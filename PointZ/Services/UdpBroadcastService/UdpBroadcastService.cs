@@ -26,7 +26,7 @@ namespace PointZ.Services.UdpBroadcastService
                 while (true)
                 {
                     UdpReceiveResult result = await this.udpClient.ReceiveAsync();
-                    HandleResultAsync(result);
+                    _ = HandleResultAsync(result);
                 }
             }
             catch (Exception e)
@@ -35,10 +35,11 @@ namespace PointZ.Services.UdpBroadcastService
             }
         }
 
-        private void HandleResultAsync(UdpReceiveResult result)
+        private Task HandleResultAsync(UdpReceiveResult result)
         {
             string message = Encoding.UTF8.GetString(result.Buffer);
             this.logger.Log($"[{result.RemoteEndPoint}]: {message}");
+            return Task.CompletedTask;
         }
     }
 }

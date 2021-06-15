@@ -16,9 +16,7 @@ namespace PointZTest.Services.LoggerService
         }
 
         [Theory]
-        [InlineData("abc ABC 123 !\"# @£$")]
-        [InlineData("abc ABC 123 !\"# @£$\nTest")]
-        [InlineData("abc ABC 123 !\"# @£$\nTest\tTest")]
+        [ClassData(typeof(ConsoleLoggerTestData))]
         public void OutputsCorrectlyToConsole(string expected)
         {
             // arrange

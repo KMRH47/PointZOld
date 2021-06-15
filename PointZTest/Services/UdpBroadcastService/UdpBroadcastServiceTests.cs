@@ -58,6 +58,12 @@ namespace PointZTest.Services.UdpBroadcastService
                                             $"Actual: {actual}");
         }
 
+        [Fact]
+        public async Task HandlesDataCorrectlyAfterReceiving()
+        {
+            
+        }
+
         private async Task SendAsync(string message, Encoding encoding)
         {
             byte[] bytes = encoding.GetBytes(message);
