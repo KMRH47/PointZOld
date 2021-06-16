@@ -1,4 +1,4 @@
-﻿namespace PointZ.Services.LoggerService
+﻿namespace PointZ.Services.Logger
 {
     public interface ILogger
     {

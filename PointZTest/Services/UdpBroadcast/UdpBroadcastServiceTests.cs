@@ -12,30 +12,12 @@ namespace PointZTest.Services.UdpBroadcastService
         private readonly UdpClient udpClient;
         private readonly ITestOutputHelper testOutputHelper;
 
-
         public UdpBroadcastServiceTests(UdpClient udpClient, ITestOutputHelper testOutputHelper)
+
         {
             this.testOutputHelper = testOutputHelper;
             this.udpClient = udpClient;
             udpClient.Client.Bind(new IPEndPoint(0, 45454));
-        }
-
-        [Fact]
-        public async Task CanReceiveAsync()
-        {
-            // Arrange
-            Task<UdpReceiveResult> receiveTask = this.udpClient.ReceiveAsync();
-
-            // Act
-            await SendAsync("CanReceiveAsync", Encoding.UTF8);
-            UdpReceiveResult result = await receiveTask;
-
-            // Assert
-            Assert.True(receiveTask.IsCompletedSuccessfully);
-
-            // Output
-            string resultBuffer = Encoding.UTF8.GetString(result.Buffer);
-            this.testOutputHelper.WriteLine($"Result: {resultBuffer}");
         }
 
         [Fact]
@@ -56,12 +38,6 @@ namespace PointZTest.Services.UdpBroadcastService
             // Output
             this.testOutputHelper.WriteLine($"Expected: {expected}\n" +
                                             $"Actual: {actual}");
-        }
-
-        [Fact]
-        public async Task HandlesDataCorrectlyAfterReceiving()
-        {
-            
         }
 
         private async Task SendAsync(string message, Encoding encoding)

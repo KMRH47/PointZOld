@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PointZ.Services.LoggerService
+namespace PointZ.Services.Logger
 {
     public class ConsoleLogger : ILogger
     {

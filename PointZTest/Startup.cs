@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Net.Sockets;
 using Microsoft.Extensions.DependencyInjection;
-using PointZ.Services.LoggerService;
+using PointZ.Services.Logger;
 using PointZTest.Services.LoggerService;
 
 namespace PointZTest
