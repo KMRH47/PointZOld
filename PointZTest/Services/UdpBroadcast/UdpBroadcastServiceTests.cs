@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace PointZTest.Services.UdpBroadcastService
+namespace PointZTest.Services.UdpBroadcast
 {
     public class UdpBroadcastServiceTests
     {
@@ -13,22 +13,23 @@ namespace PointZTest.Services.UdpBroadcastService
         private readonly ITestOutputHelper testOutputHelper;
 
         public UdpBroadcastServiceTests(UdpClient udpClient, ITestOutputHelper testOutputHelper)
-
         {
             this.testOutputHelper = testOutputHelper;
             this.udpClient = udpClient;
             udpClient.Client.Bind(new IPEndPoint(0, 45454));
         }
-
+        
         [Fact]
         public async Task ReceivesExpectedDataAsync()
         {
             // Arrange
             Task<UdpReceiveResult> receiveResultTask = this.udpClient.ReceiveAsync();
             const string expected = "ReceivesExpectedDataAsync";
-
+            byte[] bytes = Encoding.UTF8.GetBytes(expected);
+            IPEndPoint endPoint = new(IPAddress.Loopback, 45454);
+            
             // Act
-            await SendAsync(expected, Encoding.UTF8);
+            await this.udpClient.SendAsync(bytes, bytes.Length, endPoint);
             UdpReceiveResult result = await receiveResultTask;
             string actual = Encoding.UTF8.GetString(result.Buffer);
 
@@ -38,13 +39,6 @@ namespace PointZTest.Services.UdpBroadcastService
             // Output
             this.testOutputHelper.WriteLine($"Expected: {expected}\n" +
                                             $"Actual: {actual}");
-        }
-
-        private async Task SendAsync(string message, Encoding encoding)
-        {
-            byte[] bytes = encoding.GetBytes(message);
-            IPEndPoint endPoint = new(IPAddress.Loopback, 45454);
-            await this.udpClient.SendAsync(bytes, bytes.Length, endPoint);
         }
     }
 }

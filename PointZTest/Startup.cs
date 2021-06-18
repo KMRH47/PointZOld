@@ -2,7 +2,7 @@
 using System.Net.Sockets;
 using Microsoft.Extensions.DependencyInjection;
 using PointZ.Services.Logger;
-using PointZTest.Services.LoggerService;
+using PointZTest.Services.Logger;
 
 namespace PointZTest
 {

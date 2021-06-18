@@ -2,7 +2,7 @@
 using System.IO;
 using Xunit;
 
-namespace PointZTest.Services.LoggerService
+namespace PointZTest.Services.Logger
 {
     public class ConsoleLoggerTests
     {

@@ -26,7 +26,7 @@ namespace PointZ.Services.UdpBroadcast
             {
                 this.logger.Log("[UDP Broadcaster] Listening...");
                 
-                cancellationToken.re
+              //  cancellationToken.re
                 while (!cancellationToken.IsCancellationRequested)
                 {
                     UdpReceiveResult result = await this.udpClient.ReceiveAsync();

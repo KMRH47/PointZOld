@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 
-namespace PointZTest.Services.LoggerService
+namespace PointZTest.Services.Logger
 {
     public class ConsoleLoggerTestData : IEnumerable<object[]>
     {
