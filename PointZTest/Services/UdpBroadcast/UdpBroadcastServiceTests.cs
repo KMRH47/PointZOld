@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,32 +14,36 @@ namespace PointZTest.Services.UdpBroadcast
         private readonly ITestOutputHelper testOutputHelper;
 
         public UdpBroadcastServiceTests(UdpClient udpClient, ITestOutputHelper testOutputHelper)
+
         {
             this.testOutputHelper = testOutputHelper;
             this.udpClient = udpClient;
             udpClient.Client.Bind(new IPEndPoint(0, 45454));
         }
-        
+
         [Fact]
-        public async Task ReceivesExpectedDataAsync()
+        public async Task SuccessfullySendsUdpBroadcasts()
         {
             // Arrange
-            Task<UdpReceiveResult> receiveResultTask = this.udpClient.ReceiveAsync();
-            const string expected = "ReceivesExpectedDataAsync";
-            byte[] bytes = Encoding.UTF8.GetBytes(expected);
-            IPEndPoint endPoint = new(IPAddress.Loopback, 45454);
-            
+            string hostName = Dns.GetHostName();
+            await this.udpClient.Client.ConnectAsync(IPAddress.Broadcast, 0);
+
+            if (this.udpClient.Client.LocalEndPoint is not IPEndPoint localEndPoint)
+                throw new NullReferenceException("LocalEndPoint is null.");
+
+            string localEthernetAddress = localEndPoint.Address.ToString();
+            IPEndPoint broadcastAddress = new(IPAddress.Broadcast, 45454);
+            string message = $"[{hostName}] {localEthernetAddress}";
+            byte[] bytes = Encoding.UTF8.GetBytes(message);
+
             // Act
-            await this.udpClient.SendAsync(bytes, bytes.Length, endPoint);
-            UdpReceiveResult result = await receiveResultTask;
-            string actual = Encoding.UTF8.GetString(result.Buffer);
+            this.testOutputHelper.WriteLine("Sending...");
+            Task<int> sendTask = this.udpClient.SendAsync(bytes, bytes.Length, broadcastAddress);
+            await sendTask;
+            this.testOutputHelper.WriteLine($"\"{message}\" sent!");
 
             // Assert
-            Assert.Equal(expected, actual);
-
-            // Output
-            this.testOutputHelper.WriteLine($"Expected: {expected}\n" +
-                                            $"Actual: {actual}");
+            Assert.True(sendTask.IsCompletedSuccessfully);
         }
     }
 }
