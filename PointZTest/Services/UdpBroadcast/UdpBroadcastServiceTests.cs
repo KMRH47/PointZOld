@@ -1,11 +1,12 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace PointZTest.Services.UdpBroadcastService
+namespace PointZTest.Services.UdpBroadcast
 {
     public class UdpBroadcastServiceTests
     {
@@ -21,30 +22,28 @@ namespace PointZTest.Services.UdpBroadcastService
         }
 
         [Fact]
-        public async Task ReceivesExpectedDataAsync()
+        public async Task SuccessfullySendsUdpBroadcasts()
         {
             // Arrange
-            Task<UdpReceiveResult> receiveResultTask = this.udpClient.ReceiveAsync();
-            const string expected = "ReceivesExpectedDataAsync";
+            string hostName = Dns.GetHostName();
+            await this.udpClient.Client.ConnectAsync(IPAddress.Broadcast, 0);
+
+            if (this.udpClient.Client.LocalEndPoint is not IPEndPoint localEndPoint)
+                throw new NullReferenceException("LocalEndPoint is null.");
+
+            string localEthernetAddress = localEndPoint.Address.ToString();
+            IPEndPoint broadcastAddress = new(IPAddress.Broadcast, 45454);
+            string message = $"[{hostName}] {localEthernetAddress}";
+            byte[] bytes = Encoding.UTF8.GetBytes(message);
 
             // Act
-            await SendAsync(expected, Encoding.UTF8);
-            UdpReceiveResult result = await receiveResultTask;
-            string actual = Encoding.UTF8.GetString(result.Buffer);
+            this.testOutputHelper.WriteLine("Sending...");
+            Task<int> sendTask = this.udpClient.SendAsync(bytes, bytes.Length, broadcastAddress);
+            await sendTask;
+            this.testOutputHelper.WriteLine($"\"{message}\" sent!");
 
             // Assert
-            Assert.Equal(expected, actual);
-
-            // Output
-            this.testOutputHelper.WriteLine($"Expected: {expected}\n" +
-                                            $"Actual: {actual}");
-        }
-
-        private async Task SendAsync(string message, Encoding encoding)
-        {
-            byte[] bytes = encoding.GetBytes(message);
-            IPEndPoint endPoint = new(IPAddress.Loopback, 45454);
-            await this.udpClient.SendAsync(bytes, bytes.Length, endPoint);
+            Assert.True(sendTask.IsCompletedSuccessfully);
         }
     }
 }

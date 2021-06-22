@@ -3,7 +3,6 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
-using PointZ.Services.DataInterpreter;
 using PointZ.Services.Logger;
 using PointZ.Services.UdpBroadcast;
 
@@ -21,8 +20,7 @@ namespace PointZ
 
             // UDP Broadcaster
             UdpClient udpClient = new(new IPEndPoint(IPAddress.Any, 45454));
-            IDataInterpreter dataInterpreter = new DataInterpreter();
-            IUdpBroadcastService udpBroadcastService = new UdpBroadcastService(udpClient, dataInterpreter, logger);
+            IUdpBroadcastService udpBroadcastService = new UdpBroadcastService(udpClient, logger);
 
             // Run tasks
             Task broadcastServiceTask = udpBroadcastService.StartAsync(cancellationTokenSource.Token);
@@ -35,8 +33,6 @@ namespace PointZ
             logger.Log($"CancellationSource: {cancellationTokenSource.Token.IsCancellationRequested}");
 
             Console.ReadKey();
-
-
         }
     }
 }

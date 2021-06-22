@@ -2,7 +2,6 @@
 using System.Net.Sockets;
 using Microsoft.Extensions.DependencyInjection;
 using PointZ.Services.Logger;
-using PointZTest.Services.LoggerService;
 
 namespace PointZTest
 {
@@ -13,7 +12,6 @@ namespace PointZTest
             // Add services
             services.AddTransient<StringWriter>();
             services.AddTransient<UdpClient>();
-            services.AddTransient<ConsoleLoggerTests>();
             services.AddTransient<ILogger, ConsoleLogger>();
         }
     }
