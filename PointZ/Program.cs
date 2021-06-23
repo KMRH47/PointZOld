@@ -18,19 +18,12 @@ namespace PointZ
             // Logger
             ILogger logger = new ConsoleLogger();
 
-            // UDP Broadcaster
+            // UDP Broadcast Service
             UdpClient udpClient = new(new IPEndPoint(IPAddress.Any, 45454));
             IUdpBroadcastService udpBroadcastService = new UdpBroadcastService(udpClient, logger);
 
             // Run tasks
             Task broadcastServiceTask = udpBroadcastService.StartAsync(cancellationTokenSource.Token);
-            logger.Log($"CancellationSource: {cancellationTokenSource.Token.IsCancellationRequested}");
-
-            Console.ReadKey();
-            
-            cancellationTokenSource.Cancel();
-            
-            logger.Log($"CancellationSource: {cancellationTokenSource.Token.IsCancellationRequested}");
 
             Console.ReadKey();
         }

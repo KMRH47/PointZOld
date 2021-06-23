@@ -10,6 +10,7 @@ namespace PointZ.Services.UdpBroadcast
 {
     public class UdpBroadcastService : IUdpBroadcastService
     {
+        private const string TaskCancelledMessage = "The UDP Broadcasting service was forcefully stopped.";
         private readonly UdpClient udpClient;
         private readonly ILogger logger;
 
@@ -18,13 +19,13 @@ namespace PointZ.Services.UdpBroadcast
             this.udpClient = udpClient;
             this.logger = logger;
         }
-
+        
         public async Task StartAsync(CancellationToken cancellationToken)
         {
             try
             {
                 string hostName = Dns.GetHostName();
-                await this.udpClient.Client.ConnectAsync(IPAddress.Broadcast, 65530, cancellationToken);
+                await this.udpClient.Client.ConnectAsync(IPAddress.Broadcast, 0, cancellationToken);
 
                 if (this.udpClient.Client.LocalEndPoint is not IPEndPoint localEndPoint)
                     throw new NullReferenceException();
@@ -34,24 +35,30 @@ namespace PointZ.Services.UdpBroadcast
 
                 while (!cancellationToken.IsCancellationRequested)
                 {
-                    this.logger.Log($"Sending...");
                     string message = $"[{hostName}] {localEthernetAddress}";
+                    Log(message);
                     byte[] bytes = Encoding.UTF8.GetBytes(message);
-                    await this.udpClient.SendAsync(bytes, bytes.Length, broadcastAddress);
-                    this.logger.Log($"\"{message}\" sent!");
+                    Task<int> task = this.udpClient.SendAsync(bytes, bytes.Length, broadcastAddress);
+                    await task;
+                    string taskCompletion = task.IsCompletedSuccessfully
+                        ? "Broadcast successful!"
+                        : "Broadcast failed!";
+                    Log(taskCompletion);
                     await Task.Delay(1000, cancellationToken);
                 }
-
-                this.logger.Log("UDP Broadcasting service stopped!");
+                
+                Log(TaskCancelledMessage);
             }
-            catch (TaskCanceledException e)
+            catch (TaskCanceledException)
             {
-                this.logger.Log($"The UDP Broadcasting service was forcefully stopped.");
+                Log(TaskCancelledMessage);
             }
             catch (Exception e)
             {
-                this.logger.Log($"{e.Message}.");
+                Log(e.Message);
             }
         }
+
+        private void Log(string message) => this.logger.Log($"[{DateTime.Now}] UDP Broadcast Service: {message}");
     }
 }

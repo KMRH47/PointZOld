@@ -14,36 +14,35 @@ namespace PointZTest.Services.UdpBroadcast
         private readonly ITestOutputHelper testOutputHelper;
 
         public UdpBroadcastServiceTests(UdpClient udpClient, ITestOutputHelper testOutputHelper)
-
         {
             this.testOutputHelper = testOutputHelper;
             this.udpClient = udpClient;
-            udpClient.Client.Bind(new IPEndPoint(0, 45454));
         }
 
         [Fact]
-        public async Task SuccessfullySendsUdpBroadcasts()
+        public async Task GetsCorrectEthernetAddress()
         {
             // Arrange
-            string hostName = Dns.GetHostName();
             await this.udpClient.Client.ConnectAsync(IPAddress.Broadcast, 0);
 
+            // Act
             if (this.udpClient.Client.LocalEndPoint is not IPEndPoint localEndPoint)
                 throw new NullReferenceException("LocalEndPoint is null.");
-
-            string localEthernetAddress = localEndPoint.Address.ToString();
-            IPEndPoint broadcastAddress = new(IPAddress.Broadcast, 45454);
-            string message = $"[{hostName}] {localEthernetAddress}";
-            byte[] bytes = Encoding.UTF8.GetBytes(message);
-
-            // Act
-            this.testOutputHelper.WriteLine("Sending...");
-            Task<int> sendTask = this.udpClient.SendAsync(bytes, bytes.Length, broadcastAddress);
-            await sendTask;
-            this.testOutputHelper.WriteLine($"\"{message}\" sent!");
+            
+            string localEndpointAddress = localEndPoint.Address.ToString();
+            bool startsWith10 = localEndpointAddress.StartsWith("10");
+            bool startsWith172 = localEndpointAddress.StartsWith("172");
+            bool startsWith192 = localEndpointAddress.StartsWith("192");
+            bool isPrivateAddress = startsWith10 || startsWith172 || startsWith192;
 
             // Assert
-            Assert.True(sendTask.IsCompletedSuccessfully);
+            Assert.Equal(AddressFamily.InterNetwork, localEndPoint.AddressFamily);
+            this.testOutputHelper.WriteLine($"Expected: {AddressFamily.InterNetwork}\n" +
+                                            $"Actual: {localEndPoint.AddressFamily}");
+            Assert.True(isPrivateAddress);
+            this.testOutputHelper.WriteLine($"Starts with 10: {startsWith10}\n" +
+                                            $"Starts with 172: {startsWith172}\n" +
+                                            $"Starts with 192: {startsWith192}");
         }
     }
 }
