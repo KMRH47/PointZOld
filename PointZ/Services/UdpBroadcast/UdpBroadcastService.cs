@@ -19,7 +19,7 @@ namespace PointZ.Services.UdpBroadcast
             this.udpClient = udpClient;
             this.logger = logger;
         }
-        
+
         public async Task StartAsync(CancellationToken cancellationToken)
         {
             try
@@ -32,21 +32,16 @@ namespace PointZ.Services.UdpBroadcast
 
                 string localEthernetAddress = localEndPoint.Address.ToString();
                 IPEndPoint broadcastAddress = new(IPAddress.Broadcast, 45454);
+                string message = $"[{hostName}|{localEthernetAddress}]";
+                Log($"Started {message}");
 
                 while (!cancellationToken.IsCancellationRequested)
                 {
-                    string message = $"[{hostName}] {localEthernetAddress}";
-                    Log(message);
                     byte[] bytes = Encoding.UTF8.GetBytes(message);
-                    Task<int> task = this.udpClient.SendAsync(bytes, bytes.Length, broadcastAddress);
-                    await task;
-                    string taskCompletion = task.IsCompletedSuccessfully
-                        ? "Broadcast successful!"
-                        : "Broadcast failed!";
-                    Log(taskCompletion);
+                    await this.udpClient.SendAsync(bytes, bytes.Length, broadcastAddress);
                     await Task.Delay(1000, cancellationToken);
                 }
-                
+
                 Log(TaskCancelledMessage);
             }
             catch (TaskCanceledException)
@@ -59,6 +54,6 @@ namespace PointZ.Services.UdpBroadcast
             }
         }
 
-        private void Log(string message) => this.logger.Log($"[{DateTime.Now}] UDP Broadcast Service: {message}");
+        private void Log(string message) => this.logger.Log($"UDP Broadcast Service: {message}");
     }
 }

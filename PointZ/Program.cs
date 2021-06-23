@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
@@ -19,7 +18,7 @@ namespace PointZ
             ILogger logger = new ConsoleLogger();
 
             // UDP Broadcast Service
-            UdpClient udpClient = new(new IPEndPoint(IPAddress.Any, 45454));
+            UdpClient udpClient = new();
             IUdpBroadcastService udpBroadcastService = new UdpBroadcastService(udpClient, logger);
 
             // Run tasks
