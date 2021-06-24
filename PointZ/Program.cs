@@ -12,19 +12,26 @@ namespace PointZ
         private static async Task Main(string[] args)
         {
             // Cancellation Token
-            CancellationTokenSource cancellationTokenSource = new();
+            CancellationTokenSource broadcastServiceTokenSource = new();
 
-            // Logger
-            ILogger logger = new ConsoleLogger();
+            // Services
+            ILogger logger = new FileLogger("Main");
+#if RELEASE
+            IUdpBroadcastService udpBroadcastService = new UdpBroadcastService(new UdpClient(), new ConsoleLogger());
+#else
+            IUdpBroadcastService udpBroadcastService = new UdpBroadcastService(new UdpClient(), new FileLogger("UDPBroadcastService"));
+#endif
 
-            // UDP Broadcast Service
-            UdpClient udpClient = new();
-            IUdpBroadcastService udpBroadcastService = new UdpBroadcastService(udpClient, logger);
+            // Run
+            Task broadcastServiceTask = udpBroadcastService.StartAsync(broadcastServiceTokenSource.Token);
 
-            // Run tasks
-            Task broadcastServiceTask = udpBroadcastService.StartAsync(cancellationTokenSource.Token);
+            while (true)
+            {
+                string input = Console.ReadLine();
 
-            Console.ReadKey();
+                if (input == "kill") break;
+                await logger.Log($"{input}");
+            }
         }
     }
 }

@@ -1,7 +1,9 @@
-﻿namespace PointZ.Services.Logger
+﻿using System.Threading.Tasks;
+
+namespace PointZ.Services.Logger
 {
     public interface ILogger
     {
-        void Log(string message);
+        Task Log(string message);
     }
 }

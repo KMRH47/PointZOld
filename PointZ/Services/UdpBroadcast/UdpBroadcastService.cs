@@ -13,6 +13,7 @@ namespace PointZ.Services.UdpBroadcast
         private const string TaskCancelledMessage = "The UDP Broadcasting service was forcefully stopped.";
         private readonly UdpClient udpClient;
         private readonly ILogger logger;
+        private CancellationToken cancellationToken;
 
         public UdpBroadcastService(UdpClient udpClient, ILogger logger)
         {
@@ -24,6 +25,7 @@ namespace PointZ.Services.UdpBroadcast
         {
             try
             {
+                this.cancellationToken = cancellationToken;
                 string hostName = Dns.GetHostName();
                 await this.udpClient.Client.ConnectAsync(IPAddress.Broadcast, 0, cancellationToken);
 
