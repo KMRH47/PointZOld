@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Net.Sockets;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,7 +14,6 @@ namespace PointZ.Services.UdpBroadcast
         private const string TaskCancelledMessage = "The UDP Broadcasting service was forcefully stopped.";
         private readonly UdpClient udpClient;
         private readonly ILogger logger;
-        private CancellationToken cancellationToken;
 
         public UdpBroadcastService(UdpClient udpClient, ILogger logger)
         {
@@ -25,7 +25,6 @@ namespace PointZ.Services.UdpBroadcast
         {
             try
             {
-                this.cancellationToken = cancellationToken;
                 string hostName = Dns.GetHostName();
                 await this.udpClient.Client.ConnectAsync(IPAddress.Broadcast, 0, cancellationToken);
 
@@ -34,28 +33,27 @@ namespace PointZ.Services.UdpBroadcast
 
                 string localEthernetAddress = localEndPoint.Address.ToString();
                 IPEndPoint broadcastAddress = new(IPAddress.Broadcast, 45454);
-                string message = $"[{hostName}|{localEthernetAddress}]";
-                Log($"Started {message}");
+                string hostNameAndIpAddress = $"{hostName}|{localEthernetAddress}";
+                
+                _ = this.logger.Log($"Started ({hostNameAndIpAddress})", this);
 
                 while (!cancellationToken.IsCancellationRequested)
                 {
-                    byte[] bytes = Encoding.UTF8.GetBytes(message);
+                    byte[] bytes = Encoding.UTF8.GetBytes(hostNameAndIpAddress);
                     await this.udpClient.SendAsync(bytes, bytes.Length, broadcastAddress);
                     await Task.Delay(1000, cancellationToken);
                 }
 
-                Log(TaskCancelledMessage);
+                _ = this.logger.Log(TaskCancelledMessage, this);
             }
             catch (TaskCanceledException)
             {
-                Log(TaskCancelledMessage);
+                _ = this.logger.Log(TaskCancelledMessage, this);
             }
             catch (Exception e)
             {
-                Log(e.Message);
+                _ = this.logger.Log(e.Message, this);
             }
         }
-
-        private void Log(string message) => this.logger.Log($"UDP Broadcast Service: {message}");
     }
 }

@@ -6,19 +6,37 @@ namespace PointZ.Services.Logger
 {
     public class FileLogger : ILogger
     {
-        private readonly string filePath;
+        private readonly string path = $"{Environment.SpecialFolder.ApplicationData}/Logs";
+        private readonly ConsoleLogger consoleLogger;
 
-        public FileLogger(string contextName)
+        /// <summary>
+        /// Logs messages to .txt files.
+        /// </summary>
+        /// <param name="consoleLogger">Used to output exceptions to the console.</param>
+        public FileLogger(ConsoleLogger consoleLogger)
         {
-            string path = $"{Environment.SpecialFolder.ApplicationData}/Logs/";
-            this.filePath = $"{path}/{contextName}.txt";
-            if (!Directory.Exists(path)) Directory.CreateDirectory(path);
-            File.Create($"{this.filePath}").Close();
+            try
+            {
+                this.consoleLogger = consoleLogger;
+                if (Directory.Exists(this.path)) return;
+                Directory.CreateDirectory(this.path);
+            }
+            catch (Exception e)
+            {
+                consoleLogger.Log($"Initialization of object {nameof(FileLogger)} failed: {e.Message}", this);
+            }
         }
 
-        public async Task Log(string message)
+        public async Task Log(string message, object contextSource)
         {
-            await File.AppendAllTextAsync(this.filePath, message);
+            try
+            {
+                await File.AppendAllTextAsync($"{this.path}/{contextSource}_log.txt", $"[{DateTime.Now}] {message}\n");
+            }
+            catch (Exception e)
+            {
+                await Task.Run(() => this.consoleLogger.Log($"{contextSource}: {e.Message}", this));
+            }
         }
     }
 }

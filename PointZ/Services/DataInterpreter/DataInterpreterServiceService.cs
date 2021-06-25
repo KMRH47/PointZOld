@@ -4,11 +4,11 @@ using System.Threading.Tasks;
 
 namespace PointZ.Services.DataInterpreter
 {
-    public class DataInterpreter : IDataInterpreter
+    public class DataInterpreterServiceService : IDataInterpreterService
     {
         private readonly IDictionary<string, string> commandMap;
         
-        public DataInterpreter()
+        public DataInterpreterServiceService()
         {
             // Service to handle some action...    
         }

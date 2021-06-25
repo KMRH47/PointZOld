@@ -4,6 +4,6 @@ namespace PointZ.Services.Logger
 {
     public interface ILogger
     {
-        Task Log(string message);
+        Task Log(string message, object contextSource);
     }
 }

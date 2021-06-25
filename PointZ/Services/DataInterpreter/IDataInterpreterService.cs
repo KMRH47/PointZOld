@@ -2,7 +2,7 @@
 
 namespace PointZ.Services.DataInterpreter
 {
-    public interface IDataInterpreter
+    public interface IDataInterpreterService
     {
         Task InterpretAsync(byte[] bytes);
 }
