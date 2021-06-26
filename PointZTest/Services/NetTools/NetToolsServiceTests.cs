@@ -5,21 +5,21 @@ using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace PointZTest.Services.UdpBroadcast
+namespace PointZTest.Services.NetTools
 {
-    public class UdpBroadcastServiceTests
+    public class NetToolsServiceTests
     {
         private readonly UdpClient udpClient;
         private readonly ITestOutputHelper testOutputHelper;
 
-        public UdpBroadcastServiceTests(UdpClient udpClient, ITestOutputHelper testOutputHelper)
+        public NetToolsServiceTests(UdpClient udpClient, ITestOutputHelper testOutputHelper)
         {
             this.testOutputHelper = testOutputHelper;
             this.udpClient = udpClient;
         }
 
         [Fact]
-        public async Task GetsCorrectEthernetAddress()
+        public async Task GetsPrimaryNetworkInterfaceControllerIpv4Address()
         {
             // Arrange
             await this.udpClient.Client.ConnectAsync(IPAddress.Broadcast, 0);

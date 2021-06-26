@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Net;
 using System.Net.Sockets;
-using System.Reflection.Metadata;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using PointZ.Services.Logger;
+using PointZ.Services.NetTools;
 
 namespace PointZ.Services.UdpBroadcast
 {
@@ -13,11 +13,13 @@ namespace PointZ.Services.UdpBroadcast
     {
         private const string TaskCancelledMessage = "The UDP Broadcasting service was forcefully stopped.";
         private readonly UdpClient udpClient;
+        private readonly INetToolsService netToolsService;
         private readonly ILogger logger;
 
-        public UdpBroadcastService(UdpClient udpClient, ILogger logger)
+        public UdpBroadcastService(UdpClient udpClient, INetToolsService netToolsService, ILogger logger)
         {
             this.udpClient = udpClient;
+            this.netToolsService = netToolsService;
             this.logger = logger;
         }
 
@@ -26,16 +28,11 @@ namespace PointZ.Services.UdpBroadcast
             try
             {
                 string hostName = Dns.GetHostName();
-                await this.udpClient.Client.ConnectAsync(IPAddress.Broadcast, 0, cancellationToken);
-
-                if (this.udpClient.Client.LocalEndPoint is not IPEndPoint localEndPoint)
-                    throw new NullReferenceException();
-
-                string localEthernetAddress = localEndPoint.Address.ToString();
-                IPEndPoint broadcastAddress = new(IPAddress.Broadcast, 45454);
-                string hostNameAndIpAddress = $"{hostName}|{localEthernetAddress}";
-                
-                _ = this.logger.Log($"Started ({hostNameAndIpAddress})", this);
+                const ushort port = 45455;
+                string localIpv4Address = await this.netToolsService.GetLocalIpv4Address(cancellationToken);
+                string hostNameAndIpAddress = $"{hostName}|{localIpv4Address}";
+                await this.logger.Log($"Broadcasting data '{hostNameAndIpAddress}' on port 45455", this);
+                IPEndPoint broadcastAddress = new(IPAddress.Broadcast, port);
 
                 while (!cancellationToken.IsCancellationRequested)
                 {
@@ -44,15 +41,15 @@ namespace PointZ.Services.UdpBroadcast
                     await Task.Delay(1000, cancellationToken);
                 }
 
-                _ = this.logger.Log(TaskCancelledMessage, this);
+                await this.logger.Log(TaskCancelledMessage, this);
             }
             catch (TaskCanceledException)
             {
-                _ = this.logger.Log(TaskCancelledMessage, this);
+                await this.logger.Log(TaskCancelledMessage, this);
             }
             catch (Exception e)
             {
-                _ = this.logger.Log(e.Message, this);
+                await this.logger.Log(e.Message, this);
             }
         }
     }
