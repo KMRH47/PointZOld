@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using PointZ.Services.Logger;
-using PointZ.Services.NetTools;
+using PointZ.Tools;
 
 namespace PointZ.Services.UdpBroadcast
 {
@@ -13,13 +13,11 @@ namespace PointZ.Services.UdpBroadcast
     {
         private const string TaskCancelledMessage = "The UDP Broadcasting service was forcefully stopped.";
         private readonly UdpClient udpClient;
-        private readonly INetToolsService netToolsService;
         private readonly ILogger logger;
 
-        public UdpBroadcastService(UdpClient udpClient, INetToolsService netToolsService, ILogger logger)
+        public UdpBroadcastService(UdpClient udpClient, ILogger logger)
         {
             this.udpClient = udpClient;
-            this.netToolsService = netToolsService;
             this.logger = logger;
         }
 
@@ -29,7 +27,7 @@ namespace PointZ.Services.UdpBroadcast
             {
                 string hostName = Dns.GetHostName();
                 const ushort port = 45455;
-                string localIpv4Address = await this.netToolsService.GetLocalIpv4Address(cancellationToken);
+                string localIpv4Address = await NetTools.GetLocalIpv4Address(cancellationToken);
                 string hostNameAndIpAddress = $"{hostName}|{localIpv4Address}";
                 await this.logger.Log($"Broadcasting data '{hostNameAndIpAddress}' on port 45455", this);
                 IPEndPoint broadcastAddress = new(IPAddress.Broadcast, port);

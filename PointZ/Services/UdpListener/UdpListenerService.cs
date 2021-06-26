@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
 using PointZ.Services.DataInterpreter;
 using PointZ.Services.Logger;
-using PointZ.Services.NetTools;
+using PointZ.Tools;
 
 namespace PointZ.Services.UdpListener
 {
@@ -12,15 +13,12 @@ namespace PointZ.Services.UdpListener
     {
         private const string TaskCancelledMessage = "The UDP Listener service was forcefully stopped.";
         private readonly UdpClient udpClient;
-        private readonly INetToolsService netToolsService;
         private readonly IDataInterpreterService dataInterpreterService;
         private readonly ILogger logger;
 
-        public UdpListenerService(UdpClient udpClient, INetToolsService netToolsService,
-            IDataInterpreterService dataInterpreterService, ILogger logger)
+        public UdpListenerService(UdpClient udpClient, IDataInterpreterService dataInterpreterService, ILogger logger)
         {
             this.udpClient = udpClient;
-            this.netToolsService = netToolsService;
             this.dataInterpreterService = dataInterpreterService;
             this.logger = logger;
         }
@@ -29,7 +27,7 @@ namespace PointZ.Services.UdpListener
         {
             try
             {
-                string localIpv4Address = await this.netToolsService.GetLocalIpv4Address(cancellationToken);
+                string localIpv4Address = await NetTools.GetLocalIpv4Address(cancellationToken);
                 string hostNameAndIpAddress = $"{localIpv4Address}:45454";
                 await this.logger.Log($"Listening on '{hostNameAndIpAddress}'", this);
 
