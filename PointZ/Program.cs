@@ -35,7 +35,9 @@ namespace PointZ
 
             // Run
             Task broadcastServiceTask = udpBroadcastService.StartAsync(udpBroadcastTokenSource.Token);
-            Task udpListenerServiceTask = udpListenerService.StartAsync(udpListenerTokenSource.Token);
+            Task listenerServiceTask = udpListenerService.StartAsync(udpListenerTokenSource.Token);
+            
+            // udpListenerTokenSource.Cancel();
 
             Console.ReadKey();
         }

@@ -5,6 +5,6 @@ namespace PointZ.Services.UdpListener
 {
     public interface IUdpListenerService
     {
-        Task StartAsync(CancellationToken cancellationToken);
+        Task StartAsync(CancellationToken token);
     }
 }

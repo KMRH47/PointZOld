@@ -21,22 +21,22 @@ namespace PointZ.Services.UdpBroadcast
             this.logger = logger;
         }
 
-        public async Task StartAsync(CancellationToken cancellationToken)
+        public async Task StartAsync(CancellationToken token)
         {
             try
             {
                 string hostName = Dns.GetHostName();
                 const ushort port = 45455;
-                string localIpv4Address = await NetTools.GetLocalIpv4Address(cancellationToken);
+                string localIpv4Address = await NetTools.GetLocalIpv4Address(token);
                 string hostNameAndIpAddress = $"{hostName}|{localIpv4Address}";
-                await this.logger.Log($"Broadcasting data '{hostNameAndIpAddress}' on port 45455", this);
+                await this.logger.Log($"Broadcasting '{hostNameAndIpAddress}' on port 45455", this);
                 IPEndPoint broadcastAddress = new(IPAddress.Broadcast, port);
 
-                while (!cancellationToken.IsCancellationRequested)
+                while (!token.IsCancellationRequested)
                 {
                     byte[] bytes = Encoding.UTF8.GetBytes(hostNameAndIpAddress);
                     await this.udpClient.SendAsync(bytes, bytes.Length, broadcastAddress);
-                    await Task.Delay(1000, cancellationToken);
+                    await Task.Delay(1000, token);
                 }
 
                 await this.logger.Log(TaskCancelledMessage, this);

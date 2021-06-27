@@ -37,6 +37,6 @@ namespace PointZ.Services.Logger
             {
                 await Task.Run(() => this.consoleLogger.Log($"{contextSource}: {e.Message}", this));
             }
-        }
+        } 
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
@@ -23,31 +22,36 @@ namespace PointZ.Services.UdpListener
             this.logger = logger;
         }
 
-        public async Task StartAsync(CancellationToken cancellationToken)
+        public async Task StartAsync(CancellationToken token)
         {
             try
             {
-                string localIpv4Address = await NetTools.GetLocalIpv4Address(cancellationToken);
+                string localIpv4Address = await NetTools.GetLocalIpv4Address(token);
                 string hostNameAndIpAddress = $"{localIpv4Address}:45454";
                 await this.logger.Log($"Listening on '{hostNameAndIpAddress}'", this);
-
-                while (!cancellationToken.IsCancellationRequested)
+                
+                while (true)
                 {
-                    UdpReceiveResult result = await this.udpClient.ReceiveAsync();
-                    _ = this.dataInterpreterService.InterpretAsync(result.Buffer);
+                    byte[] bytes = new byte[200];
+                    await this.udpClient.Client.ReceiveAsync(bytes, SocketFlags.None, token);
+                    _ = this.dataInterpreterService.InterpretAsync(bytes);
                 }
             }
             catch (TaskCanceledException)
             {
                 await this.logger.Log(TaskCancelledMessage, this);
             }
+            catch (OperationCanceledException)
+            {
+                await this.logger.Log(TaskCancelledMessage, this);
+            }
             catch (SocketException e)
             {
-                await this.logger.Log($"{e.Message}", this);
+                await this.logger.Log($"[{nameof(SocketException)}] {e.Message}", this);
             }
             catch (Exception e)
             {
-                await this.logger.Log($"Stopped {e.Message}", this);
+                await this.logger.Log($"[{nameof(Exception)}] {e.Message}", this);
             }
         }
     }
