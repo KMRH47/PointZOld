@@ -5,6 +5,6 @@ namespace PointZ.Services.UdpListener
 {
     public interface IUdpListenerService
     {
-        Task StartAsync(CancellationToken token);
+        Task StartAsync(CancellationToken token, ushort port = 45454);
     }
 }

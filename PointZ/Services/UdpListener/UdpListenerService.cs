@@ -22,14 +22,14 @@ namespace PointZ.Services.UdpListener
             this.logger = logger;
         }
 
-        public async Task StartAsync(CancellationToken token)
+        public async Task StartAsync(CancellationToken token, ushort port = 45454)
         {
             try
             {
-                string localIpv4Address = await NetTools.GetLocalIpv4Address(token);
-                string hostNameAndIpAddress = $"{localIpv4Address}:45454";
-                await this.logger.Log($"Listening on '{hostNameAndIpAddress}'", this);
-                
+                string localIpv4Address = await NetworkTools.GetLocalIpv4Address(token);
+                string hostNameAndIpAddress = $"{localIpv4Address}:{port}";
+                await this.logger.Log($"Listening on '{hostNameAndIpAddress}'.", this);
+
                 while (true)
                 {
                     byte[] bytes = new byte[200];

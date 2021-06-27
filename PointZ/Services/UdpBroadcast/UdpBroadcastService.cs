@@ -21,33 +21,36 @@ namespace PointZ.Services.UdpBroadcast
             this.logger = logger;
         }
 
-        public async Task StartAsync(CancellationToken token)
+        public async Task StartAsync(CancellationToken token, int delayMs = 1000)
         {
             try
             {
                 string hostName = Dns.GetHostName();
-                const ushort port = 45455;
-                string localIpv4Address = await NetTools.GetLocalIpv4Address(token);
+                string localIpv4Address = await NetworkTools.GetLocalIpv4Address(token);
                 string hostNameAndIpAddress = $"{hostName}|{localIpv4Address}";
-                await this.logger.Log($"Broadcasting '{hostNameAndIpAddress}' on port 45455", this);
-                IPEndPoint broadcastAddress = new(IPAddress.Broadcast, port);
+                TimeSpan delay = TimeSpan.FromMilliseconds(delayMs);
+                await this.logger.Log(
+                    $"Broadcasting '{hostNameAndIpAddress}' on port 45455 (delay: {delay.Seconds}s {delay.Milliseconds}ms).",
+                    this);
 
-                while (!token.IsCancellationRequested)
+                while (true)
                 {
                     byte[] bytes = Encoding.UTF8.GetBytes(hostNameAndIpAddress);
-                    await this.udpClient.SendAsync(bytes, bytes.Length, broadcastAddress);
-                    await Task.Delay(1000, token);
+                    await this.udpClient.Client.SendAsync(bytes, SocketFlags.None, token);
+                    await Task.Delay(delayMs, token);
                 }
-
-                await this.logger.Log(TaskCancelledMessage, this);
             }
             catch (TaskCanceledException)
             {
                 await this.logger.Log(TaskCancelledMessage, this);
             }
+            catch (OperationCanceledException)
+            {
+                await this.logger.Log(TaskCancelledMessage, this);
+            }
             catch (Exception e)
             {
-                await this.logger.Log(e.Message, this);
+                await this.logger.Log($"{e.Message}\n{e.StackTrace}", this);
             }
         }
     }

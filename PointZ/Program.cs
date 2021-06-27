@@ -31,7 +31,7 @@ namespace PointZ
             IUdpBroadcastService udpBroadcastService = new UdpBroadcastService(new UdpClient(), logger);
             IDataInterpreterService dataInterpreterService = new DataInterpreterService(logger);
             IUdpListenerService udpListenerService =
-                new UdpListenerService(new UdpClient(45454), dataInterpreterService, logger);
+                new UdpListenerService(new UdpClient(), dataInterpreterService, logger);
 
             // Run
             Task broadcastServiceTask = udpBroadcastService.StartAsync(udpBroadcastTokenSource.Token);

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,11 +18,9 @@ namespace PointZ.Services.DataInterpreter
 
         public async Task InterpretAsync(byte[] bytes)
         {
-            byte[] buffer = RemoveEmptyEntries(bytes);
-            string data = Encoding.UTF8.GetString(buffer);
+            bytes = bytes.Where(b => b != 0).ToArray();
+            string data = Encoding.UTF8.GetString(bytes);
             await this.logger.Log($"Received '{data}' ", this);
         }
-
-        private static byte[] RemoveEmptyEntries(IEnumerable<byte> bytes) => bytes.Where(b => b != 0).ToArray();
     }
 }

@@ -5,28 +5,30 @@ using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace PointZTest.Services.NetTools
+namespace PointZTest.Tools
 {
-    public class NetToolsServiceTests
+    public class NetworkToolsTests
     {
         private readonly UdpClient udpClient;
         private readonly ITestOutputHelper testOutputHelper;
 
-        public NetToolsServiceTests(UdpClient udpClient, ITestOutputHelper testOutputHelper)
+        public NetworkToolsTests(UdpClient udpClient, ITestOutputHelper testOutputHelper)
         {
             this.testOutputHelper = testOutputHelper;
             this.udpClient = udpClient;
         }
 
         [Fact]
-        public async Task GetsPrimaryNetworkInterfaceControllerIpv4Address()
+        public async Task GetsInterNetworkIpv4AddressSuccessfully()
         {
             // Arrange
-            await this.udpClient.Client.ConnectAsync(IPAddress.Broadcast, 0);
+            using Socket socket = new(AddressFamily.InterNetwork, SocketType.Dgram, 0);
 
             // Act
-            if (this.udpClient.Client.LocalEndPoint is not IPEndPoint localEndPoint)
-                throw new NullReferenceException("LocalEndPoint is null.");
+            await socket.ConnectAsync(IPAddress.Broadcast, 65530);
+            
+            if (socket.LocalEndPoint is not IPEndPoint localEndPoint)
+                throw new NullReferenceException();
             
             string localEndpointAddress = localEndPoint.Address.ToString();
             bool startsWith10 = localEndpointAddress.StartsWith("10");

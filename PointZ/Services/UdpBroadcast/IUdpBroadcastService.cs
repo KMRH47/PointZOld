@@ -5,6 +5,6 @@ namespace PointZ.Services.UdpBroadcast
 {
     public interface IUdpBroadcastService
     {
-        Task StartAsync(CancellationToken token);
+        Task StartAsync(CancellationToken token, ushort port = 45455, int delayMs = 1000);
     }
 }
