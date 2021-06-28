@@ -1,19 +1,19 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
+﻿using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using PointZ.Services.Logger;
+using PointZ.Services.MouseSimulator;
 
 namespace PointZ.Services.DataInterpreter
 {
     public class DataInterpreterService : IDataInterpreterService
     {
+        private readonly IMouseSimulatorService mouseSimulatorService;
         private readonly ILogger logger;
-        private readonly IDictionary<string, string> commandMap;
 
-        public DataInterpreterService(ILogger logger)
+        public DataInterpreterService(IMouseSimulatorService mouseSimulatorService, ILogger logger)
         {
+            this.mouseSimulatorService = mouseSimulatorService;
             this.logger = logger;
         }
 
@@ -26,13 +26,33 @@ namespace PointZ.Services.DataInterpreter
             if (data.Length == 0)
                 PostCharacter(data[0]);
 
-            if (ContainsNonAnsiCharacter(data)) 
-                InterpretAnsiCharacter(data);
-            else InterpretNonAnsiCharacter(data);
+            switch (data)
+            {
+                case "#C":
+                  //  MoveCursor(data);
+                    break;
+            }
         }
 
-        private static void PostCharacter(char c)
+        private void PostCharacter(char c)
         {
+        }
+
+        private void MoveCursor(int x, int y)
+        {
+            this.mouseSimulatorService.MoveMouseBy(x, y);
+        }
+
+        private void Deserialize(string data)
+        {
+            (double, double) tuple = (0, 0);
+
+            for (int i = 0; i < data.Length; i++)
+            {
+                if (data[i] == 'x')
+                {
+                }
+            }
         }
 
         private static void InterpretNonAnsiCharacter(string data)

@@ -4,6 +4,6 @@ namespace PointZ.Services.MouseSimulator
 {
     public interface IMouseSimulatorService
     {
-        Task Execute(object data);
+        Task MoveMouseBy(int x, int y);
     }
 }
