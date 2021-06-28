@@ -2,6 +2,7 @@
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
+using PointZ.Extensions;
 using PointZ.Services.DataInterpreter;
 using PointZ.Services.Logger;
 using PointZ.Tools;
@@ -22,11 +23,12 @@ namespace PointZ.Services.UdpListener
             this.logger = logger;
         }
 
-        public async Task StartAsync(CancellationToken token, ushort port = 45454)
+        public async Task StartAsync(CancellationToken token)
         {
             try
             {
                 string localIpv4Address = await NetworkTools.GetLocalIpv4Address(token);
+                int port = this.udpClient.GetBoundPort();
                 string hostNameAndIpAddress = $"{localIpv4Address}:{port}";
                 await this.logger.Log($"Listening on '{hostNameAndIpAddress}'.", this);
 

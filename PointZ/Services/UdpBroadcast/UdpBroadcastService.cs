@@ -21,7 +21,7 @@ namespace PointZ.Services.UdpBroadcast
             this.logger = logger;
         }
 
-        public async Task StartAsync(CancellationToken token, int delayMs = 1000)
+        public async Task StartAsync(CancellationToken token, ushort port = 45455, int delayMs = 1000)
         {
             try
             {
@@ -30,8 +30,9 @@ namespace PointZ.Services.UdpBroadcast
                 string hostNameAndIpAddress = $"{hostName}|{localIpv4Address}";
                 TimeSpan delay = TimeSpan.FromMilliseconds(delayMs);
                 await this.logger.Log(
-                    $"Broadcasting '{hostNameAndIpAddress}' on port 45455 (delay: {delay.Seconds}s {delay.Milliseconds}ms).",
+                    $"Broadcasting '{hostNameAndIpAddress}' on port {port} (delay: {delay.Seconds}s {delay.Milliseconds}ms).",
                     this);
+                await this.udpClient.Client.ConnectAsync(IPAddress.Broadcast, port, token);
 
                 while (true)
                 {
@@ -42,7 +43,7 @@ namespace PointZ.Services.UdpBroadcast
             }
             catch (TaskCanceledException)
             {
-                await this.logger.Log(TaskCancelledMessage, this);
+                 await this.logger.Log(TaskCancelledMessage, this);
             }
             catch (OperationCanceledException)
             {

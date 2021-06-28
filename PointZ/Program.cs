@@ -23,20 +23,20 @@ namespace PointZ
             logger = ConsoleLogger;
 #endif
 
-            // Cancellation Tokens
-            CancellationTokenSource udpBroadcastTokenSource = new();
-            CancellationTokenSource udpListenerTokenSource = new();
-
             // Services
             IUdpBroadcastService udpBroadcastService = new UdpBroadcastService(new UdpClient(), logger);
             IDataInterpreterService dataInterpreterService = new DataInterpreterService(logger);
             IUdpListenerService udpListenerService =
-                new UdpListenerService(new UdpClient(), dataInterpreterService, logger);
+                new UdpListenerService(new UdpClient(45454), dataInterpreterService, logger);
 
+            // Cancellation Tokens
+            CancellationTokenSource udpBroadcastTokenSource = new();
+            CancellationTokenSource udpListenerTokenSource = new();
+            
             // Run
             Task broadcastServiceTask = udpBroadcastService.StartAsync(udpBroadcastTokenSource.Token);
             Task listenerServiceTask = udpListenerService.StartAsync(udpListenerTokenSource.Token);
-            
+
             // udpListenerTokenSource.Cancel();
 
             Console.ReadKey();
