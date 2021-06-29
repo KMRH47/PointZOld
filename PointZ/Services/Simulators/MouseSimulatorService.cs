@@ -16,7 +16,7 @@ namespace PointZ.Services.Simulators
 
         public Task Execute(object data)
         {
-            this.mouseSimulator.LeftButtonClick();
+            this.mouseSimulator.MoveMouseBy(x, y);
             return null;
         }
     }
