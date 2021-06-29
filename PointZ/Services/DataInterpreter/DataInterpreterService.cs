@@ -1,48 +1,60 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using PointZ.Extensions;
 using PointZ.Services.Logger;
+using PointZ.Services.Simulators;
 
 namespace PointZ.Services.DataInterpreter
 {
     public class DataInterpreterService : IDataInterpreterService
     {
+        private const byte ProtocolLength = 2;
+        private readonly IDictionary<string, IInputSimulatorService> inputSimulatorServiceMap =
+            new Dictionary<string, IInputSimulatorService>();
         private readonly ILogger logger;
-        private readonly IDictionary<string, string> commandMap;
 
-        public DataInterpreterService(ILogger logger)
+        public DataInterpreterService(ILogger logger, params IInputSimulatorService[] inputSimulatorServices)
         {
-            this.logger = logger;
+            try
+            {
+                this.logger = logger;
+
+                foreach (IInputSimulatorService inputSimulatorService in inputSimulatorServices)
+                    this.inputSimulatorServiceMap.Add(inputSimulatorService.CommandId, inputSimulatorService);
+            }
+            catch (Exception e)
+            {
+                this.logger.Log($"Initialization of object {nameof(DataInterpreterService)} failed: {e.Message}", this);
+                throw;
+            }
         }
 
         public async Task InterpretAsync(byte[] bytes)
         {
-            bytes = bytes.Where(b => b != 0).ToArray();
-            string data = Encoding.UTF8.GetString(bytes);
-            await this.logger.Log($"Received '{data}' ", this);
+            try
+            {
+                await bytes.CutFromFirstNullCharacter();
+                var data = Encoding.UTF8.GetString(bytes);
+                string[] deserializedData = data.Split(',');
+                string command = deserializedData[0];
+                string value = deserializedData[1];
 
-            if (data.Length == 0)
-                PostCharacter(data[0]);
-
-            if (ContainsNonAnsiCharacter(data)) 
-                InterpretAnsiCharacter(data);
-            else InterpretNonAnsiCharacter(data);
+                this.inputSimulatorServiceMap.TryGetValue(command, out IInputSimulatorService inputSimulatorService);
+                if (inputSimulatorService == null) throw new NullReferenceException();
+                await inputSimulatorService.Execute(value);
+            }
+            catch (NullReferenceException e)
+            {
+                await this.logger.Log($"{e.Message}\n{e.StackTrace}", this);
+                throw;
+            }
+            catch (Exception e)
+            {
+                await this.logger.Log($"{e.Message}\n{e.StackTrace}", this);
+                throw;
+            }
         }
-
-        private static void PostCharacter(char c)
-        {
-        }
-
-        private static void InterpretNonAnsiCharacter(string data)
-        {
-        }
-
-        private static void InterpretAnsiCharacter(string data)
-        {
-        }
-
-        private static bool ContainsNonAnsiCharacter(string data) => data.Any(c => c >= 255);
     }
 }

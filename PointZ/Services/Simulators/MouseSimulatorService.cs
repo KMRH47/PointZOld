@@ -1,16 +1,18 @@
 ﻿using System.Threading.Tasks;
 using InputSimulatorStandard;
 
-namespace PointZ.Services.MouseSimulator
+namespace PointZ.Services.Simulators
 {
-    public class MouseSimulatorService :IMouseSimulatorService
+    public class MouseSimulatorService : IInputSimulatorService
     {
         private readonly IMouseSimulator mouseSimulator;
 
-        public  MouseSimulatorService(IMouseSimulator mouseSimulator)
+        public MouseSimulatorService(IMouseSimulator mouseSimulator)
         {
             this.mouseSimulator = mouseSimulator;
         }
+
+        public string CommandId => "#C";
 
         public Task Execute(object data)
         {

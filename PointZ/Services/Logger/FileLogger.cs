@@ -24,6 +24,7 @@ namespace PointZ.Services.Logger
             catch (Exception e)
             {
                 consoleLogger.Log($"Initialization of object {nameof(FileLogger)} failed: {e.Message}", this);
+                throw;
             }
         }
 
@@ -36,6 +37,7 @@ namespace PointZ.Services.Logger
             catch (Exception e)
             {
                 await Task.Run(() => this.consoleLogger.Log($"{contextSource}: {e.Message}", this));
+                throw;
             }
         } 
     }

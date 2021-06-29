@@ -2,8 +2,10 @@
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
+using InputSimulatorStandard;
 using PointZ.Services.DataInterpreter;
 using PointZ.Services.Logger;
+using PointZ.Services.Simulators;
 using PointZ.Services.UdpBroadcast;
 using PointZ.Services.UdpListener;
 
@@ -24,15 +26,18 @@ namespace PointZ
 #endif
 
             // Services
+            IInputSimulatorService mouseSimulatorService = new MouseSimulatorService(new MouseSimulator());
+            IInputSimulatorService keyboardSimulatorService = new KeyboardSimulatorService(new KeyboardSimulator());
             IUdpBroadcastService udpBroadcastService = new UdpBroadcastService(new UdpClient(), logger);
-            IDataInterpreterService dataInterpreterService = new DataInterpreterService(logger);
+            IDataInterpreterService dataInterpreterService =
+                new DataInterpreterService(logger, keyboardSimulatorService, mouseSimulatorService);
             IUdpListenerService udpListenerService =
                 new UdpListenerService(new UdpClient(45454), dataInterpreterService, logger);
 
             // Cancellation Tokens
             CancellationTokenSource udpBroadcastTokenSource = new();
             CancellationTokenSource udpListenerTokenSource = new();
-            
+
             // Run
             Task broadcastServiceTask = udpBroadcastService.StartAsync(udpBroadcastTokenSource.Token);
             Task listenerServiceTask = udpListenerService.StartAsync(udpListenerTokenSource.Token);
