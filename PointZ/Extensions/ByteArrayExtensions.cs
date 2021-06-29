@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace PointZ.Extensions
@@ -11,13 +10,12 @@ namespace PointZ.Extensions
         /// </summary>
         /// <param name="bytes">This byte array.</param>
         /// <returns></returns>
-        public static Task CutFromFirstNullCharacter(this byte[] bytes)
+        public static Task<byte[]> CopyRemovingNulls(this byte[]  bytes)
         {
             List<byte> byteList = new(200);
             byte count = 0;
             while (bytes[count] != 0) byteList.Add(bytes[count++]);
-            bytes = byteList.ToArray();
-            throw new Exception($"Error when attempting to copy '{bytes}'.");
+           return Task.FromResult(byteList.ToArray());
         }
     }
 }

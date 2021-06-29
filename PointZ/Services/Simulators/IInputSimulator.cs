@@ -2,9 +2,9 @@
 
 namespace PointZ.Services.Simulators
 {
-    public interface IInputSimulatorService
+    public interface IInputSimulator
     {
         public string CommandId { get; }
-        Task Execute(object o);
+        Task ExecuteCommand(string[] data);
     }
 }

@@ -10,18 +10,17 @@ namespace PointZ.Services.DataInterpreter
 {
     public class DataInterpreterService : IDataInterpreterService
     {
-        private const byte ProtocolLength = 2;
-        private readonly IDictionary<string, IInputSimulatorService> inputSimulatorServiceMap =
-            new Dictionary<string, IInputSimulatorService>();
+        private readonly IDictionary<string, IInputSimulator> inputSimulatorServiceMap =
+            new Dictionary<string, IInputSimulator>();
         private readonly ILogger logger;
 
-        public DataInterpreterService(ILogger logger, params IInputSimulatorService[] inputSimulatorServices)
+        public DataInterpreterService(ILogger logger, params IInputSimulator[] inputSimulatorServices)
         {
             try
             {
                 this.logger = logger;
 
-                foreach (IInputSimulatorService inputSimulatorService in inputSimulatorServices)
+                foreach (IInputSimulator inputSimulatorService in inputSimulatorServices)
                     this.inputSimulatorServiceMap.Add(inputSimulatorService.CommandId, inputSimulatorService);
             }
             catch (Exception e)
@@ -35,20 +34,14 @@ namespace PointZ.Services.DataInterpreter
         {
             try
             {
-                await bytes.CutFromFirstNullCharacter();
-                var data = Encoding.UTF8.GetString(bytes);
+                byte[] shavedBytes = await bytes.CopyRemovingNulls();
+                string data = Encoding.UTF8.GetString(shavedBytes);
                 string[] deserializedData = data.Split(',');
-                string command = deserializedData[0];
-                string value = deserializedData[1];
 
-                this.inputSimulatorServiceMap.TryGetValue(command, out IInputSimulatorService inputSimulatorService);
+                this.inputSimulatorServiceMap.TryGetValue(deserializedData[0],
+                    out IInputSimulator inputSimulatorService);
                 if (inputSimulatorService == null) throw new NullReferenceException();
-                await inputSimulatorService.Execute(value);
-            }
-            catch (NullReferenceException e)
-            {
-                await this.logger.Log($"{e.Message}\n{e.StackTrace}", this);
-                throw;
+                await inputSimulatorService.ExecuteCommand(deserializedData);
             }
             catch (Exception e)
             {
