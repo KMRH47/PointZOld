@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PointZClient.Views.DiscoverView"
+             xmlns:viewModelsBase="clr-namespace:PointZClient.ViewModels.Base;assembly=PointZClient"
+             viewModelsBase:ViewModelLocator.AutoWireViewModel="True">
+
+    <ContentPage.Content>
+
+        <Grid BackgroundColor="{AppThemeBinding Dark=#121212, Light=#DEDEDE}">
+            <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
+                <ActivityIndicator WidthRequest="300" HeightRequest="300" IsRunning="{Binding IsSearching}"
+                                   Color="{AppThemeBinding Dark=#DEDEDE, Light=#121212}" />
+                <Label FontSize="Title" Text="Searching" HorizontalOptions="Center"
+                       TextColor="{AppThemeBinding Dark=#DEDEDE, Light=#121212 }" />
+            </StackLayout>
+        </Grid>
+
+    </ContentPage.Content>
+</ContentPage>
