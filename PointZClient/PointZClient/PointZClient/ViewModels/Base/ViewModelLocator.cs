@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Reflection;
+using PointZClient.Services.UdpListener;
 using TinyIoC;
 using Xamarin.Forms;
 
@@ -18,8 +19,11 @@ namespace PointZClient.ViewModels.Base
             // By default, concrete classes are registered as instances and interfaces implementations as singletons.
 
             // View models
+            Container.Register<DiscoverViewModel>();
+            Container.Register<SessionViewModel>();
 
             // Services
+            Container.Register<IUdpListenerService, UdpListenerService>();
         }
 
         // ReSharper disable once MemberCanBePrivate.Global
@@ -53,7 +57,7 @@ namespace PointZClient.ViewModels.Base
             Type viewModelType = Type.GetType(viewModelName);
             if (viewModelType == null) return;
 
-            var viewModel = Container.Resolve(viewModelType);
+            object viewModel = Container.Resolve(viewModelType);
             view.BindingContext = viewModel;
         }
     }

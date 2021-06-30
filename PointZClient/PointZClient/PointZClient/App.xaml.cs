@@ -13,9 +13,6 @@ namespace PointZClient
         {
             Device.SetFlags(new[] {"Shapes_Experimental", "Brush_Experimental"}); 
             InitializeComponent();
-
-            Current.UserAppTheme = OSAppTheme.Dark;
-
             MainPage = new DiscoverView();
         }
 

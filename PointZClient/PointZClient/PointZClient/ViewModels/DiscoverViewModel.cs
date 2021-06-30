@@ -1,15 +1,18 @@
-﻿using PointZClient.ViewModels.Base;
+﻿using PointZClient.Services.UdpListener;
+using PointZClient.ViewModels.Base;
 
 namespace PointZClient.ViewModels
 {
     public class DiscoverViewModel : ViewModelBase
     {
-        
-        public DiscoverViewModel()
+        private readonly IUdpListenerService udpListenerService;
+
+        public DiscoverViewModel(IUdpListenerService udpListenerService)
         {
-           // ActivityIndicator.IsRunning = true;
+            this.udpListenerService = udpListenerService;
         }
 
         public bool IsSearching { get; set;  } = true;
+        
     }
 }
