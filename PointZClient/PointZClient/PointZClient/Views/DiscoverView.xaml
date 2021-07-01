@@ -9,11 +9,14 @@
     <ContentPage.Content>
 
         <Grid BackgroundColor="{AppThemeBinding Dark=#121212, Light=#DEDEDE}">
-            <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
-                <ActivityIndicator WidthRequest="300" HeightRequest="300" IsRunning="{Binding IsSearching}"
-                                   Color="{AppThemeBinding Dark=#DEDEDE, Light=#121212}" />
-                <Label FontSize="Title" Text="Searching" HorizontalOptions="Center"
-                       TextColor="{AppThemeBinding Dark=#DEDEDE, Light=#121212 }" />
+            <StackLayout HorizontalOptions="Center">
+                <ListView ItemsSource="{Binding Servers}"/>
+                <StackLayout  VerticalOptions="Center">
+                    <ActivityIndicator WidthRequest="300" HeightRequest="300" IsRunning="{Binding IsSearching}"
+                                       Color="{AppThemeBinding Dark=#DEDEDE, Light=#121212}" />
+                    <Label FontSize="Title" Text="Searching" HorizontalOptions="Center"
+                           TextColor="{AppThemeBinding Dark=#DEDEDE, Light=#121212 }" />
+                </StackLayout>
             </StackLayout>
         </Grid>
 

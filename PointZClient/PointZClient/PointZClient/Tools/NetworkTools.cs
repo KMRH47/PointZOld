@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Net;
 using System.Net.Sockets;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace PointZClient.Tools
@@ -17,12 +16,12 @@ namespace PointZClient.Tools
         {
             using Socket socket = new(AddressFamily.InterNetwork, SocketType.Dgram, 0);
             await socket.ConnectAsync(IPAddress.Broadcast, 65530);
-            
+
             if (socket.LocalEndPoint is not IPEndPoint localEndPoint)
-                throw new NullReferenceException();
-            
+                throw new InvalidCastException($"{socket.LocalEndPoint} cannot be cast to type {typeof(IPEndPoint)}.");
+
             socket.Dispose();
-            
+
             return localEndPoint.Address.ToString();
         }
     }

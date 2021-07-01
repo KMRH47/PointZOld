@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Reflection;
+using PointZClient.Services.Logger;
 using PointZClient.Services.UdpListener;
 using TinyIoC;
 using Xamarin.Forms;
@@ -24,6 +25,7 @@ namespace PointZClient.ViewModels.Base
 
             // Services
             Container.Register<IUdpListenerService, UdpListenerService>();
+            Container.Register<ILogger, ConsoleLogger>();
         }
 
         // ReSharper disable once MemberCanBePrivate.Global
