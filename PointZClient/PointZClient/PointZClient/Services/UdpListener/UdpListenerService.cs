@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
-using PointZClient.Extensions;
 using PointZClient.Models.Server;
 using PointZClient.Services.Logger;
-using PointZClient.Tools;
 
 namespace PointZClient.Services.UdpListener
 {
@@ -23,32 +22,30 @@ namespace PointZClient.Services.UdpListener
 
         public void Stop() => this.udpClient.Client.Disconnect(true);
         public bool Running { get; private set; }
-        public ObservableCollection<ServerData> Servers { get; } = new();
+        private ObservableCollection<ServerData> Servers { get; set; }
 
-        public async Task StartAsync()
+        public async Task StartAsync(ObservableCollection<ServerData> servers)
         {
             try
             {
+                Servers = servers;
                 Running = true;
-                string localIpv4Address = await NetworkTools.GetLocalIpv4Address();
-                int port = this.udpClient.GetBoundPort();
-                string hostNameAndIpAddress = $"{localIpv4Address}:{port}";
-                await this.logger.Log($"Listening on '{hostNameAndIpAddress}'.", this);
+                IPEndPoint endPoint = new(IPAddress.Any, 45455);
+                this.udpClient.Client.Bind(endPoint);
 
                 while (true)
                 {
                     UdpReceiveResult result = await this.udpClient.ReceiveAsync();
                     _ = HandleResult(result);
-            
                 }
             }
             catch (SocketException e)
             {
-                await this.logger.Log($"[{nameof(SocketException)}] {e.Message}", this);
+                await this.logger.Log($"[{nameof(SocketException)}] {e.Message}.\n{e.StackTrace}", this);
             }
             catch (Exception e)
             {
-                await this.logger.Log($"[{nameof(Exception)}] {e.Message}", this);
+                await this.logger.Log($"[{nameof(Exception)}] {e.Message}.\n{e.StackTrace}", this);
             }
             finally
             {
@@ -59,6 +56,7 @@ namespace PointZClient.Services.UdpListener
         private async Task HandleResult(UdpReceiveResult result)
         {
             string data = Encoding.UTF8.GetString(result.Buffer);
+            await this.logger.Log($"Handling result: {data}", this);
             string[] dataSplit = data.Split('|');
             ServerData serverData = new(dataSplit[0], dataSplit[1]);
             await UpdateServer(serverData);
@@ -66,24 +64,23 @@ namespace PointZClient.Services.UdpListener
 
         private Task UpdateServer(ServerData serverData)
         {
-            for (int i = 0; i < Servers.Count; i++)
+            if (Servers.Count > 0)
             {
-                if (serverData.Name == Servers[i].Name)
-                    Servers[i] = serverData;
+                for (int i = 0; i < Servers.Count; i++)
+                {
+                    if (serverData.Name != Servers[i].Name) continue;
 
-                Servers.Add(serverData);
+                    this.logger.Log(
+                        $"Updated {Servers[i].Name}|{Servers[i].Address} to {serverData.Name}|{serverData.Address}.",
+                        this);
+                    Servers[i] = serverData;
+                    return Task.CompletedTask;
+                }
             }
 
+            Servers.Add(serverData);
+            this.logger.Log($"Server {serverData.Name}|{serverData.Address} added.", this);
             return Task.CompletedTask;
         }
-        
-        /*
-         * 
-                if (DateTime.Now.Second - serverData.LastUpdated.Second > 5 )
-                {
-                    
-                }
-                
-         */
     }
 }

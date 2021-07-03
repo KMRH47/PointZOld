@@ -3,6 +3,29 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="PointZClient.App">
     <Application.Resources>
+        
+        <!-- Colors -->
+        <Color x:Key="SystemColorDark">Black</Color>
+        <Color x:Key="SystemColorLight">White</Color>
+        <Color x:Key="WhitenedBlack">#121212</Color>
+        <Color x:Key="DimmedWhite">#CECECE</Color>
+        <Color x:Key="BackgroundColorLight">#DEDEDE</Color>
+        
+        <!-- Styles -->
+        <Style x:Key="GridStyle" TargetType="{x:Type Grid}">
+            <Setter Property="BackgroundColor"
+                    Value="{AppThemeBinding 
+                       Dark={StaticResource WhitenedBlack}, 
+                       Light={StaticResource DimmedWhite}}" />
+        </Style>
+        
+        <Style x:Key="StackLayoutStyle" TargetType="{x:Type StackLayout}">
+            <Setter Property="BackgroundColor"
+                    Value="{AppThemeBinding 
+                        Dark={StaticResource WhitenedBlack},
+                        Light={StaticResource DimmedWhite}}" />
 
+        </Style>
+       
     </Application.Resources>
 </Application>

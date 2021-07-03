@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq.Expressions;
 using System.Reflection;
 using Xamarin.Forms;
@@ -10,6 +11,7 @@ namespace PointZClient.ViewModels.Base
         protected void RaisePropertyChanged<T>(Expression<Func<T>> property)
         {
             string name = GetMemberInfo(property).Name;
+            Debug.WriteLine($"Property changed: {name}");
             OnPropertyChanged(name);
         }
 

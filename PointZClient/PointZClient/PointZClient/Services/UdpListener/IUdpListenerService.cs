@@ -6,9 +6,8 @@ namespace PointZClient.Services.UdpListener
 {
     public interface IUdpListenerService
     {
-        Task StartAsync();
+        Task StartAsync(ObservableCollection<ServerData> servers);
         void Stop();
         public bool Running { get; }
-        public ObservableCollection<ServerData> Servers { get; }
     }
 }

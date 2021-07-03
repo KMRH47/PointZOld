@@ -11,7 +11,7 @@ namespace PointZClient
     {
         public App()
         {
-            Device.SetFlags(new[] {"Shapes_Experimental", "Brush_Experimental"}); 
+            Device.SetFlags(new[] {"Shapes_Experimental", "Brush_Experimental","AppTheme_Experimental"}); 
             InitializeComponent();
             MainPage = new DiscoverView();
         }

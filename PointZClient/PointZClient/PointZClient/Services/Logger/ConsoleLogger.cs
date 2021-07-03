@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace PointZClient.Services.Logger
@@ -7,7 +8,7 @@ namespace PointZClient.Services.Logger
     {
         public Task Log(string message, object contextSource)
         {
-            Console.WriteLine($"{DateTime.Now} {contextSource}: {message}");
+            Debug.WriteLine($"{DateTime.Now} {contextSource}: {message}");
             return Task.CompletedTask;
         }
     }
