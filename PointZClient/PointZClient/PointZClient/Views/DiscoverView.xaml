@@ -9,7 +9,6 @@
 
     <ContentPage.Resources>
         <ResourceDictionary>
-
             <Style x:Key="ActivityIndicatorBigStyle" TargetType="{x:Type ActivityIndicator}">
                 <Setter Property="Color"
                         Value="{AppThemeBinding 
@@ -34,30 +33,34 @@
 
     <ContentPage.Content>
 
-        <Grid Style="{StaticResource GridStyle}">
+        <StackLayout Style="{StaticResource StackLayoutStyle}">
 
-            <StackLayout Style="{StaticResource StackLayoutStyle}" 
-                         VerticalOptions="Center"
-                         IsVisible="{Binding ShouldSearch}">
-                <ActivityIndicator Style="{StaticResource ActivityIndicatorBigStyle}"
-                                   IsRunning="{Binding IsSearching}" />
-                <Label Style="{StaticResource SearchingStyle}" />
+            <StackLayout VerticalOptions="CenterAndExpand">
+                <StackLayout IsVisible="{Binding AnyServerFound}">
+                    <ActivityIndicator Style="{StaticResource ActivityIndicatorBigStyle}"
+                                       IsRunning="{Binding IsSearching}" />
+                    <Label Style="{StaticResource SearchingStyle}" />
+                </StackLayout>
+
+
+                <ListView ItemsSource="{Binding Servers}"
+                          IsVisible="{Binding Servers.Count}"
+                          SelectedItem="{Binding SelectedServer}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <templates:DiscoverServerTemplate />
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
             </StackLayout>
 
-            <ListView ItemsSource="{Binding Servers}"
-                      IsVisible="{Binding Servers.Count}"
-                      Margin="20 ">
-
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-                            <templates:DiscoverServerTemplate />
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-
-        </Grid>
+            <Button Text="Connect" 
+                    IsEnabled="{Binding IsServerSelected}" 
+                    IsVisible="{Binding IsServerSelected}" 
+                    Command="{Binding ConnectCommand}"/>
+        </StackLayout>
 
     </ContentPage.Content>
 </ContentPage>

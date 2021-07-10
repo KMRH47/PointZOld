@@ -4,11 +4,10 @@ using Xamarin.Forms.Xaml;
 namespace PointZClient.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class SessionView : ContentPage
+    public partial class CustomNavigationView : NavigationPage
     {
-        public SessionView()
+        public CustomNavigationView(Page root) : base(root)
         {
-            InitializeComponent();
         }
     }
 }

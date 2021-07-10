@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -9,26 +8,25 @@ using PointZClient.Services.Logger;
 
 namespace PointZClient.Services.UdpListener
 {
-    public class UdpListenerService : IUdpListenerService
+    public class ServerListenerService : IServerListenerService
     {
         private readonly UdpClient udpClient;
         private readonly ILogger logger;
+        private Action<ServerData> onServerDataReceived;
 
-        public UdpListenerService(UdpClient udpClient, ILogger logger)
+        public ServerListenerService(UdpClient udpClient, ILogger logger)
         {
             this.udpClient = udpClient;
             this.logger = logger;
         }
 
-        public void Stop() => this.udpClient.Client.Disconnect(true);
         public bool Running { get; private set; }
-        private ObservableCollection<ServerData> Servers { get; set; }
 
-        public async Task StartAsync(ObservableCollection<ServerData> servers)
+        public async Task StartAsync(Action<ServerData> onServerDataReceived )
         {
             try
             {
-                Servers = servers;
+                this.onServerDataReceived = onServerDataReceived;
                 Running = true;
                 IPEndPoint endPoint = new(IPAddress.Any, 45455);
                 this.udpClient.Client.Bind(endPoint);
@@ -36,7 +34,7 @@ namespace PointZClient.Services.UdpListener
                 while (true)
                 {
                     UdpReceiveResult result = await this.udpClient.ReceiveAsync();
-                    _ = HandleResult(result);
+                    _ = HandleReceivedData(result);
                 }
             }
             catch (SocketException e)
@@ -52,35 +50,16 @@ namespace PointZClient.Services.UdpListener
                 Running = false;
             }
         }
+        
+        public void Stop() => this.udpClient.Client.Disconnect(true);
 
-        private async Task HandleResult(UdpReceiveResult result)
+        private async Task HandleReceivedData(UdpReceiveResult result)
         {
             string data = Encoding.UTF8.GetString(result.Buffer);
-            await this.logger.Log($"Handling result: {data}", this);
+            await this.logger.Log($"Server found: {data}", this);
             string[] dataSplit = data.Split('|');
             ServerData serverData = new(dataSplit[0], dataSplit[1]);
-            await UpdateServer(serverData);
-        }
-
-        private Task UpdateServer(ServerData serverData)
-        {
-            if (Servers.Count > 0)
-            {
-                for (int i = 0; i < Servers.Count; i++)
-                {
-                    if (serverData.Name != Servers[i].Name) continue;
-
-                    this.logger.Log(
-                        $"Updated {Servers[i].Name}|{Servers[i].Address} to {serverData.Name}|{serverData.Address}.",
-                        this);
-                    Servers[i] = serverData;
-                    return Task.CompletedTask;
-                }
-            }
-
-            Servers.Add(serverData);
-            this.logger.Log($"Server {serverData.Name}|{serverData.Address} added.", this);
-            return Task.CompletedTask;
+            this.onServerDataReceived(serverData);
         }
     }
 }

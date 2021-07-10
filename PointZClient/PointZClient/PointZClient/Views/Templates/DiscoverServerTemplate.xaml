@@ -8,8 +8,7 @@
         <ResourceDictionary>
             <Style x:Key="ServerText"
                    TargetType="{x:Type Label}">
-                <Setter Property="FontSize"
-                        Value="Title" />
+                <Setter Property="FontSize" Value="Title" />
                 <Setter Property="TextColor"
                         Value="{AppThemeBinding 
                         Dark={StaticResource DimmedWhite},
@@ -18,9 +17,13 @@
         </ResourceDictionary>
     </ContentView.Resources>
 
-    <StackLayout Orientation="Horizontal" HorizontalOptions="Center" VerticalOptions="Center">
-        <Label Text="{Binding Name}" Style="{StaticResource ServerText}" />
-        <Label Text="{Binding Address}" Style="{StaticResource ServerText}" />
+    <StackLayout Orientation="Horizontal"  VerticalOptions="Center" >
+        <Label Text="{Binding Name}" 
+               Style="{StaticResource ServerText}"
+               HorizontalOptions="StartAndExpand" />
+        <Label Text="{Binding Address}" 
+               Style="{StaticResource ServerText}" 
+               HorizontalOptions="EndAndExpand" />
     </StackLayout>
 
 </ContentView>

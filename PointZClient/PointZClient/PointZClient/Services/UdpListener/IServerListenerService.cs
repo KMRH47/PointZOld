@@ -1,13 +1,14 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
 using System.Threading.Tasks;
 using PointZClient.Models.Server;
 
 namespace PointZClient.Services.UdpListener
 {
-    public interface IUdpListenerService
+    public interface IServerListenerService
     {
-        Task StartAsync(ObservableCollection<ServerData> servers);
+        Task StartAsync(Action<ServerData> onServerDataReceived);
         void Stop();
         public bool Running { get; }
+        
     }
 }

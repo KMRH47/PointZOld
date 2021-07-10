@@ -2,12 +2,17 @@
 using System.Diagnostics;
 using System.Linq.Expressions;
 using System.Reflection;
+using PointZClient.Services.Navigation;
 using Xamarin.Forms;
 
 namespace PointZClient.ViewModels.Base
 {
     public class ViewModelBase : BindableObject
     {
+        protected readonly INavigationService NavigationService;
+
+        public ViewModelBase() => this.NavigationService = ViewModelLocator.Resolve<INavigationService>();
+
         protected void RaisePropertyChanged<T>(Expression<Func<T>> property)
         {
             string name = GetMemberInfo(property).Name;
