@@ -1,23 +1,31 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8"?>
+
 <Application xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="PointZClient.App">
     <Application.Resources>
-        
+
         <!-- Colors -->
         <Color x:Key="SystemColorDark">Black</Color>
         <Color x:Key="SystemColorLight">White</Color>
         <Color x:Key="WhitenedBlack">#121212</Color>
         <Color x:Key="DimmedWhite">#CECECE</Color>
-        
+
         <!-- Styles -->
         <Style x:Key="StackLayoutStyle" TargetType="{x:Type StackLayout}">
             <Setter Property="BackgroundColor"
                     Value="{AppThemeBinding 
                         Dark={StaticResource WhitenedBlack},
                         Light={StaticResource DimmedWhite}}" />
-
+        </Style>
+        <Style x:Key="GridStyle" TargetType="{x:Type Grid}">
+             <Setter Property="ColumnSpacing" Value="0" />
         </Style>
         
+        <Style TargetType="{x:Type Button}">
+            <Setter Property="BorderWidth" Value="0" />
+            <Setter Property="CornerRadius" Value="0" />
+        </Style>
+
     </Application.Resources>
 </Application>

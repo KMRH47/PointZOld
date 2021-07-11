@@ -56,7 +56,7 @@ namespace PointZClient.Services.UdpListener
         private async Task HandleReceivedData(UdpReceiveResult result)
         {
             string data = Encoding.UTF8.GetString(result.Buffer);
-            await this.logger.Log($"Server found: {data}", this);
+            await this.logger.Log($"Server visible: {data}", this);
             string[] dataSplit = data.Split('|');
             ServerData serverData = new(dataSplit[0], dataSplit[1]);
             this.onServerDataReceived(serverData);

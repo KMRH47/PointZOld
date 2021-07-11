@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Reflection;
+using PointZClient.Services.CommandSender;
 using PointZClient.Services.Logger;
 using PointZClient.Services.Navigation;
 using PointZClient.Services.UdpListener;
@@ -28,6 +29,7 @@ namespace PointZClient.ViewModels.Base
             Container.Register<IServerListenerService, ServerListenerService>();
             Container.Register<ILogger, ConsoleLogger>();
             Container.Register<INavigationService, NavigationService>();
+            Container.Register<ICommandSenderService, CommandSenderService>();
 
         }
 

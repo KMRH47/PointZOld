@@ -5,12 +5,24 @@
              x:Class="PointZClient.Views.SessionView"
              xmlns:viewModelsBase="clr-namespace:PointZClient.ViewModels.Base;assembly=PointZClient"
              viewModelsBase:ViewModelLocator.AutoWireViewModel="True">
-    
+
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Hello, world!"
-                   VerticalOptions="CenterAndExpand"
-                   HorizontalOptions="CenterAndExpand" />
+
+        <StackLayout Orientation="Vertical" Style="{StaticResource StackLayoutStyle}">
+            <StackLayout.GestureRecognizers>
+                <DragGestureRecognizer DragStartingCommand="{Binding TouchpadDragStartingCommand}"/>
+               <!-- <TapGestureRecognizer Command="{Binding TouchpadTappedCommand}" /> -->
+            </StackLayout.GestureRecognizers>
+            <Grid VerticalOptions="EndAndExpand" Style="{StaticResource GridStyle}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition /> <ColumnDefinition /> <ColumnDefinition /> <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" Text="lol 1" />
+                <Button Grid.Column="1" Text="lol 2" />
+                <Button Grid.Column="2" Text="lol 3" />
+                <Button Grid.Column="3" Text="lol 4" />
+            </Grid>
         </StackLayout>
+
     </ContentPage.Content>
 </ContentPage>

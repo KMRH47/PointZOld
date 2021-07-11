@@ -1,4 +1,6 @@
 ﻿using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Linq;
 using System.Windows.Input;
 using PointZClient.Models.Server;
 using PointZClient.Services.UdpListener;
@@ -19,7 +21,7 @@ namespace PointZClient.ViewModels
         public DiscoverViewModel(IServerListenerService serverListenerService)
         {
             this.serverListenerService = serverListenerService;
-            ConnectCommand = new Command(OnConnect); 
+            ConnectCommand = new Command(OnConnect);
             serverListenerService.StartAsync(OnServerDataReceived);
         }
 
@@ -43,8 +45,9 @@ namespace PointZClient.ViewModels
             {
                 this.isServerSelected = value;
                 RaisePropertyChanged(() => IsServerSelected);
-            } 
+            }
         }
+        
 
         public bool AnyServerFound
         {
@@ -83,10 +86,13 @@ namespace PointZClient.ViewModels
             this.NavigationService.NavigateToAsync<SessionViewModel>();
         }
 
-        private void OnServerDataReceived(ServerData serverData)
+        private void OnServerDataReceived(ServerData server)
         {
-            Servers.Add(serverData);
+            if (IsServerAlreadyAdded(server)) return;
+            Servers.Add(server);
             AnyServerFound = Servers.Count <= 0;
         }
+
+        private bool IsServerAlreadyAdded(ServerData server) => Servers.Any(s => s.Address == server.Address);
     }
 }
