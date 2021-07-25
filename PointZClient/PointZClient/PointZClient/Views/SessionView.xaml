@@ -8,11 +8,8 @@
 
     <ContentPage.Content>
 
-        <StackLayout Orientation="Vertical" Style="{StaticResource StackLayoutStyle}">
-            <StackLayout.GestureRecognizers>
-                <DragGestureRecognizer DragStartingCommand="{Binding TouchpadDragStartingCommand}"/>
-               <!-- <TapGestureRecognizer Command="{Binding TouchpadTappedCommand}" /> -->
-            </StackLayout.GestureRecognizers>
+        <StackLayout  Orientation="Vertical" 
+                     Style="{StaticResource StackLayoutStyle}" >
             <Grid VerticalOptions="EndAndExpand" Style="{StaticResource GridStyle}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition /> <ColumnDefinition /> <ColumnDefinition /> <ColumnDefinition />

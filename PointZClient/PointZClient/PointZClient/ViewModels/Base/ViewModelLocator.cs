@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Globalization;
 using System.Reflection;
+using PointZClient.Dependency;
 using PointZClient.Services.CommandSender;
 using PointZClient.Services.Logger;
 using PointZClient.Services.Navigation;
+using PointZClient.Services.TouchEventService;
 using PointZClient.Services.UdpListener;
 using TinyIoC;
 using Xamarin.Forms;
+using DependencyService = Xamarin.Forms.DependencyService;
 
 namespace PointZClient.ViewModels.Base
 {
@@ -26,11 +29,13 @@ namespace PointZClient.ViewModels.Base
             Container.Register<SessionViewModel>();
 
             // Services
+            ITouchEventService touchEventService = DependencyService.Resolve<ITouchEventService>();
             Container.Register<IServerListenerService, ServerListenerService>();
             Container.Register<ILogger, ConsoleLogger>();
             Container.Register<INavigationService, NavigationService>();
             Container.Register<ICommandSenderService, CommandSenderService>();
-
+            Container.Register<IDependencyService, Dependency.DependencyService>();
+            Container.Register(touchEventService);
         }
 
         // ReSharper disable once MemberCanBePrivate.Global

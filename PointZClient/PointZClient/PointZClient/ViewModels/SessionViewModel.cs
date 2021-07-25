@@ -1,8 +1,7 @@
 ﻿using System.Diagnostics;
-using System.Windows.Input;
 using PointZClient.Services.CommandSender;
+using PointZClient.Services.TouchEventService;
 using PointZClient.ViewModels.Base;
-using Xamarin.Forms;
 
 namespace PointZClient.ViewModels
 {
@@ -10,23 +9,15 @@ namespace PointZClient.ViewModels
     {
         private readonly ICommandSenderService commandSenderService;
 
-        public SessionViewModel(ICommandSenderService commandSenderService)
+        public SessionViewModel(ICommandSenderService commandSenderService, ITouchEventService touchEventService)
         {
             this.commandSenderService = commandSenderService;
-            TouchpadTappedCommand = new Command(OnTouchpadTapped);
-            TouchpadDragStartingCommand = new Command(OnTouchpadDragStarting);
+            touchEventService.ScreenTouched+= OnScreenTouched;
         }
 
-        public ICommand TouchpadTappedCommand { get; }
-        public ICommand TouchpadDragStartingCommand { get; }
-
-        private void OnTouchpadTapped(object data)
+        private static void OnScreenTouched(object sender, TouchEventArgs e)
         {
-            Debug.WriteLine($"Touchpad tapped, data: {data}");
-        }
-        private void OnTouchpadDragStarting(object data)
-        {
-            Debug.WriteLine($"Touchpad drag starting, data: {data}");
+            Debug.WriteLine($"Touch at X: {e.X} Y: {e.Y}");
         }
     }
 }

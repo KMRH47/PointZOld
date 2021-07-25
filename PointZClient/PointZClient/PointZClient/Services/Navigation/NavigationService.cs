@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -97,12 +98,20 @@ namespace PointZClient.Services.Navigation
 
         private static Page CreatePage(Type viewModelType, object parameter)
         {
-            Type pageType = GetPageTypeForViewModel(viewModelType);
+            try
+            {
+                Type pageType = GetPageTypeForViewModel(viewModelType);
 
-            if (pageType == null) throw new Exception($"Cannot locate page type for {viewModelType}");
+                if (pageType == null) throw new Exception($"Cannot locate page type for {viewModelType}");
 
-            Page page = Activator.CreateInstance(pageType) as Page;
-            return page;
+                Page page = Activator.CreateInstance(pageType) as Page;
+                return page;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                throw;
+            }
         }
     }
 }
