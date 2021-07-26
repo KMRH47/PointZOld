@@ -1,4 +1,5 @@
 ﻿using System;
+using PointZClient.Models.ScreenTouch;
 using PointZClient.Services.TouchEventService;
 using Xamarin.Forms;
 
@@ -12,7 +13,8 @@ namespace PointZClient.Android.Services
 
         public void OnScreenTouched(float x, float y)
         {
-            TouchEventArgs args = new TouchEventArgs {X = x, Y = y};
+            ScreenTouchData screenTouchData = new ScreenTouchData(x, y);
+            TouchEventArgs args = new TouchEventArgs(screenTouchData);
             RaiseScreenTouchedEvent(args);
         }
 

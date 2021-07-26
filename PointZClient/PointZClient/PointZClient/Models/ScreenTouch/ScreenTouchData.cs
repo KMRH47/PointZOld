@@ -1,6 +1,6 @@
 ﻿namespace PointZClient.Models.ScreenTouch
 {
-    public struct ScreenTouchData
+    public readonly struct ScreenTouchData
     {
         public ScreenTouchData(float x, float y)
         {
@@ -9,6 +9,6 @@
         }
 
         public float X { get; }
-        public float Y { get;  }
+        public float Y { get; }
     }
 }

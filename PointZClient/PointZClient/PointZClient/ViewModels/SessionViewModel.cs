@@ -17,7 +17,9 @@ namespace PointZClient.ViewModels
 
         private static void OnScreenTouched(object sender, TouchEventArgs e)
         {
-            Debug.WriteLine($"Touch at X: {e.X} Y: {e.Y}");
+            float x = e.ScreenTouchData.X;
+            float y = e.ScreenTouchData.Y;
+            Debug.WriteLine($"Touch at X: {x} Y: {y}");
         }
     }
 }
