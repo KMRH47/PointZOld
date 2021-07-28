@@ -5,6 +5,7 @@
              x:Class="PointZClient.Views.DiscoverView"
              xmlns:viewModelsBase="clr-namespace:PointZClient.ViewModels.Base;assembly=PointZClient"
              xmlns:templates="clr-namespace:PointZClient.Views.Templates;assembly=PointZClient"
+             NavigationPage.HasNavigationBar="False"
              viewModelsBase:ViewModelLocator.AutoWireViewModel="True">
 
     <ContentPage.Resources>

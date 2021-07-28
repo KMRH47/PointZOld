@@ -19,9 +19,9 @@
                         Light={StaticResource DimmedWhite}}" />
         </Style>
         <Style x:Key="GridStyle" TargetType="{x:Type Grid}">
-             <Setter Property="ColumnSpacing" Value="0" />
+            <Setter Property="ColumnSpacing" Value="0" />
         </Style>
-        
+
         <Style TargetType="{x:Type Button}">
             <Setter Property="BorderWidth" Value="0" />
             <Setter Property="CornerRadius" Value="0" />

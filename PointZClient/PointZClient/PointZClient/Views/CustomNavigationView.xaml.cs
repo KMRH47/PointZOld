@@ -8,6 +8,7 @@ namespace PointZClient.Views
     {
         public CustomNavigationView(Page root) : base(root)
         {
+           // SetHasNavigationBar(root, false);
         }
     }
 }

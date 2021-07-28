@@ -7,7 +7,7 @@ using Xamarin.Forms;
 
 namespace PointZClient.ViewModels.Base
 {
-    public class ViewModelBase : BindableObject
+    public abstract class ViewModelBase : BindableObject
     {
         protected readonly INavigationService NavigationService;
 

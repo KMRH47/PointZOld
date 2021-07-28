@@ -12,7 +12,7 @@ namespace PointZClient
         {
             Device.SetFlags(new[] {"Shapes_Experimental", "Brush_Experimental", "AppTheme_Experimental"});
             InitializeComponent();
-            MainPage = new DiscoverView();
+            MainPage = new CustomNavigationView(new DiscoverView());
         }
 
         protected override void OnStart()

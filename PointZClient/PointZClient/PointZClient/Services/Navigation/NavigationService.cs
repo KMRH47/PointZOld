@@ -60,20 +60,14 @@ namespace PointZClient.Services.Navigation
         {
             Page page = CreatePage(viewModelType, parameter);
 
-            if (page is DiscoverView)
+
+            if (Application.Current.MainPage is CustomNavigationView navigationPage)
             {
-                Application.Current.MainPage = new CustomNavigationView(page);
+                await navigationPage.PushAsync(page);
             }
             else
             {
-                if (Application.Current.MainPage is CustomNavigationView navigationPage)
-                {
-                    await navigationPage.PushAsync(page);
-                }
-                else
-                {
-                    Application.Current.MainPage = new CustomNavigationView(page);
-                }
+                Application.Current.MainPage = new CustomNavigationView(page);
             }
 
             if (page.BindingContext == null) return;

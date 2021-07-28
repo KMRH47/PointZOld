@@ -1,11 +1,16 @@
-﻿using PointZClient.Models.ScreenTouch;
-
-namespace PointZClient.Services.TouchEventService
+﻿namespace PointZClient.Services.TouchEventService
 {
     public class TouchEventArgs
     {
-        public TouchEventArgs(ScreenTouchData screenTouchData) => ScreenTouchData = screenTouchData;
+        public TouchEventArgs(float x, float y, TouchEventActions touchEventAction)
+        {
+            X = x;
+            Y = y;
+            TouchEventAction = touchEventAction;
+        }
 
-        public ScreenTouchData ScreenTouchData { get; }
+        public float X { get; }
+        public float Y { get; }
+        public TouchEventActions TouchEventAction { get; }
     }
 }
