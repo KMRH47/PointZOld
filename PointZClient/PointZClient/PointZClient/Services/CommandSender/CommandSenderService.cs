@@ -1,4 +1,7 @@
 ﻿using System.Net.Sockets;
+using System.Text;
+using System.Threading.Tasks;
+using PointZClient.Models.CursorBehavior;
 
 namespace PointZClient.Services.CommandSender
 {
@@ -11,9 +14,14 @@ namespace PointZClient.Services.CommandSender
             this.udpClient = udpClient;
         }
 
-        public void Send(string command)
+        public async Task Send(string command)
         {
-            
+        }
+
+        public async Task Send(CursorBehavior cursorBehavior)
+        {
+            byte[] message = Encoding.UTF8.GetBytes($"{cursorBehavior.PosX},{cursorBehavior.PosY}");
+            Task<int> task = this.udpClient.SendAsync(message, message.Length);
         }
     }
 }

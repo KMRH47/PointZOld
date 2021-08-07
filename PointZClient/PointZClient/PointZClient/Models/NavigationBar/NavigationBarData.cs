@@ -1,4 +1,4 @@
-﻿namespace PointZClient.Models.DeviceUserInterface
+﻿namespace PointZClient.Models.NavigationBar
 {
     public struct NavigationBarData
     {

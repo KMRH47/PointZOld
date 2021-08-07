@@ -2,8 +2,11 @@
 using Android.App;
 using Android.Content.PM;
 using Android.OS;
+using Android.Util;
 using Android.Views;
-using PointZClient.Models.DeviceUserInterface;
+using PointZClient.Models.DisplaySettings;
+using PointZClient.Models.NavigationBar;
+using PointZClient.Services.DeviceUserInterface;
 using PointZClient.Services.TouchEventService;
 using Xamarin.Forms;
 using Debug = System.Diagnostics.Debug;
@@ -15,6 +18,7 @@ namespace PointZClient.Android
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
         private ITouchEventService touchEventService;
+        private IDeviceUserInterfaceService deviceUserInterfaceService;
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -35,7 +39,7 @@ namespace PointZClient.Android
             if (motionEventArgs == null)
                 throw new ArgumentNullException($"{nameof(motionEventArgs)}",
                     "Error getting motion data from platform.");
-            
+
             float x = motionEventArgs.GetX();
             float y = motionEventArgs.GetY();
             TouchEventActions touchEventAction = (TouchEventActions) ((ushort) motionEventArgs.Action);
@@ -47,6 +51,26 @@ namespace PointZClient.Android
         private void InitializePlatform()
         {
             this.touchEventService = DependencyService.Resolve<ITouchEventService>();
+            this.deviceUserInterfaceService = DependencyService.Resolve<IDeviceUserInterfaceService>();
+            DisplayMetrics displayMetrics = new DisplayMetrics();
+
+            if (WindowManager != null)
+            {
+                if (WindowManager.DefaultDisplay != null)
+                {
+                    WindowManager.DefaultDisplay.GetMetrics(displayMetrics);
+                }
+                else
+                {
+                    throw new Exception(
+                        $"Couldn't resolve DisplayMetrics, {nameof(WindowManager.DefaultDisplay)} is null.");
+                }
+            }
+            else
+            {
+                throw new Exception($"Couldn't resolve DisplayMetrics, {nameof(WindowManager)} is null.");
+            }
+
 
             if (Resources == null) throw new Exception($"Couldn't initialize platform, {nameof(Resources)} is null.");
             int navBarHeightResId = Resources.GetIdentifier("navigation_bar_height", "dimen", "android");
@@ -54,8 +78,11 @@ namespace PointZClient.Android
             int navBarHeightPixels = Resources.GetDimensionPixelSize(navBarHeightResId);
             int navBarWidthPixels = Resources.GetDimensionPixelSize(navBarWidthResId);
 
-            NavigationBarData navigationBarData = new NavigationBarData(navBarWidthPixels, navBarHeightPixels);
-            DeviceUserInterfaceData deviceUserInterfaceData = new DeviceUserInterfaceData(navigationBarData);
+            this.deviceUserInterfaceService.NavigationBar =
+                new NavigationBarData(navBarWidthPixels, navBarHeightPixels);
+            this.deviceUserInterfaceService.DisplaySettings =
+                new DisplaySettingsData( displayMetrics.WidthPixels,displayMetrics.HeightPixels);
+
             Debug.WriteLine($"[Nav bar] Height: {navBarHeightPixels} Width: {navBarWidthPixels}");
         }
     }

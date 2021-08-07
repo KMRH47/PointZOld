@@ -1,7 +1,11 @@
-﻿namespace PointZClient.Services.CommandSender
+﻿using System.Threading.Tasks;
+using PointZClient.Models.CursorBehavior;
+
+namespace PointZClient.Services.CommandSender
 {
     public interface ICommandSenderService
     {
-        void Send(string command);
+        Task Send(string command);
+        Task Send(CursorBehavior cursorBehavior);
     }
 }

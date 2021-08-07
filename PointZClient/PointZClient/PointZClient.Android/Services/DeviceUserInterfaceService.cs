@@ -1,4 +1,5 @@
-﻿using PointZClient.Models.DeviceUserInterface;
+﻿using PointZClient.Models.DisplaySettings;
+using PointZClient.Models.NavigationBar;
 using PointZClient.Services.DeviceUserInterface;
 using Xamarin.Forms;
 
@@ -9,5 +10,6 @@ namespace PointZClient.Android.Services
     public class DeviceUserInterfaceService : IDeviceUserInterfaceService
     {
         public NavigationBarData NavigationBar { get; set; }
+        public DisplaySettingsData DisplaySettings { get; set; }
     }
 }
