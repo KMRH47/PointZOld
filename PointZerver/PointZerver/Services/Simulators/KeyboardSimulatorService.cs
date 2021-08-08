@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using InputSimulatorStandard;
 using InputSimulatorStandard.Native;
-using PointZ.Services.Logger;
+using PointZerver.Services.Logger;
 
-namespace PointZ.Services.Simulators
+namespace PointZerver.Services.Simulators
 {
     public class KeyboardSimulatorService : BaseInputSimulator
     {

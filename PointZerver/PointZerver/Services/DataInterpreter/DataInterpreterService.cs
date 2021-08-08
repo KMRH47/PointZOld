@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using PointZ.Extensions;
-using PointZ.Services.Logger;
-using PointZ.Services.Simulators;
+using PointZerver.Extensions;
+using PointZerver.Services.Logger;
+using PointZerver.Services.Simulators;
 
-namespace PointZ.Services.DataInterpreter
+namespace PointZerver.Services.DataInterpreter
 {
     public class DataInterpreterService : IDataInterpreterService
     {

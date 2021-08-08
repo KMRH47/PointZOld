@@ -4,7 +4,7 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace PointZ.Tools
+namespace PointZerver.Tools
 {
     public static class NetworkTools
     {

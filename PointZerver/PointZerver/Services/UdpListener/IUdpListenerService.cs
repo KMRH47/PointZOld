@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
-namespace PointZ.Services.UdpListener
+namespace PointZerver.Services.UdpListener
 {
     public interface IUdpListenerService
     {

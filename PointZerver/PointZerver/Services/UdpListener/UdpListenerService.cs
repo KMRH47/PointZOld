@@ -2,12 +2,12 @@
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
-using PointZ.Extensions;
-using PointZ.Services.DataInterpreter;
-using PointZ.Services.Logger;
-using PointZ.Tools;
+using PointZerver.Extensions;
+using PointZerver.Services.DataInterpreter;
+using PointZerver.Services.Logger;
+using PointZerver.Tools;
 
-namespace PointZ.Services.UdpListener
+namespace PointZerver.Services.UdpListener
 {
     public class UdpListenerService : IUdpListenerService
     {

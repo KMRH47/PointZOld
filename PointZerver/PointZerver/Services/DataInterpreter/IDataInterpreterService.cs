@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace PointZ.Services.DataInterpreter
+namespace PointZerver.Services.DataInterpreter
 {
     public interface IDataInterpreterService
     {

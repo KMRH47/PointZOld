@@ -2,7 +2,7 @@
 using System.Net;
 using System.Net.Sockets;
 
-namespace PointZ.Extensions
+namespace PointZerver.Extensions
 {
     public static class UdpClientExtensions
     {

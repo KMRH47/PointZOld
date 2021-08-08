@@ -3,14 +3,14 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
 using InputSimulatorStandard;
-using PointZ.Services.DataInterpreter;
-using PointZ.Services.Logger;
-using PointZ.Services.Simulators;
-using PointZ.Services.UdpBroadcast;
-using PointZ.Services.UdpListener;
-using IInputSimulator = PointZ.Services.Simulators.IInputSimulator;
+using PointZerver.Services.DataInterpreter;
+using PointZerver.Services.Logger;
+using PointZerver.Services.Simulators;
+using PointZerver.Services.UdpBroadcast;
+using PointZerver.Services.UdpListener;
+using IInputSimulator = PointZerver.Services.Simulators.IInputSimulator;
 
-namespace PointZ
+namespace PointZerver
 {
     internal static class Program
     {

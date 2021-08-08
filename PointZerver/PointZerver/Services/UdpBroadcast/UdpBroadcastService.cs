@@ -4,10 +4,10 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using PointZ.Services.Logger;
-using PointZ.Tools;
+using PointZerver.Services.Logger;
+using PointZerver.Tools;
 
-namespace PointZ.Services.UdpBroadcast
+namespace PointZerver.Services.UdpBroadcast
 {
     public class UdpBroadcastService : IUdpBroadcastService
     {

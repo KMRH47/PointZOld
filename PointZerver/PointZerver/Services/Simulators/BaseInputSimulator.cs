@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
-using PointZ.Services.Logger;
+using PointZerver.Services.Logger;
 
-namespace PointZ.Services.Simulators
+namespace PointZerver.Services.Simulators
 {
     public abstract class BaseInputSimulator : IInputSimulator
     {

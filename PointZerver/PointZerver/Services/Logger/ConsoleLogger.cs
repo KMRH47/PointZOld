@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace PointZ.Services.Logger
+namespace PointZerver.Services.Logger
 {
     public class ConsoleLogger : ILogger
     {

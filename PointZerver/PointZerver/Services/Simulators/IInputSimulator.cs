@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace PointZ.Services.Simulators
+namespace PointZerver.Services.Simulators
 {
     public interface IInputSimulator
     {

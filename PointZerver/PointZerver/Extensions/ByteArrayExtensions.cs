@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace PointZ.Extensions
+namespace PointZerver.Extensions
 {
     public static class ByteArrayExtensions
     {

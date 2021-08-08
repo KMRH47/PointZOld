@@ -22,7 +22,7 @@ namespace PointZClient.Services.UdpListener
 
         public bool Running { get; private set; }
 
-        public async Task StartAsync(Action<ServerData> onServerDataReceived )
+        public async Task StartAsync(Action<ServerData> onServerDataReceived)
         {
             try
             {
@@ -50,7 +50,7 @@ namespace PointZClient.Services.UdpListener
                 Running = false;
             }
         }
-        
+
         public void Stop() => this.udpClient.Client.Disconnect(true);
 
         private async Task HandleReceivedData(UdpReceiveResult result)
