@@ -4,11 +4,10 @@ using PointZClient.Models.Server;
 
 namespace PointZClient.Services.UdpListener
 {
-    public interface IServerListenerService
+    public interface IUdpListenerService
     {
         Task StartAsync(Action<ServerData> onServerDataReceived);
         void Stop();
         public bool Running { get; }
-        
     }
 }

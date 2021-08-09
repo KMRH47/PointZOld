@@ -28,7 +28,7 @@ namespace PointZClient.ViewModels.Base
             Container.Register<SessionViewModel>();
 
             // Services
-            Container.Register<IServerListenerService, ServerListenerService>();
+            Container.Register<IUdpListenerService, UdpListenerService>();
             Container.Register<ILogger, ConsoleLogger>();
             Container.Register<INavigationService, NavigationService>();
             Container.Register<ICommandSenderService, CommandSenderService>();

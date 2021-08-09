@@ -8,13 +8,13 @@ using PointZClient.Services.Logger;
 
 namespace PointZClient.Services.UdpListener
 {
-    public class ServerListenerService : IServerListenerService
+    public class UdpListenerService : IUdpListenerService
     {
         private readonly UdpClient udpClient;
         private readonly ILogger logger;
         private Action<ServerData> onServerDataReceived;
 
-        public ServerListenerService(UdpClient udpClient, ILogger logger)
+        public UdpListenerService(UdpClient udpClient, ILogger logger)
         {
             this.udpClient = udpClient;
             this.logger = logger;

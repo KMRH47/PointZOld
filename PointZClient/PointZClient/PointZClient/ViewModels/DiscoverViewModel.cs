@@ -15,13 +15,13 @@ namespace PointZClient.ViewModels
         private bool isServerSelected;
         private ServerData selectedServer;
 
-        private readonly IServerListenerService serverListenerService;
+        private readonly IUdpListenerService udpListenerService;
 
-        public DiscoverViewModel(IServerListenerService serverListenerService)
+        public DiscoverViewModel(IUdpListenerService udpListenerService)
         {
-            this.serverListenerService = serverListenerService;
+            this.udpListenerService = udpListenerService;
             ConnectCommand = new Command(OnConnect);
-            serverListenerService.StartAsync(OnServerDataReceived);
+            udpListenerService.StartAsync(OnServerDataReceived);
         }
 
         public ObservableCollection<ServerData> Servers { get; } = new();
@@ -70,14 +70,14 @@ namespace PointZClient.ViewModels
 
         public void Start()
         {
-            if (!this.serverListenerService.Running)
-                _ = this.serverListenerService.StartAsync(OnServerDataReceived);
+            if (!this.udpListenerService.Running)
+                _ = this.udpListenerService.StartAsync(OnServerDataReceived);
         }
 
         public void Stop()
         {
-            if (this.serverListenerService.Running)
-                this.serverListenerService.Stop();
+            if (this.udpListenerService.Running)
+                this.udpListenerService.Stop();
         }
 
         private void OnConnect()
