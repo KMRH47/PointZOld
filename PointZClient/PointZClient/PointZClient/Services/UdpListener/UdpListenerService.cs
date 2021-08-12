@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -33,6 +34,7 @@ namespace PointZClient.Services.UdpListener
 
                 while (true)
                 {
+                    
                     UdpReceiveResult result = await this.udpClient.ReceiveAsync();
                     _ = HandleReceivedData(result);
                 }
@@ -57,8 +59,8 @@ namespace PointZClient.Services.UdpListener
         {
             string data = Encoding.UTF8.GetString(result.Buffer);
             await this.logger.Log($"Server visible: {data}", this);
-            string[] dataSplit = data.Split('|');
-            ServerData serverData = new(dataSplit[0], dataSplit[1]);
+            Debug.WriteLine($"IP Endpoint = {result.RemoteEndPoint.Address}");
+            ServerData serverData = new(data, result.RemoteEndPoint.Address.ToString());
             this.onServerDataReceived(serverData);
         }
     }
