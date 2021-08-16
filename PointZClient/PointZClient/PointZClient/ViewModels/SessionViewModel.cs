@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
-using PointZClient.Models.CursorBehavior;
+using System.Threading.Tasks;
+using PointZClient.Models.Command;
 using PointZClient.Models.DisplaySettings;
+using PointZClient.Models.Server;
 using PointZClient.Services.CommandSender;
 using PointZClient.Services.DeviceUserInterface;
 using PointZClient.Services.TouchEventService;
@@ -14,6 +16,9 @@ namespace PointZClient.ViewModels
         private readonly ICommandSenderService commandSenderService;
         private readonly IDeviceUserInterfaceService deviceUserInterfaceService;
         private double buttonHeight;
+        private double previousX;
+        private double previousY;
+        private ServerData serverData;
 
         public SessionViewModel(ICommandSenderService commandSenderService, ITouchEventService touchEventService,
             IDeviceUserInterfaceService deviceUserInterfaceService)
@@ -33,20 +38,40 @@ namespace PointZClient.ViewModels
             }
         }
 
-        private void OnScreenTouched(object sender, TouchEventArgs e)
+        public override Task InitializeAsync(object parameter)
         {
-            DisplaySettingsData displaySettings = this.deviceUserInterfaceService.DisplaySettings;
+            this.serverData = (ServerData) parameter;
+            return Task.CompletedTask;
+        }
 
+        private async void OnScreenTouched(object sender, TouchEventArgs e)
+        {
+            switch (e.TouchEventAction)
+            {
+                case TouchEventActions.Up:
+                    return;
+                case TouchEventActions.Down:
+                    this.previousX = e.X;
+                    this.previousY = e.Y;
+                    return;
+            }
+
+            DisplaySettingsData displaySettings = this.deviceUserInterfaceService.DisplaySettings;
             bool withinBounds = e.Y < displaySettings.Height - ButtonHeightPixels;
             if (!withinBounds) return;
 
-            float x = e.X;
-            float y = e.Y;
+            Debug.WriteLine($"Toucheventaction: {e.TouchEventAction}");
+            Debug.WriteLine($"x: {e.X} y: {e.Y}");
+            Debug.WriteLine($"previousx: {this.previousX} previousy: {this.previousY}");
 
-            CursorBehavior cursorBehavior = new(x, y);
-            this.commandSenderService.Send(cursorBehavior);
+            int x = (int) -(this.previousX - e.X);
+            int y = (int) -(this.previousY - e.Y);
+            string data = $"{x},{y}";
 
-            Debug.WriteLine($"Touch at X: {x} Y: {y}");
+            await this.commandSenderService.SendAsync(MouseCommand.MoveMouseBy, data, this.serverData.Address);
+
+            this.previousX = e.X;
+            this.previousY = e.Y;
         }
     }
 }

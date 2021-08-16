@@ -82,7 +82,7 @@ namespace PointZClient.ViewModels
 
         private void OnConnect()
         {
-            this.NavigationService.NavigateToAsync<SessionViewModel>();
+            this.NavigationService.NavigateToAsync<SessionViewModel>(SelectedServer);
         }
 
         private void OnServerDataReceived(ServerData server)

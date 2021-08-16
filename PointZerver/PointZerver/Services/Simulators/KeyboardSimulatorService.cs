@@ -19,23 +19,23 @@ namespace PointZerver.Services.Simulators
         public override async Task ExecuteCommand(string[] data)
         {
             string command = data[1];
-
+            
             switch (command)
             {
-                case "KD":
+                case "KeyDowm":
                     string arg = data[2];
                     bool parseUnsuccessful = !Enum.TryParse(arg, out VirtualKeyCode key);
                     if (parseUnsuccessful) throw ArgumentException(arg);
                     this.keyboardSimulator.KeyDown(key);
                     break;
-                case "KP":
+                case "KeyPress":
                     VirtualKeyCode[] parameters = await GetParams(data);
                     this.keyboardSimulator.KeyPress(parameters);
                     break;
-                case "TE":
+                case "TextEntry":
                     //this.keyboardSimulator.TextEntry();
                     break;
-                case "MKS":
+                case "ModifiedKeyStroke":
                     // this.keyboardSimulator.ModifiedKeyStroke();
                     break;
             }

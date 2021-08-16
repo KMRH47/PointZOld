@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Threading.Tasks;
 using PointZClient.Services.Navigation;
 using Xamarin.Forms;
 
@@ -19,6 +20,8 @@ namespace PointZClient.ViewModels.Base
             Debug.WriteLine($"Property changed: {name}");
             OnPropertyChanged(name);
         }
+
+        public virtual Task InitializeAsync(object parameter) => Task.FromResult(false);
 
         private static MemberInfo GetMemberInfo(Expression expression)
         {

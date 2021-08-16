@@ -1,5 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System.Diagnostics;
+using System.Threading.Tasks;
 using InputSimulatorStandard;
+using InputSimulatorStandard.Native;
 using PointZerver.Services.Logger;
 
 namespace PointZerver.Services.Simulators
@@ -11,56 +13,57 @@ namespace PointZerver.Services.Simulators
         public MouseSimulatorService(IMouseSimulator mouseSimulator, ILogger logger) : base(logger) =>
             this.mouseSimulator = mouseSimulator;
 
-        public override string CommandId => "C";
+        public override string CommandId => "M";
 
         public override Task ExecuteCommand(string[] data)
         {
             string command = data[1];
-
+            
             switch (command)
             {
-                case "HS":
+                case "HorizontalScroll":
                     this.mouseSimulator.HorizontalScroll(int.Parse(data[2]));
                     break;
-                case "VS":
+                case "VerticalScroll":
                     this.mouseSimulator.VerticalScroll(int.Parse(data[2]));
                     break;
-                case "LBC":
+                case "LeftButtonClick":
                     this.mouseSimulator.LeftButtonClick();
                     break;
-                case "LBD":
+                case "LeftButtonDown":
                     this.mouseSimulator.LeftButtonDown();
                     break;
-                case "LBU":
+                case "LeftButtonUp":
                     this.mouseSimulator.LeftButtonUp();
                     break;
-                case "MBC":
+                case "MiddleButtonClick":
                     this.mouseSimulator.MiddleButtonClick();
                     break;
-                case "MBD":
+                case "MiddleButtonDown":
                     this.mouseSimulator.MiddleButtonDown();
                     break;
-                case "MBU":
+                case "MiddleButtonUp":
                     this.mouseSimulator.MiddleButtonUp();
                     break;
-                case "RBC":
+                case "RightButtonClick":
                     this.mouseSimulator.RightButtonClick();
                     break;
-                case "RBD":
+                case "RightButtonDown":
                     this.mouseSimulator.RightButtonDown();
                     break;
-                case "RBU":
+                case "RightButtonUp":
                     this.mouseSimulator.RightButtonUp();
                     break;
-                case "MB":
+                case "MoveMouseBy":
+                    Debug.WriteLine($"Moving mouse by {data[2]}, {data[3]}");
                     this.mouseSimulator.MoveMouseBy(int.Parse(data[2]), int.Parse(data[3]));
                     break;
-                case "MT":
+                case "MoveMouseTo":
                     base.Logger.Log($"x: {data[2]} y: {data[3]}", this);
-                    this.mouseSimulator.MoveMouseTo(int.Parse(data[2]), int.Parse(data[3]));
+                    this.mouseSimulator.MoveMouseTo(double.Parse(data[2]), double.Parse(data[3]));
                     break;
-                case "M":
-                    this.mouseSimulator.MoveMouseToPositionOnVirtualDesktop(int.Parse(data[2]), int.Parse(data[3]));
+                case "MoveMouseToPositionOnVirtualDesktop":
+                    this.mouseSimulator.MoveMouseToPositionOnVirtualDesktop(double.Parse(data[2]), double.Parse(data[3]));
                     break;
             }
 

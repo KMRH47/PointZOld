@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
 using PointZerver.Extensions;
@@ -37,9 +38,20 @@ namespace PointZerver.Services.DataInterpreter
                 byte[] shavedBytes = await bytes.CopyRemovingNulls();
                 string data = Encoding.UTF8.GetString(shavedBytes);
                 string[] deserializedData = data.Split(',');
+                string commandType = deserializedData[0];
+                Debug.WriteLine($"Received:");
 
-                this.inputSimulatorServiceMap.TryGetValue(deserializedData[0],
-                    out IInputSimulator inputSimulatorService);
+                foreach (string s in deserializedData)
+                    Debug.WriteLine(s);
+
+                Debug.WriteLine($"inputsims");
+                foreach (KeyValuePair<string,IInputSimulator> inputSimulator in this.inputSimulatorServiceMap)
+                {
+                    Debug.WriteLine(inputSimulator);
+
+                }
+                
+                this.inputSimulatorServiceMap.TryGetValue(commandType, out IInputSimulator inputSimulatorService);
                 if (inputSimulatorService == null) throw new NullReferenceException();
                 await inputSimulatorService.ExecuteCommand(deserializedData);
             }

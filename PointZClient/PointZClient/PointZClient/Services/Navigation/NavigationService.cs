@@ -72,9 +72,8 @@ namespace PointZClient.Services.Navigation
 
             if (page.BindingContext == null) return;
 
-            await Task.CompletedTask;
-            // ViewModelBase viewModelBaseBindingContext = (ViewModelBase) page.BindingContext;
-            //await viewModelBaseBindingContext.InitializeAsync(parameter);
+            ViewModelBase viewModelBaseBindingContext = (ViewModelBase) page.BindingContext;
+            await viewModelBaseBindingContext.InitializeAsync(parameter);
         }
 
         private static Type GetPageTypeForViewModel(Type viewModelType)
@@ -100,6 +99,8 @@ namespace PointZClient.Services.Navigation
 
                 Page page = Activator.CreateInstance(pageType) as Page;
                 return page;
+                
+                // THIS NEEDS FIXING...
             }
             catch (Exception e)
             {
