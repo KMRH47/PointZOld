@@ -2,6 +2,9 @@
 {
     public enum KeyboardCommand
     {
-        
+        KeyDown,
+        KeyPress,
+        TextEntry,
+        ModifiedKeyStroke
     }
 }

@@ -13,6 +13,10 @@
                      Height="{Binding StackLayoutHeightPixels}"
                      Style="{StaticResource StackLayoutStyle}">
             
+            <StackLayout.GestureRecognizers>
+                <TapGestureRecognizer  Command="{Binding TapCommand}"/>
+            </StackLayout.GestureRecognizers>
+            
             <Grid VerticalOptions="EndAndExpand"
                   Style="{StaticResource GridStyle}">
                 <Grid.ColumnDefinitions>

@@ -33,6 +33,7 @@ namespace PointZClient.ViewModels.Base
             Container.Register<INavigationService, NavigationService>();
             Container.Register<ICommandSenderService, CommandSenderService>();
             Container.Register(DependencyService.Resolve<ITouchEventService>());
+            Container.Register(DependencyService.Resolve<IPlatformNavigationService>());
             Container.Register(DependencyService.Resolve<IDeviceUserInterfaceService>());
         }
 

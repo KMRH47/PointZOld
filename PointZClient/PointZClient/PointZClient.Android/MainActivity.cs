@@ -7,6 +7,7 @@ using Android.Views;
 using PointZClient.Models.DisplaySettings;
 using PointZClient.Models.NavigationBar;
 using PointZClient.Services.DeviceUserInterface;
+using PointZClient.Services.Navigation;
 using PointZClient.Services.TouchEventService;
 using Xamarin.Forms;
 using Debug = System.Diagnostics.Debug;
@@ -19,7 +20,31 @@ namespace PointZClient.Android
     {
         private ITouchEventService touchEventService;
         private IDeviceUserInterfaceService deviceUserInterfaceService;
+        private IPlatformNavigationService platformNavigationService;
 
+        public override void OnBackPressed()
+        {
+            this.platformNavigationService.NotifyOnBackButtonPressed();
+            base.OnBackPressed();
+        }
+
+        public override bool DispatchTouchEvent(MotionEvent? motionEventArgs)
+        {
+            if (motionEventArgs == null)
+                throw new ArgumentNullException($"{nameof(motionEventArgs)}",
+                    "Error getting motion data from platform.");
+
+            float x = motionEventArgs.GetX();
+            float y = motionEventArgs.GetY();
+            TouchEventAction touchEventAction = (TouchEventAction) ((ushort) motionEventArgs.Action);
+
+            Debug.WriteLine($"Native Touch Event = {motionEventArgs.Action}");
+            Debug.WriteLine($"Custom Touch Event = {touchEventAction}");
+            this.touchEventService.NotifyOnScreenTouched(x, y, touchEventAction);
+
+            return base.DispatchTouchEvent(motionEventArgs);
+        }
+        
         protected override void OnCreate(Bundle savedInstanceState)
         {
             TabLayoutResource = Resource.Layout.Tabbar;
@@ -34,24 +59,28 @@ namespace PointZClient.Android
             LoadApplication(new App());
         }
 
-        public override bool DispatchTouchEvent(MotionEvent? motionEventArgs)
-        {
-            if (motionEventArgs == null)
-                throw new ArgumentNullException($"{nameof(motionEventArgs)}",
-                    "Error getting motion data from platform.");
-
-            float x = motionEventArgs.GetX();
-            float y = motionEventArgs.GetY();
-            TouchEventActions touchEventAction = (TouchEventActions) ((ushort) motionEventArgs.Action);
-            this.touchEventService.OnScreenTouched(x, y, touchEventAction);
-
-            return base.DispatchTouchEvent(motionEventArgs);
-        }
-
         private void InitializePlatform()
         {
+            DisplayMetrics displayMetrics = GetDisplayMetrics();
+
             this.touchEventService = DependencyService.Resolve<ITouchEventService>();
             this.deviceUserInterfaceService = DependencyService.Resolve<IDeviceUserInterfaceService>();
+            this.platformNavigationService = DependencyService.Resolve<IPlatformNavigationService>();
+
+            if (Resources == null) throw new Exception($"Couldn't initialize platform, {nameof(Resources)} is null.");
+            int navBarHeightResId = Resources.GetIdentifier("navigation_bar_height", "dimen", "android");
+            int navBarWidthResId = Resources.GetIdentifier("navigation_bar_width", "dimen", "android");
+            int navBarHeightPixels = Resources.GetDimensionPixelSize(navBarHeightResId);
+            int navBarWidthPixels = Resources.GetDimensionPixelSize(navBarWidthResId);
+
+            this.deviceUserInterfaceService.NavigationBar =
+                new NavigationBarData(navBarWidthPixels, navBarHeightPixels);
+            this.deviceUserInterfaceService.DisplaySettings =
+                new DisplaySettingsData(displayMetrics.WidthPixels, displayMetrics.HeightPixels);
+        }
+
+        private DisplayMetrics GetDisplayMetrics()
+        {
             DisplayMetrics displayMetrics = new DisplayMetrics();
 
             if (WindowManager != null)
@@ -71,19 +100,7 @@ namespace PointZClient.Android
                 throw new Exception($"Couldn't resolve DisplayMetrics, {nameof(WindowManager)} is null.");
             }
 
-
-            if (Resources == null) throw new Exception($"Couldn't initialize platform, {nameof(Resources)} is null.");
-            int navBarHeightResId = Resources.GetIdentifier("navigation_bar_height", "dimen", "android");
-            int navBarWidthResId = Resources.GetIdentifier("navigation_bar_width", "dimen", "android");
-            int navBarHeightPixels = Resources.GetDimensionPixelSize(navBarHeightResId);
-            int navBarWidthPixels = Resources.GetDimensionPixelSize(navBarWidthResId);
-
-            this.deviceUserInterfaceService.NavigationBar =
-                new NavigationBarData(navBarWidthPixels, navBarHeightPixels);
-            this.deviceUserInterfaceService.DisplaySettings =
-                new DisplaySettingsData( displayMetrics.WidthPixels,displayMetrics.HeightPixels);
-
-            Debug.WriteLine($"[Nav bar] Height: {navBarHeightPixels} Width: {navBarWidthPixels}");
+            return displayMetrics;
         }
     }
 }

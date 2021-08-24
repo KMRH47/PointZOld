@@ -22,7 +22,7 @@ namespace PointZerver.Services.Simulators
             
             switch (command)
             {
-                case "KeyDowm":
+                case "KeyDown":
                     string arg = data[2];
                     bool parseUnsuccessful = !Enum.TryParse(arg, out VirtualKeyCode key);
                     if (parseUnsuccessful) throw ArgumentException(arg);

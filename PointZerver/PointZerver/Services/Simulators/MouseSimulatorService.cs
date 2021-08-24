@@ -1,7 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Threading.Tasks;
 using InputSimulatorStandard;
-using InputSimulatorStandard.Native;
 using PointZerver.Services.Logger;
 
 namespace PointZerver.Services.Simulators

@@ -39,20 +39,11 @@ namespace PointZerver.Services.DataInterpreter
                 string data = Encoding.UTF8.GetString(shavedBytes);
                 string[] deserializedData = data.Split(',');
                 string commandType = deserializedData[0];
-                Debug.WriteLine($"Received:");
+                await this.logger.Log($"Interpreting command '{commandType}'", this);
 
-                foreach (string s in deserializedData)
-                    Debug.WriteLine(s);
-
-                Debug.WriteLine($"inputsims");
-                foreach (KeyValuePair<string,IInputSimulator> inputSimulator in this.inputSimulatorServiceMap)
-                {
-                    Debug.WriteLine(inputSimulator);
-
-                }
-                
                 this.inputSimulatorServiceMap.TryGetValue(commandType, out IInputSimulator inputSimulatorService);
                 if (inputSimulatorService == null) throw new NullReferenceException();
+                await this.logger.Log($"Executing command '{deserializedData}'", this);
                 await inputSimulatorService.ExecuteCommand(deserializedData);
             }
             catch (Exception e)

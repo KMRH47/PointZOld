@@ -1,6 +1,6 @@
 ﻿namespace PointZClient.Services.TouchEventService
 {
-    public enum TouchEventActions
+    public enum TouchEventAction
     {
         Down,
         Up,
@@ -15,9 +15,9 @@
         HoverExit,
         ButtonPress,
         ButtonRelease,
-        Pointer2Down,
+        Pointer2Down = 261,
         Pointer2Up,
-        Pointer3Down,
+        Pointer3Down = 517,
         Pointer3Up
     }
 }

@@ -2,7 +2,7 @@
 {
     public class TouchEventArgs
     {
-        public TouchEventArgs(float x, float y, TouchEventActions touchEventAction)
+        public TouchEventArgs(float x, float y, TouchEventAction touchEventAction)
         {
             X = x;
             Y = y;
@@ -11,6 +11,6 @@
 
         public float X { get; }
         public float Y { get; }
-        public TouchEventActions TouchEventAction { get; }
+        public TouchEventAction TouchEventAction { get; }
     }
 }

@@ -58,8 +58,7 @@ namespace PointZClient.Services.Navigation
 
         private static async Task InternalNavigateToAsync(Type viewModelType, object parameter)
         {
-            Page page = CreatePage(viewModelType, parameter);
-
+            Page page = CreatePage(viewModelType);
 
             if (Application.Current.MainPage is CustomNavigationView navigationPage)
             {
@@ -89,7 +88,13 @@ namespace PointZClient.Services.Navigation
             return viewType;
         }
 
-        private static Page CreatePage(Type viewModelType, object parameter)
+        /// <summary>
+        /// Creates a page (view) that matches the view model passed.
+        /// </summary>
+        /// <param name="viewModelType"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        private static Page CreatePage(Type viewModelType)
         {
             try
             {
@@ -99,8 +104,6 @@ namespace PointZClient.Services.Navigation
 
                 Page page = Activator.CreateInstance(pageType) as Page;
                 return page;
-                
-                // THIS NEEDS FIXING...
             }
             catch (Exception e)
             {
