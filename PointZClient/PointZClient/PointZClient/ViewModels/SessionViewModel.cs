@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Diagnostics;
+using System.Globalization;
 using System.Net;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -26,7 +26,7 @@ namespace PointZClient.ViewModels
         private double buttonHeight;
         private double previousX;
         private double previousY;
-        
+
         private bool doubleTapped;
         private bool tripleTapped;
         private bool moving;
@@ -77,7 +77,6 @@ namespace PointZClient.ViewModels
             int screenHeight = displaySettings.Height;
 
             bool withinBounds = e.Y < screenHeight - ButtonHeightPixels;
-
             if (!withinBounds) return;
 
             switch (e.TouchEventAction)
@@ -96,14 +95,14 @@ namespace PointZClient.ViewModels
                 case TouchEventAction.Up:
                     if (this.doubleTapped && !this.tripleTapped)
                     {
-                        if (!this.moving) break;
-                        await this.commandSenderService.SendAsync(MouseCommand.RightButtonClick);
                         this.doubleTapped = false;
+                        if (this.moving) break;
+                        await this.commandSenderService.SendAsync(MouseCommand.RightButtonClick);
                     }
                     else if (this.tripleTapped)
                     {
-                        await this.commandSenderService.SendAsync(MouseCommand.MiddleButtonClick);
                         this.tripleTapped = false;
+                        await this.commandSenderService.SendAsync(MouseCommand.MiddleButtonClick);
                     }
                     this.moving = false;
                     return;
@@ -111,12 +110,11 @@ namespace PointZClient.ViewModels
                     int x = (int) -(this.previousX - e.X);
                     int y = (int) -(this.previousY - e.Y);
                     string data;
-                    Debug.WriteLine($"x: {x} y: {y}");
-                    
+
                     if (this.doubleTapped)
                     {
                         this.moving = true;
-                        data = y.ToString();
+                        data = (y * 0.2).ToString(CultureInfo.InvariantCulture);
                         await this.commandSenderService.SendAsync(MouseCommand.VerticalScroll, data);
                     }
                     else if (this.tripleTapped)
@@ -126,9 +124,8 @@ namespace PointZClient.ViewModels
                     {
                         data = $"{x},{y}";
                         await this.commandSenderService.SendAsync(MouseCommand.MoveMouseBy, data);
-                        
                     }
-                    
+
                     this.previousX = e.X;
                     this.previousY = e.Y;
                     break;
