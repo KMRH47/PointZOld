@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Net;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -25,7 +26,10 @@ namespace PointZClient.ViewModels
         private double buttonHeight;
         private double previousX;
         private double previousY;
+        
+        private bool doubleTapped;
         private bool tripleTapped;
+        private bool moving;
 
         public SessionViewModel(
             ICommandSenderService commandSenderService,
@@ -70,34 +74,61 @@ namespace PointZClient.ViewModels
         private async void OnScreenTouched(object sender, TouchEventArgs e)
         {
             DisplaySettingsData displaySettings = this.deviceUserInterfaceService.DisplaySettings;
+            int screenHeight = displaySettings.Height;
 
-            bool withinBounds = e.Y < displaySettings.Height - ButtonHeightPixels;
+            bool withinBounds = e.Y < screenHeight - ButtonHeightPixels;
 
             if (!withinBounds) return;
 
             switch (e.TouchEventAction)
             {
                 case TouchEventAction.Pointer3Down:
+                    this.doubleTapped = false;
                     this.tripleTapped = true;
-                    await this.commandSenderService.SendAsync(MouseCommand.MiddleButtonClick);
                     break;
                 case TouchEventAction.Pointer2Down:
-                    await Task.Delay(10);
-                    if (this.tripleTapped) return;
-                    await this.commandSenderService.SendAsync(MouseCommand.RightButtonClick);
+                    this.doubleTapped = true;
                     break;
                 case TouchEventAction.Down:
                     this.previousX = e.X;
                     this.previousY = e.Y;
                     return;
                 case TouchEventAction.Up:
-                    this.tripleTapped = false;
+                    if (this.doubleTapped && !this.tripleTapped)
+                    {
+                        if (!this.moving) break;
+                        await this.commandSenderService.SendAsync(MouseCommand.RightButtonClick);
+                        this.doubleTapped = false;
+                    }
+                    else if (this.tripleTapped)
+                    {
+                        await this.commandSenderService.SendAsync(MouseCommand.MiddleButtonClick);
+                        this.tripleTapped = false;
+                    }
+                    this.moving = false;
                     return;
                 case TouchEventAction.Move:
                     int x = (int) -(this.previousX - e.X);
                     int y = (int) -(this.previousY - e.Y);
-                    string data = $"{x},{y}";
-                    await this.commandSenderService.SendAsync(MouseCommand.MoveMouseBy, data);
+                    string data;
+                    Debug.WriteLine($"x: {x} y: {y}");
+                    
+                    if (this.doubleTapped)
+                    {
+                        this.moving = true;
+                        data = y.ToString();
+                        await this.commandSenderService.SendAsync(MouseCommand.VerticalScroll, data);
+                    }
+                    else if (this.tripleTapped)
+                    {
+                    }
+                    else
+                    {
+                        data = $"{x},{y}";
+                        await this.commandSenderService.SendAsync(MouseCommand.MoveMouseBy, data);
+                        
+                    }
+                    
                     this.previousX = e.X;
                     this.previousY = e.Y;
                     break;
