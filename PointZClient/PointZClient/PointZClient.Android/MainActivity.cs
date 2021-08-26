@@ -38,7 +38,8 @@ namespace PointZClient.Android
             float y = motionEventArgs.GetY();
             TouchEventAction touchEventAction = (TouchEventAction) ((ushort) motionEventArgs.Action);
 
-            Debug.WriteLine($"Custom Touch Event = {touchEventAction}");
+            Debug.WriteLine($"Custom Touch Event: {touchEventAction}");
+            Debug.WriteLine($"x: {x} y: {y}");
             this.touchEventService.NotifyOnScreenTouched(x, y, touchEventAction);
 
             return base.DispatchTouchEvent(motionEventArgs);

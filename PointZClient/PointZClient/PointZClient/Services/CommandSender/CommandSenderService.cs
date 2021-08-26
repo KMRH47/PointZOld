@@ -20,24 +20,25 @@ namespace PointZClient.Services.CommandSender
         public void Bind(IPAddress ipAddress) => this.ipAddress = ipAddress;
 
         public Task SendAsync(MouseCommand command) =>
-            InternalSendAsync("M", command.ToString(), null, this.ipAddress);
+            InternalSendAsync(CommandType.Mouse, command.ToString(), null, this.ipAddress);
         public Task SendAsync(MouseCommand command, IPAddress ipAddress) =>
-            InternalSendAsync("M", command.ToString(), null, ipAddress);
+            InternalSendAsync(CommandType.Mouse, command.ToString(), null, ipAddress);
         public async Task SendAsync(MouseCommand command, string data) =>
-            await InternalSendAsync("M", command.ToString(), data, this.ipAddress);
+            await InternalSendAsync(CommandType.Mouse, command.ToString(), data, this.ipAddress);
         public async Task SendAsync(MouseCommand command, string data, IPAddress ipAddress) =>
-            await InternalSendAsync("M", command.ToString(), data, ipAddress);
+            await InternalSendAsync(CommandType.Mouse, command.ToString(), data, ipAddress);
 
         public async Task SendAsync(KeyboardCommand command, string data) =>
-            await InternalSendAsync("K", command.ToString(), data, this.ipAddress);
+            await InternalSendAsync(CommandType.Keyboard, command.ToString(), data, this.ipAddress);
         public async Task SendAsync(KeyboardCommand command, string data, IPAddress ipAddress) =>
-            await InternalSendAsync("K", command.ToString(), data, ipAddress);
+            await InternalSendAsync(CommandType.Keyboard, command.ToString(), data, ipAddress);
 
-        private async Task InternalSendAsync(string commandType, string command, string data, IPAddress ipAddress)
+        private async Task InternalSendAsync(CommandType commandType, string command, string data, IPAddress ipAddress)
         {
+            char commandT = (char) commandType;
             byte[] message = data == null
-                ? Encoding.UTF8.GetBytes($"{commandType},{command}")
-                : Encoding.UTF8.GetBytes($"{commandType},{command},{data}");
+                ? Encoding.UTF8.GetBytes($"{commandT},{command}")
+                : Encoding.UTF8.GetBytes($"{commandT},{command},{data}");
 
             IPEndPoint endPoint = new(ipAddress, 45454);
             await this.udpClient.SendAsync(message, message.Length, endPoint);

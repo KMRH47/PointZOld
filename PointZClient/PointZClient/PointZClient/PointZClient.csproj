@@ -3,6 +3,11 @@
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
         <LangVersion>preview</LangVersion>
+        <PackageVersion>0.1</PackageVersion>
+        <Title>PointZ</Title>
+        <Authors>SunflowerSensei</Authors>
+        <Company>SunflowerSensei</Company>
+        <Product>PointZ</Product>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

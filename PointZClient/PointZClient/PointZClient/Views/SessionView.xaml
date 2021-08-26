@@ -22,10 +22,10 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition /> <ColumnDefinition /> <ColumnDefinition /> <ColumnDefinition />
                 </Grid.ColumnDefinitions>
-                <Button Grid.Column="0" Text="lol 1" Height="{Binding ButtonHeightPixels}" />
-                <Button Grid.Column="1" Text="lol 2" />
-                <Button Grid.Column="2" Text="lol 3" />
-                <Button Grid.Column="3" Text="lol 4" />
+                <Button Grid.Column="0" Text="Test" Height="{Binding ButtonHeightPixels}" />
+                <Button Grid.Column="1" Text="Test" />
+                <Button Grid.Column="2" Text="Test" />
+                <Button Grid.Column="3" Text="Test" />
             </Grid>
             
         </StackLayout>
