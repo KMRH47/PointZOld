@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PointZ.Views.DiscoverView"
+             xmlns:viewModelsBase="clr-namespace:PointZ.ViewModels.Base;assembly=PointZ"
+             xmlns:templates="clr-namespace:PointZ.Views.Templates;assembly=PointZ"
+             NavigationPage.HasNavigationBar="False"
+             viewModelsBase:ViewModelLocator.AutoWireViewModel="True">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="ActivityIndicatorBigStyle" TargetType="{x:Type ActivityIndicator}">
+                <Setter Property="Color"
+                        Value="{AppThemeBinding 
+                        Dark={StaticResource DimmedWhite},
+                        Light={StaticResource WhitenedBlack}}" />
+                <Setter Property="WidthRequest" Value="300" />
+                <Setter Property="HeightRequest" Value="300" />
+
+            </Style>
+
+            <Style x:Key="SearchingStyle" TargetType="{x:Type Label}">
+                <Setter Property="TextColor"
+                        Value="{AppThemeBinding 
+                        Dark={StaticResource DimmedWhite},
+                        Light={StaticResource WhitenedBlack}}" />
+                <Setter Property="FontSize" Value="Title" />
+                <Setter Property="Text" Value="Searching" />
+                <Setter Property="HorizontalOptions" Value="Center" />
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.Content>
+
+        <StackLayout Style="{StaticResource StackLayoutStyle}">
+
+            <StackLayout VerticalOptions="CenterAndExpand">
+                <StackLayout IsVisible="{Binding AnyServerFound}">
+                    <ActivityIndicator Style="{StaticResource ActivityIndicatorBigStyle}"
+                                       IsRunning="{Binding IsSearching}" />
+                    <Label Style="{StaticResource SearchingStyle}" />
+                </StackLayout>
+
+
+                <ListView ItemsSource="{Binding Servers}"
+                          IsVisible="{Binding Servers.Count}"
+                          SelectedItem="{Binding SelectedServer}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <templates:DiscoverServerTemplate />
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackLayout>
+
+            <Button Text="Connect" 
+                    IsEnabled="{Binding IsServerSelected}" 
+                    IsVisible="{Binding IsServerSelected}" 
+                    Command="{Binding ConnectCommand}"/>
+        </StackLayout>
+
+    </ContentPage.Content>
+</ContentPage>
