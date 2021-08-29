@@ -7,10 +7,10 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("PointZ.Android")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("SunflowerSensei")]
+[assembly: AssemblyCompany("Sunflower Sensei")]
 [assembly: AssemblyProduct("PointZ.Android")]
-[assembly: AssemblyCopyright("Copyright © SunflowerSensei 2021")]
-[assembly: AssemblyTrademark("SunflowerSensei")]
+[assembly: AssemblyCopyright("Copyright © Sunflower Sensei 2021")]
+[assembly: AssemblyTrademark("Sunflower Sensei")]
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
 
