@@ -14,7 +14,7 @@ using Debug = System.Diagnostics.Debug;
 
 namespace PointZ.Android
 {
-    [Activity(Label = "PointZ", Theme = "@style/MainTheme", MainLauncher = true,
+    [Activity(Label = "PointZ", Theme = "@style/MainTheme", Icon = "@mipmap/icon", MainLauncher = true,
         ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {

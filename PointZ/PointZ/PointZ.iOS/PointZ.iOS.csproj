@@ -5,7 +5,7 @@
         <Platform Condition=" '$(Platform)' == '' ">iPhoneSimulator</Platform>
         <ProductVersion>8.0.30703</ProductVersion>
         <SchemaVersion>2.0</SchemaVersion>
-        <ProjectGuid>{74717A53-891C-49F0-8FA2-A7CD57E20EEC}</ProjectGuid>
+        <ProjectGuid>{C389DA88-ADC8-4623-AE9E-A1FCBC4D1EF5}</ProjectGuid>
         <ProjectTypeGuids>{FEACFBD2-3405-455C-9665-78FE426C6842};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
         <OutputType>Exe</OutputType>
         <RootNamespace>PointZ.iOS</RootNamespace>
@@ -110,7 +110,7 @@
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\PointZ\PointZ.csproj">
-            <Project>{2702813B-3A96-4749-A898-1FE2579CFA19}</Project>
+            <Project>{1CC0931C-9E04-497D-9806-051A0F599429}</Project>
             <Name>PointZ</Name>
         </ProjectReference>
     </ItemGroup>

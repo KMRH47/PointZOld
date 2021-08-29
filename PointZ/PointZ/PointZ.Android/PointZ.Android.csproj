@@ -3,7 +3,7 @@
     <PropertyGroup>
         <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
         <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-        <ProjectGuid>{E79ACB3A-7D95-4DDD-9797-5A6B6736B582}</ProjectGuid>
+        <ProjectGuid>{819E9AAD-130B-4305-ABAB-3ACC78B701D6}</ProjectGuid>
         <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
         <OutputType>Library</OutputType>
         <RootNamespace>PointZ.Android</RootNamespace>
@@ -40,8 +40,8 @@
         <AndroidManagedSymbols>true</AndroidManagedSymbols>
         <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
         <AndroidSupportedAbis>armeabi-v7a;x86;arm64-v8a;x86_64</AndroidSupportedAbis>
-        <AndroidLinkMode>None</AndroidLinkMode>
         <AndroidPackageFormat>aab</AndroidPackageFormat>
+        <AndroidLinkMode>None</AndroidLinkMode>
     </PropertyGroup>
     <ItemGroup>
         <Reference Include="Mono.Android" />
@@ -55,35 +55,36 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="MainActivity.cs" />
+        <Compile Include="Resources\Resource.Designer.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="Services\DeviceUserInterfaceService.cs" />
         <Compile Include="Services\PlatformNavigationService.cs" />
         <Compile Include="Services\TouchEventService.cs" />
     </ItemGroup>
     <ItemGroup>
+        <None Include="Resources\AboutResources.txt" />
         <None Include="Assets\AboutAssets.txt" />
         <None Include="Properties\AndroidManifest.xml" />
     </ItemGroup>
     <ItemGroup>
+        <AndroidResource Include="Resources\layout\Tabbar.axml" />
+        <AndroidResource Include="Resources\layout\Toolbar.axml" />
+        <AndroidResource Include="Resources\mipmap-hdpi\icon.png" />
+        <AndroidResource Include="Resources\mipmap-mdpi\icon.png" />
+        <AndroidResource Include="Resources\mipmap-xhdpi\icon.png" />
+        <AndroidResource Include="Resources\mipmap-xxhdpi\icon.png" />
+        <AndroidResource Include="Resources\mipmap-xxxhdpi\icon.png" />
+        <AndroidResource Include="Resources\values\styles.xml" />
+        <AndroidResource Include="Resources\values\colors.xml" />
+    </ItemGroup>
+    <ItemGroup>
         <ProjectReference Include="..\PointZ\PointZ.csproj">
-            <Project>{2702813B-3A96-4749-A898-1FE2579CFA19}</Project>
+            <Project>{1CC0931C-9E04-497D-9806-051A0F599429}</Project>
             <Name>PointZ</Name>
         </ProjectReference>
     </ItemGroup>
     <ItemGroup>
-      <AndroidResource Include="Resources\AboutResources.txt" />
-      <AndroidResource Include="Resources\layout\Tabbar.axml" />
-      <AndroidResource Include="Resources\layout\Toolbar.axml" />
-      <AndroidResource Include="Resources\Resource.designer.cs" />
-      <AndroidResource Include="Resources\values\colors.xml" />
-      <AndroidResource Include="Resources\values\styles.xml" />
-    </ItemGroup>
-    <ItemGroup>
       <Folder Include="Resources\drawable" />
-      <Folder Include="Resources\drawable-hdpi" />
-      <Folder Include="Resources\drawable-ldpi" />
-      <Folder Include="Resources\drawable-mdpi" />
-      <Folder Include="Resources\drawable-xhdpi" />
     </ItemGroup>
     <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>
