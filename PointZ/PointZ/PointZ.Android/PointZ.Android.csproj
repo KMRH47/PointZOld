@@ -41,6 +41,7 @@
         <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
         <AndroidSupportedAbis>armeabi-v7a;x86;arm64-v8a;x86_64</AndroidSupportedAbis>
         <AndroidLinkMode>None</AndroidLinkMode>
+        <AndroidPackageFormat>aab</AndroidPackageFormat>
     </PropertyGroup>
     <ItemGroup>
         <Reference Include="Mono.Android" />
@@ -54,28 +55,35 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="MainActivity.cs" />
-        <Compile Include="Resources\Resource.Designer.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="Services\DeviceUserInterfaceService.cs" />
         <Compile Include="Services\PlatformNavigationService.cs" />
         <Compile Include="Services\TouchEventService.cs" />
     </ItemGroup>
     <ItemGroup>
-        <None Include="Resources\AboutResources.txt" />
         <None Include="Assets\AboutAssets.txt" />
         <None Include="Properties\AndroidManifest.xml" />
-    </ItemGroup>
-    <ItemGroup>
-        <AndroidResource Include="Resources\layout\Tabbar.axml" />
-        <AndroidResource Include="Resources\layout\Toolbar.axml" />
-        <AndroidResource Include="Resources\values\styles.xml" />
-        <AndroidResource Include="Resources\values\colors.xml" />
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\PointZ\PointZ.csproj">
             <Project>{2702813B-3A96-4749-A898-1FE2579CFA19}</Project>
             <Name>PointZ</Name>
         </ProjectReference>
+    </ItemGroup>
+    <ItemGroup>
+      <AndroidResource Include="Resources\AboutResources.txt" />
+      <AndroidResource Include="Resources\layout\Tabbar.axml" />
+      <AndroidResource Include="Resources\layout\Toolbar.axml" />
+      <AndroidResource Include="Resources\Resource.designer.cs" />
+      <AndroidResource Include="Resources\values\colors.xml" />
+      <AndroidResource Include="Resources\values\styles.xml" />
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Resources\drawable" />
+      <Folder Include="Resources\drawable-hdpi" />
+      <Folder Include="Resources\drawable-ldpi" />
+      <Folder Include="Resources\drawable-mdpi" />
+      <Folder Include="Resources\drawable-xhdpi" />
     </ItemGroup>
     <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>
