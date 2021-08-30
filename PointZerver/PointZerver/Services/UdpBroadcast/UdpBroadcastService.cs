@@ -26,9 +26,6 @@ namespace PointZerver.Services.UdpBroadcast
             {
                 string hostName = Dns.GetHostName();
                 TimeSpan delay = TimeSpan.FromMilliseconds(delayMs);
-                await this.logger.Log(
-                    $"Broadcasting '{hostName}' on port {port} (delay: {delay.Seconds}s {delay.Milliseconds}ms).",
-                    this);
                 await this.udpClient.Client.ConnectAsync(IPAddress.Broadcast, port, token);
 
                 while (true)
