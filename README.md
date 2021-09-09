@@ -1,1 +1,1 @@
-![](graphic/pz-banner.png)
+![](Graphic/pz_banner.png)
