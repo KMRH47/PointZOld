@@ -55,12 +55,12 @@ namespace PointZ.Services.UdpListener
 
         public void Stop() => this.udpClient.Client.Disconnect(true);
 
-        private async Task HandleReceivedData(UdpReceiveResult result)
+        private Task HandleReceivedData(UdpReceiveResult result)
         {
             string data = Encoding.UTF8.GetString(result.Buffer);
-            await this.logger.Log($"Received {data}", this);
             ServerData serverData = new(data, result.RemoteEndPoint.Address.ToString());
             this.onServerDataReceived(serverData);
+            return Task.CompletedTask;
         }
     }
 }

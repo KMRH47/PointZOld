@@ -14,7 +14,8 @@
                      Style="{StaticResource StackLayoutStyle}">
             
             <StackLayout.GestureRecognizers>
-                <TapGestureRecognizer  Command="{Binding TapCommand}"/>
+                <TapGestureRecognizer Command="{Binding SingleTapCommand}"/>
+                <TapGestureRecognizer NumberOfTapsRequired="2" Command="{Binding DoubleTapCommand}"/>
             </StackLayout.GestureRecognizers>
             
             <Grid VerticalOptions="EndAndExpand"
