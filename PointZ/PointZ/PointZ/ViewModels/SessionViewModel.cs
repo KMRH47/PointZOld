@@ -30,12 +30,14 @@ namespace PointZ.ViewModels
         private bool singleTap;
         private bool doubleTap;
 
-        private double doubleTapTimeFrameMs = 250;
-        private long doubleTapTick;
-
+        private double tapTimeFrameMs = 150;
+        private double doubleTapTimeFrameMs = 150;
+        private double deadZoneSizePx = 10;
         private double buttonHeight;
         private double previousX;
         private double previousY;
+
+        private long tapTicks;
 
         public SessionViewModel(
             ICommandSenderService commandSenderService,
@@ -81,7 +83,7 @@ namespace PointZ.ViewModels
         private void OnDoubleTap()
         {
             this.doubleTap = true;
-            this.doubleTapTick = DateTime.Now.Ticks;
+            this.tapTicks = DateTime.Now.Ticks;
         }
 
         private async void OnScreenTouched(object sender, TouchEventArgs e)
@@ -96,34 +98,37 @@ namespace PointZ.ViewModels
             {
                 case TouchEventAction.Pointer3Down:
                     this.previousTapEvent = e.TouchEventAction;
+                    this.tapTicks = DateTime.Now.Ticks;
                     break;
                 case TouchEventAction.Pointer2Down:
                     this.previousTapEvent = e.TouchEventAction;
+                    this.tapTicks = DateTime.Now.Ticks;
                     break;
                 case TouchEventAction.Down:
                     this.previousTapEvent = e.TouchEventAction;
                     this.previousX = e.X;
                     this.previousY = e.Y;
+                    this.tapTicks = DateTime.Now.Ticks;
                     return;
                 case TouchEventAction.Up:
+                    Debug.WriteLine($"Previous Tap: {this.previousTapEvent}");
                     switch (this.previousTapEvent)
                     {
                         case TouchEventAction.Down:
-                            if (DoubleTapped())
+                            if (Tapped())
                             {
-                                Debug.WriteLine($"Double tapped = true");
-                                await ClickPrimaryButton();
+                                Debug.WriteLine("SINGLE TAP");
+                                await PrimaryButtonClick();
                             }
-                            else break;
-
-                            Debug.WriteLine($"Double tapped = false");
-
-                            await ClickPrimaryButton();
-                            await ReleasePrimaryButton();
+                            else await PrimaryButtonUp();
 
                             break;
                         case TouchEventAction.Pointer2Down:
-                            await this.commandSenderService.SendAsync(MouseCommand.RightButtonClick);
+                            if (Tapped())
+                            {
+                                await SecondaryButtonUp();
+                            }
+
                             break;
                         case TouchEventAction.Pointer3Down:
                             await this.commandSenderService.SendAsync(MouseCommand.MiddleButtonClick);
@@ -131,48 +136,58 @@ namespace PointZ.ViewModels
                         case TouchEventAction.Move:
                             break;
                     }
+
                     break;
                 case TouchEventAction.Move:
                     int x = (int)-(this.previousX - e.X);
                     int y = (int)-(this.previousY - e.Y);
+
                     string data;
 
                     switch (this.previousTapEvent)
                     {
                         case TouchEventAction.Down:
 
-                            if (DoubleTapped())
+                            int absX = Math.Abs(x);
+                            int absY = Math.Abs(y);
+
+                            if (absX > this.deadZoneSizePx || absY > this.deadZoneSizePx)
                             {
-                                Debug.WriteLine($"DOUBLE TAPPED TRUE???????");
-                                await HoldPrimaryButton();
+                                x = 0;
+                                y = 0;
+                                this.previousTapEvent = TouchEventAction.Move;
+
+                                if (DoubleTapped())
+                                {
+                                    await PrimaryButtonDown();
+                                }
+
+                                goto case TouchEventAction.Move;
                             }
 
-                            this.previousTapEvent = TouchEventAction.Move;
-                            goto case TouchEventAction.Move;
+                            break;
                         case TouchEventAction.Pointer2Down:
-                            double scrollAdjustment = y * 0.2;
-                            data = scrollAdjustment < 1
-                                ? 1.ToString()
-                                : scrollAdjustment.ToString(CultureInfo.InvariantCulture);
+                            double scrollAdjustment = y * 0.075;
+                            data = scrollAdjustment.ToString(CultureInfo.InvariantCulture);
                             await this.commandSenderService.SendAsync(MouseCommand.VerticalScroll, data);
                             break;
                         case TouchEventAction.Pointer3Down:
                             break;
                         case TouchEventAction.Move:
                             data = $"{x},{y}";
+                            Debug.WriteLine($"Moving mouse by x: {x} y: {y}");
                             await this.commandSenderService.SendAsync(MouseCommand.MoveMouseBy, data);
+                            this.previousX = e.X;
+                            this.previousY = e.Y;
                             break;
                     }
 
-                    this.previousX = e.X;
-                    this.previousY = e.Y;
                     this.singleTap = false;
-                    this.doubleTap = false;
                     break;
             }
         }
 
-        private async Task ClickPrimaryButton()
+        private async Task PrimaryButtonClick()
         {
             Debug.WriteLine($"CLICKING PRIMARY BUTTON!");
 
@@ -186,7 +201,8 @@ namespace PointZ.ViewModels
             }
         }
 
-        private async Task HoldPrimaryButton()
+
+        private async Task PrimaryButtonDown()
         {
             Debug.WriteLine($"HOLDING PRIMARY BUTTON!");
 
@@ -200,7 +216,7 @@ namespace PointZ.ViewModels
             }
         }
 
-        private async Task ReleasePrimaryButton()
+        private async Task PrimaryButtonUp()
         {
             Debug.WriteLine($"RELEASING PRIMARY BUTTON!");
 
@@ -214,11 +230,64 @@ namespace PointZ.ViewModels
             }
         }
 
+        private async Task SecondaryButtonClick()
+        {
+            Debug.WriteLine($"HOLDING PRIMARY BUTTON!");
+
+            if (this.leftButtonIsPrimary)
+            {
+                await this.commandSenderService.SendAsync(MouseCommand.RightButtonClick);
+            }
+            else
+            {
+                await this.commandSenderService.SendAsync(MouseCommand.LeftButtonClick);
+            }
+        }
+
+
+        private async Task SecondaryButtonDown()
+        {
+            Debug.WriteLine($"HOLDING PRIMARY BUTTON!");
+
+            if (this.leftButtonIsPrimary)
+            {
+                await this.commandSenderService.SendAsync(MouseCommand.RightButtonDown);
+            }
+            else
+            {
+                await this.commandSenderService.SendAsync(MouseCommand.LeftButtonDown);
+            }
+        }
+
+        private async Task SecondaryButtonUp()
+        {
+            Debug.WriteLine($"HOLDING PRIMARY BUTTON!");
+
+            if (this.leftButtonIsPrimary)
+            {
+                await this.commandSenderService.SendAsync(MouseCommand.RightButtonUp);
+            }
+            else
+            {
+                await this.commandSenderService.SendAsync(MouseCommand.LeftButtonUp);
+            }
+        }
+
+
+        private bool Tapped()
+        {
+            if (DoubleTapped()) return false;
+            long ticksElapsed = DateTime.Now.Ticks - this.tapTicks;
+            double millisElapsed = TimeSpan.FromTicks(ticksElapsed).TotalMilliseconds;
+            Debug.WriteLine($"Time elapsed between down and up: {millisElapsed}");
+            return this.tapTimeFrameMs > millisElapsed;
+        }
+
         private bool DoubleTapped()
         {
             if (!this.doubleTap) return false;
-            long ticksElapsed = DateTime.Now.Ticks - this.doubleTapTick;
-            double millisElapsed = TimeSpan.FromMilliseconds(ticksElapsed).TotalMilliseconds;
+            long ticksElapsed = DateTime.Now.Ticks - this.tapTicks;
+            double millisElapsed = TimeSpan.FromTicks(ticksElapsed).TotalMilliseconds;
             return this.doubleTapTimeFrameMs > millisElapsed;
         }
     }
