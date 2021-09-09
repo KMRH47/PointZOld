@@ -29,6 +29,7 @@ namespace PointZ.ViewModels
         private bool leftButtonIsPrimary = true;
         private bool singleTap;
         private bool doubleTap;
+        private bool primaryButtonDown;
 
         private double tapTimeFrameMs = 150;
         private double doubleTapTimeFrameMs = 150;
@@ -120,7 +121,12 @@ namespace PointZ.ViewModels
                                 Debug.WriteLine("SINGLE TAP");
                                 await PrimaryButtonClick();
                             }
-                            else await PrimaryButtonUp();
+                            else
+                            {
+                                await PrimaryButtonUp();
+                                this.primaryButtonDown = false;
+                                this.doubleTap = false;
+                            }
 
                             break;
                         case TouchEventAction.Pointer2Down:
@@ -134,6 +140,8 @@ namespace PointZ.ViewModels
                             await this.commandSenderService.SendAsync(MouseCommand.MiddleButtonClick);
                             break;
                         case TouchEventAction.Move:
+                            await PrimaryButtonUp();
+                            this.doubleTap = false;
                             break;
                     }
 
@@ -151,16 +159,16 @@ namespace PointZ.ViewModels
                             int absX = Math.Abs(x);
                             int absY = Math.Abs(y);
 
+                            if (DoubleTapped())
+                            {
+                                await PrimaryButtonDown();
+                            }
+
                             if (absX > this.deadZoneSizePx || absY > this.deadZoneSizePx)
                             {
                                 x = 0;
                                 y = 0;
                                 this.previousTapEvent = TouchEventAction.Move;
-
-                                if (DoubleTapped())
-                                {
-                                    await PrimaryButtonDown();
-                                }
 
                                 goto case TouchEventAction.Move;
                             }
@@ -175,7 +183,7 @@ namespace PointZ.ViewModels
                             break;
                         case TouchEventAction.Move:
                             data = $"{x},{y}";
-                            Debug.WriteLine($"Moving mouse by x: {x} y: {y}");
+                            // Debug.WriteLine($"Moving mouse by x: {x} y: {y}");
                             await this.commandSenderService.SendAsync(MouseCommand.MoveMouseBy, data);
                             this.previousX = e.X;
                             this.previousY = e.Y;
