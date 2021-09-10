@@ -1,9 +1,11 @@
+![](Graphic\Logo\pz_banner.png)
 
+# Current Version
 
-# PointZ
-
-
-[TOC]
+| Application | Version      |
+| ----------- | ------------ |
+| PointZ      | V0.1 (Alpha) |
+| PointZerver | V0.1 (Alpha) |
 
 # FAQ
 
@@ -23,21 +25,28 @@ Since PointZerver is built using .NET 5.0, it should work on **Windows**, **iOS*
 
 No. Maybe in the future, but I'd rather upload releases here on GitLab.
 
-# How to use
+
+
+
+
+
+
+# Installation Guide
 
 1. Download PointZerver to the PC you want to remote control
 2. Download PointZ to your mobile device
 3. Run PointZerver
 4. Run PointZ
 
+# How to use
 
+1. When PointZ is running, it'll immediately enter "Discovery mode", listening for any PointZerver applications on the network. 
+2. When PointZerver and PointZ runs simultaneously, PointZ will list all available devices.
+3. When you tap on the device you want to remote control, a **connect** button appears on the bottom of the screen.
 
-# Current Version
+Click **connect** and remote control the desired device!
 
-| Application | Version      |
-| ----------- | ------------ |
-| PointZ      | V0.1 (Alpha) |
-| PointZerver | V0.1 (Alpha) |
+![](Graphic/Guide/PointZ/Full.png)
 
 # Download
 
@@ -48,6 +57,8 @@ https://drive.google.com/drive/folders/1Wb_Bz7FsOtTk9ZraFRQ9Ve7e_yYNw8HR
 ### PointZerver
 
 https://drive.google.com/drive/folders/1E1ca5ZQqQigOoMo5ikrgok3YpFGECbMH
+
+
 
 # Troubleshooting
 
