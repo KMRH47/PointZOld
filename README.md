@@ -1,5 +1,8 @@
 
 
+# PointZ
+
+
 [TOC]
 
 # FAQ
@@ -27,11 +30,14 @@ No. Maybe in the future, but I'd rather upload releases here on GitLab.
 3. Run PointZerver
 4. Run PointZ
 
+
+
 # Current Version
 
-| PointZ          | V0.1 (Alpha)     |
-| --------------- | ---------------- |
-| **PointZerver** | **V0.1 (Alpha)** |
+| Application | Version      |
+| ----------- | ------------ |
+| PointZ      | V0.1 (Alpha) |
+| PointZerver | V0.1 (Alpha) |
 
 # Download
 
@@ -55,10 +61,10 @@ Below is a table of all ports, protocols and roles used by PointZ and PointZerve
 
 ## Ports used
 
-| Application | Value | Protocol | Role             |
+| Application | Port     | Protocol | Role             |
 | ----------- | ----- | -------- | ---------------- |
 | PointZ      | 45454 | UDP      | Command Sender   |
 | PointZ      | 45455 | UDP      | Listener         |
 | PointZerver | 45454 | UDP      | Command Receiver |
-| PointZerver | 45455 | UDP      | Broadcast        |
+| PointZerver | 45455 | UDP      | Broadcaster      |
 
