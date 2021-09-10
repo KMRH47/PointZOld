@@ -1,4 +1,4 @@
-![](Graphic\Logo\pz_banner.png)
+![](Graphic/Logo/pz_banner.png)
 
 # Current Version
 
