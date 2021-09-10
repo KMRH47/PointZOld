@@ -1,8 +1,12 @@
+
+
+[TOC]
+
 # FAQ
 
 ### What is PointZ?
 
-PointZ is an Android/iPhone application built using Xamarin.Forms. The application allows you to remote control any system running PointZerver.
+PointZ is an Android/iPhone application built using Xamarin.Forms. The application allows you to remote control any system running PointZerver, as long as they're on the same WiFi network.
 
 ### What is PointZerver?
 
@@ -15,6 +19,13 @@ Since PointZerver is built using .NET 5.0, it should work on **Windows**, **iOS*
 ### Is PointZ on Google Play and App store?
 
 No. Maybe in the future, but I'd rather upload releases here on GitLab.
+
+# How to use
+
+1. Download PointZerver to the PC you want to remote control
+2. Download PointZ to your mobile device
+3. Run PointZerver
+4. Run PointZ
 
 # Current Version
 
@@ -32,5 +43,22 @@ https://drive.google.com/drive/folders/1Wb_Bz7FsOtTk9ZraFRQ9Ve7e_yYNw8HR
 
 https://drive.google.com/drive/folders/1E1ca5ZQqQigOoMo5ikrgok3YpFGECbMH
 
+# Troubleshooting
 
+### PointZ isn't discovering my PC
+
+**First of all, ensure that the mobile device running PointZ and the PC running PointZerver, are on the same WiFi-network.**
+
+PointZerver constantly broadcasts UDP packets for the clients running PointZ to pick up. These broadcast messages might be blocked by a firewall on the network.
+
+Below is a table of all ports, protocols and roles used by PointZ and PointZerver.
+
+## Ports used
+
+| Application | Value | Protocol | Role             |
+| ----------- | ----- | -------- | ---------------- |
+| PointZ      | 45454 | UDP      | Command Sender   |
+| PointZ      | 45455 | UDP      | Listener         |
+| PointZerver | 45454 | UDP      | Command Receiver |
+| PointZerver | 45455 | UDP      | Broadcast        |
 
