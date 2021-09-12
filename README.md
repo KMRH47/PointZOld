@@ -94,7 +94,7 @@ Below is a table of all ports and protocols used by PointZ and PointZerver.
 
 ### PointZ
 
-| Version | Message                                                      |
+| Version | Changes                                                      |
 | ------- | ------------------------------------------------------------ |
 | 0.1     | Alpha Release                                                |
 | 0.1.1   | - Mouse up command is no longer send if **Secondary Button Click** has been performed after engaging **Primary Button Hold**<br />- Scrolling no longer jumps randomly |
