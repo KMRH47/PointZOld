@@ -1,14 +1,5 @@
 ![](Graphic/Logo/pz_banner.png)
 
-# Current Version
-
-**BE AWARE THAT THIS APPLICATION IS CURRENTLY IN ITS EARLY STAGES AND THUS FUNCTIONALITY IS VERY LIMITED.**
-
-| Application | Version      |
-| ----------- | ------------ |
-| PointZ      | V0.1 (Alpha) |
-| PointZerver | V0.1 (Alpha) |
-
 # FAQ
 
 ### What is PointZ?
@@ -57,6 +48,16 @@ Click **connect** and remote control the desired device!
 | Double tap            | Primary Mouse Button Click x 2 | Down, up, Down, up    | Two taps in a row. Time between the single taps must match the set time frame. | 250ms              |
 | Multi-tap (2 fingers) | Secondary Mouse Button Click   | Down (2 fingers)      | Time after putting fingers down and releasing them is within the set time frame. | 150ms              |
 | Multi-tap (3 fingers) | Middle-Mouse Button Click      | Down (3 fingers)      | Time after putting fingers down and releasing them is within the set time frame. | 150ms              |
+
+# Current Version
+
+**BE AWARE THAT THIS APPLICATION IS CURRENTLY IN ITS EARLY STAGES AND THUS FUNCTIONALITY IS VERY LIMITED.**
+
+| Application | Version      |
+| ----------- | ------------ |
+| PointZ      | V0.1 (Alpha) |
+| PointZerver | V0.1 (Alpha) |
+
 
 # Download
 
