@@ -1,5 +1,5 @@
 ﻿using System;
-using PointZ.Services.TouchEventService;
+using PointZ.Services.TouchEvent;
 using Xamarin.Forms;
 
 [assembly: Dependency(typeof(PointZ.Android.Services.TouchEventService))]

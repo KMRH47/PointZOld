@@ -1,4 +1,4 @@
-﻿namespace PointZ.Services.TouchEventService
+﻿namespace PointZ.Services.TouchEvent
 {
     public enum TouchEventAction
     {

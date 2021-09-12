@@ -6,7 +6,7 @@ using PointZ.Services.CommandSender;
 using PointZ.Services.DeviceUserInterface;
 using PointZ.Services.Logger;
 using PointZ.Services.Navigation;
-using PointZ.Services.TouchEventService;
+using PointZ.Services.TouchEvent;
 using PointZ.Services.UdpListener;
 using PointZ.TinyIoC;
 using Xamarin.Forms;

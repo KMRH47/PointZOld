@@ -10,7 +10,7 @@ using PointZ.Models.Server;
 using PointZ.Services.CommandSender;
 using PointZ.Services.DeviceUserInterface;
 using PointZ.Services.Navigation;
-using PointZ.Services.TouchEventService;
+using PointZ.Services.TouchEvent;
 using PointZ.ViewModels.Base;
 using Xamarin.Forms;
 using NavigationEventArgs = PointZ.Services.Navigation.NavigationEventArgs;

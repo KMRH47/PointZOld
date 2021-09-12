@@ -8,7 +8,7 @@ using PointZ.Models.DisplaySettings;
 using PointZ.Models.NavigationBar;
 using PointZ.Services.DeviceUserInterface;
 using PointZ.Services.Navigation;
-using PointZ.Services.TouchEventService;
+using PointZ.Services.TouchEvent;
 using Xamarin.Forms;
 using Debug = System.Diagnostics.Debug;
 

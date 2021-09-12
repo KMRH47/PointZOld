@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PointZ.Services.TouchEventService
+namespace PointZ.Services.TouchEvent
 {
     public interface ITouchEventService
     {
