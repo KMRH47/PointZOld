@@ -2,6 +2,8 @@
 
 # Current Version
 
+**BE AWARE THAT THIS APPLICATION IS CURRENTLY IN ITS EARLY STAGES AND THUS FUNCTIONALITY IS VERY LIMITED.**
+
 | Application | Version      |
 | ----------- | ------------ |
 | PointZ      | V0.1 (Alpha) |
@@ -78,4 +80,5 @@ Below is a table of all ports, protocols and roles used by PointZ and PointZerve
 | PointZ      | 45455 | UDP      | Listener         |
 | PointZerver | 45454 | UDP      | Command Receiver |
 | PointZerver | 45455 | UDP      | Broadcaster      |
+
 
