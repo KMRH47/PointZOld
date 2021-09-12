@@ -50,13 +50,13 @@ Click **connect** and remote control the desired device!
 
 # How to use
 
-| Action                | Equivalent                     | Sequence              | Condition                                                    | Time frame |
-| --------------------- | ------------------------------ | --------------------- | ------------------------------------------------------------ | ---------- |
-| Tap                   | Primary Mouse Button Click     | Down, up              | Time after putting finger down and releasing it is within the set time frame. | 150ms      |
-| Tap and hold          | Primary Mouse Button Hold      | Down, up, down (hold) | Time between a tap and putting the finger down again is within the set time frame. | 250ms      |
-| Double tap            | Primary Mouse Button Click x 2 | Down, up, Down, up    | Two taps in a row. Time between the single taps must match the set time frame. | 250ms      |
-| Multi-tap (2 fingers) | Secondary Mouse Button Click   | Down (2 fingers)      | Time after putting fingers down and releasing them is within the set time frame. | 150ms      |
-| Multi-tap (3 fingers) | Middle-Mouse Button Click      | Down (3 fingers)      | Time after putting fingers down and releasing them is within the set time frame. | 150ms      |
+| Action                | Equivalent                     | Sequence              | Condition                                                    | Default time frame |
+| --------------------- | ------------------------------ | --------------------- | ------------------------------------------------------------ | ------------------ |
+| Tap                   | Primary Mouse Button Click     | Down, up              | Time after putting finger down and releasing it is within the set time frame. | 150ms              |
+| Tap and hold          | Primary Mouse Button Hold      | Down, up, down (hold) | Time between a tap and putting the finger down again is within the set time frame. | 250ms              |
+| Double tap            | Primary Mouse Button Click x 2 | Down, up, Down, up    | Two taps in a row. Time between the single taps must match the set time frame. | 250ms              |
+| Multi-tap (2 fingers) | Secondary Mouse Button Click   | Down (2 fingers)      | Time after putting fingers down and releasing them is within the set time frame. | 150ms              |
+| Multi-tap (3 fingers) | Middle-Mouse Button Click      | Down (3 fingers)      | Time after putting fingers down and releasing them is within the set time frame. | 150ms              |
 
 # Download
 
