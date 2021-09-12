@@ -27,11 +27,9 @@ Since PointZerver is built using .NET 5.0, it should work on **Windows**, **iOS*
 
 No. Maybe in the future, but I'd rather upload releases here on GitLab.
 
+### Is it free?
 
-
-
-
-
+It's free and open-source.
 
 # Installation Guide
 
@@ -40,7 +38,7 @@ No. Maybe in the future, but I'd rather upload releases here on GitLab.
 3. Run PointZerver
 4. Run PointZ
 
-# How to use
+# Get started
 
 1. When PointZ is running, it'll immediately enter "Discovery mode", listening for any PointZerver applications on the network. 
 2. When PointZerver and PointZ runs simultaneously, PointZ will list all available devices.
@@ -49,6 +47,16 @@ No. Maybe in the future, but I'd rather upload releases here on GitLab.
 Click **connect** and remote control the desired device!
 
 ![](Graphic/Guide/PointZ/Full.png)
+
+# How to use
+
+| Action                | Equivalent                     | Sequence              | Condition                                                    | Default |
+| --------------------- | ------------------------------ | --------------------- | ------------------------------------------------------------ | ------- |
+| Tap                   | Primary Mouse Button Click     | Down, up              | Time after putting finger down and releasing it is within the set time frame. | 150ms   |
+| Tap and hold          | Primary Mouse Button Hold      | Down, up, down (hold) | Time between a tap and putting the finger down again is within the set time frame. | 250ms   |
+| Double tap            | Primary Mouse Button Click x 2 | Down, up, Down, up    | Two taps in a row. Time between the single taps must match the set time frame. | 250ms   |
+| Multi-tap (2 fingers) | Secondary Mouse Button Click   | Down (2 fingers)      | Time after putting fingers down and releasing them is within the set time frame. | 150ms   |
+| Multi-tap (3 fingers) | Middle-Mouse Button Click      | Down (3 fingers)      | Time after putting fingers down and releasing them is within the set time frame. | 150ms   |
 
 # Download
 
@@ -59,8 +67,6 @@ https://drive.google.com/drive/folders/1Wb_Bz7FsOtTk9ZraFRQ9Ve7e_yYNw8HR
 ### PointZerver
 
 https://drive.google.com/drive/folders/1E1ca5ZQqQigOoMo5ikrgok3YpFGECbMH
-
-
 
 # Troubleshooting
 
@@ -80,5 +86,4 @@ Below is a table of all ports, protocols and roles used by PointZ and PointZerve
 | PointZ      | 45455 | UDP      | Listener         |
 | PointZerver | 45454 | UDP      | Command Receiver |
 | PointZerver | 45455 | UDP      | Broadcaster      |
-
 
