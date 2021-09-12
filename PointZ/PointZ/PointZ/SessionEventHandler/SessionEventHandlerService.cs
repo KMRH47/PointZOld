@@ -23,7 +23,8 @@ namespace PointZ.SessionEventHandler
         private double scrollSpeed = 1;
         private short tapTimeFrameMs = 150;
         private short doubleTapTimeFrameMs = 250;
-        private short deadZone = 10;
+        private short deadZoneMove = 10;
+        private short deadZoneTap = 70;
         private double previousX;
         private double previousY;
 
@@ -38,6 +39,9 @@ namespace PointZ.SessionEventHandler
 
         public async Task HandleAsync(TouchEventArgs e)
         {
+            int x = (int)-(this.previousX - e.X);
+            int y = (int)-(this.previousY - e.Y);
+
             switch (e.TouchEventAction)
             {
                 case TouchEventAction.Pointer3Down:
@@ -54,8 +58,11 @@ namespace PointZ.SessionEventHandler
                     {
                         if (DoubleTapped())
                         {
-                            this.doubleTapped = true;
-                            await PrimaryMouseButtonDown();
+                            if (ValueWithinDeadzoneTap(x) && ValueWithinDeadzoneTap(y))
+                            {
+                                this.doubleTapped = true;
+                                await PrimaryMouseButtonDown();
+                            }
                         }
                     }
 
@@ -109,21 +116,15 @@ namespace PointZ.SessionEventHandler
 
                     break;
                 case TouchEventAction.Move:
-                    int x = (int)-(this.previousX - e.X);
-                    int y = (int)-(this.previousY - e.Y);
 
                     string data;
-
-                    int absX = Math.Abs(x);
-                    int absY = Math.Abs(y);
 
                     switch (this.previousTapEvent)
                     {
                         case TouchEventAction.Down:
-
                             Debug.WriteLine($"Move -> Down");
 
-                            if (absX > this.deadZone || absY > this.deadZone)
+                            if (ValueOutsideDeadzoneMove(x) || ValueOutsideDeadzoneMove(y))
                             {
                                 x = 0;
                                 y = 0;
@@ -135,18 +136,16 @@ namespace PointZ.SessionEventHandler
                         case TouchEventAction.Pointer2Down:
                             Debug.WriteLine($"Move -> Pointer2Down");
 
-                            if (absY > this.deadZone)
-                            {
-                                y = 0;
-
-                                double scrollAdjustment = e.Y < 0 ? -this.scrollSpeed : this.scrollSpeed;
+                          
+                                if (y == 0) break;
+                                double scrollAdjustment = y < 0 ? -this.scrollSpeed : this.scrollSpeed;
                                 Debug.WriteLine($"y: {y}");
                                 Debug.WriteLine($"scroll adjustment: {scrollAdjustment}");
                                 data = scrollAdjustment.ToString(CultureInfo.InvariantCulture);
                                 await this.commandSenderService.SendAsync(MouseCommand.VerticalScroll, data);
-                                this.previousX = e.X;
-                                this.previousY = e.Y;
-                            }
+                            
+                            this.previousX = e.X;
+                            this.previousY = e.Y;
 
                             break;
                         case TouchEventAction.Pointer3Down:
@@ -170,17 +169,23 @@ namespace PointZ.SessionEventHandler
         {
             if (this.doubleTapped) return false;
             Debug.WriteLine($"Tapped!");
-            long ticksElapsed = DateTime.Now.Ticks - this.tapTicks;
-            double millisElapsed = TimeSpan.FromTicks(ticksElapsed).TotalMilliseconds;
-            return this.tapTimeFrameMs > millisElapsed;
+            return WithinTimeFrame(this.tapTimeFrameMs);
         }
 
         private bool DoubleTapped()
         {
+            return WithinTimeFrame(this.doubleTapTimeFrameMs);
+        }
+
+        private bool WithinTimeFrame(short timeFrameMs)
+        {
             long ticksElapsed = DateTime.Now.Ticks - this.tapTicks;
             double millisElapsed = TimeSpan.FromTicks(ticksElapsed).TotalMilliseconds;
-            return this.doubleTapTimeFrameMs > millisElapsed;
+            return timeFrameMs > millisElapsed;
         }
+
+        private bool ValueOutsideDeadzoneMove(int value) => Math.Abs(value) > this.deadZoneMove;
+        private bool ValueWithinDeadzoneTap(int value) => Math.Abs(value) < this.deadZoneTap;
 
         private async Task PrimaryMouseButtonClick()
         {
