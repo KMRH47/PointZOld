@@ -55,10 +55,10 @@ Click **connect** and remote control the desired device!
 
 **BE AWARE THAT THIS APPLICATION IS CURRENTLY IN ITS EARLY STAGES AND THUS FUNCTIONALITY IS VERY LIMITED.**
 
-| Application | Version      |
-| ----------- | ------------ |
-| PointZ      | V0.1 (Alpha) |
-| PointZerver | V0.1 (Alpha) |
+| Application | Version        |
+| ----------- | -------------- |
+| PointZ      | V0.1.1 (Alpha) |
+| PointZerver | V0.1 (Alpha)   |
 
 
 # Download
@@ -89,4 +89,19 @@ Below is a table of all ports and protocols used by PointZ and PointZerver.
 | PointZ      | 45455 | UDP      | Listener         |
 | PointZerver | 45454 | UDP      | Command Receiver |
 | PointZerver | 45455 | UDP      | Broadcaster      |
+
+# Changelog
+
+### PointZ
+
+| Version | Message                                                      |
+| ------- | ------------------------------------------------------------ |
+| 0.1     | Alpha Release                                                |
+| 0.1.1   | - Mouse up command is no longer send if **Secondary Button Click** has been performed after engaging **Primary Button Hold**<br />- Scrolling no longer jumps randomly |
+
+### PointZerver
+
+| Version | Changes       |
+| ------- | ------------- |
+| 0.1     | Alpha Release |
 
