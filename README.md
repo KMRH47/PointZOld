@@ -76,7 +76,7 @@ https://drive.google.com/drive/folders/1E1ca5ZQqQigOoMo5ikrgok3YpFGECbMH
 
 PointZerver constantly broadcasts UDP packets for the clients running PointZ to pick up. These broadcast messages might be blocked by a firewall on the network.
 
-Below is a table of all ports, protocols and roles used by PointZ and PointZerver.
+Below is a table of all ports and protocols used by PointZ and PointZerver.
 
 ## Ports used
 
