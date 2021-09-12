@@ -15,9 +15,10 @@ namespace PointZ.SessionEventHandler
 
         private TouchEventAction previousTapEvent;
 
-        private bool leftButtonIsPrimary = true;
+        private bool leftMouseButtonIsPrimary = true;
         private bool doubleTapped;
         private bool tapped;
+        private bool secondaryMouseButtonClicked;
 
         private double scrollSpeed = 1;
         private short tapTimeFrameMs = 150;
@@ -44,6 +45,7 @@ namespace PointZ.SessionEventHandler
                     this.tapTicks = DateTime.Now.Ticks;
                     break;
                 case TouchEventAction.Pointer2Down:
+                    this.secondaryMouseButtonClicked = true;
                     this.previousTapEvent = e.TouchEventAction;
                     this.tapTicks = DateTime.Now.Ticks;
                     break;
@@ -66,6 +68,8 @@ namespace PointZ.SessionEventHandler
                     switch (this.previousTapEvent)
                     {
                         case TouchEventAction.Down:
+                            Debug.WriteLine($"Up -> Down");
+
                             if (Tapped())
                             {
                                 this.tapped = true;
@@ -80,9 +84,11 @@ namespace PointZ.SessionEventHandler
 
                             break;
                         case TouchEventAction.Pointer2Down:
+                            Debug.WriteLine($"Up -> Pointer2Down");
+
                             if (Tapped())
                             {
-                                await SecondaryMouseButtonUp();
+                                await SecondaryMouseButtonClick();
                             }
 
                             break;
@@ -90,7 +96,13 @@ namespace PointZ.SessionEventHandler
                             await this.commandSenderService.SendAsync(MouseCommand.MiddleButtonClick);
                             break;
                         case TouchEventAction.Move:
-                            await PrimaryMouseButtonUp();
+                            Debug.WriteLine($"Up -> Move");
+
+                            if (!this.secondaryMouseButtonClicked)
+                            {
+                                await PrimaryMouseButtonUp();
+                            }
+
                             this.doubleTapped = false;
                             break;
                     }
@@ -109,6 +121,7 @@ namespace PointZ.SessionEventHandler
                     {
                         case TouchEventAction.Down:
 
+                            Debug.WriteLine($"Move -> Down");
 
                             if (absX > this.deadZone || absY > this.deadZone)
                             {
@@ -120,6 +133,7 @@ namespace PointZ.SessionEventHandler
 
                             break;
                         case TouchEventAction.Pointer2Down:
+                            Debug.WriteLine($"Move -> Pointer2Down");
 
                             if (absY > this.deadZone)
                             {
@@ -130,28 +144,32 @@ namespace PointZ.SessionEventHandler
                                 Debug.WriteLine($"scroll adjustment: {scrollAdjustment}");
                                 data = scrollAdjustment.ToString(CultureInfo.InvariantCulture);
                                 await this.commandSenderService.SendAsync(MouseCommand.VerticalScroll, data);
+                                this.previousX = e.X;
+                                this.previousY = e.Y;
                             }
 
                             break;
                         case TouchEventAction.Pointer3Down:
                             break;
                         case TouchEventAction.Move:
+
+                            Debug.WriteLine($"Move -> Move");
+
                             data = $"{x},{y}";
                             await this.commandSenderService.SendAsync(MouseCommand.MoveMouseBy, data);
-
+                            this.previousX = e.X;
+                            this.previousY = e.Y;
                             break;
                     }
 
                     break;
             }
-
-            this.previousX = e.X;
-            this.previousY = e.Y;
         }
 
         private bool Tapped()
         {
             if (this.doubleTapped) return false;
+            Debug.WriteLine($"Tapped!");
             long ticksElapsed = DateTime.Now.Ticks - this.tapTicks;
             double millisElapsed = TimeSpan.FromTicks(ticksElapsed).TotalMilliseconds;
             return this.tapTimeFrameMs > millisElapsed;
@@ -166,7 +184,9 @@ namespace PointZ.SessionEventHandler
 
         private async Task PrimaryMouseButtonClick()
         {
-            if (this.leftButtonIsPrimary)
+            Debug.WriteLine($"PrimaryMouseButtonClick");
+            this.secondaryMouseButtonClicked = false;
+            if (this.leftMouseButtonIsPrimary)
             {
                 await this.commandSenderService.SendAsync(MouseCommand.LeftButtonClick);
             }
@@ -178,7 +198,9 @@ namespace PointZ.SessionEventHandler
 
         private async Task PrimaryMouseButtonDown()
         {
-            if (this.leftButtonIsPrimary)
+            Debug.WriteLine($"PrimaryMouseButtonDown");
+
+            if (this.leftMouseButtonIsPrimary)
             {
                 await this.commandSenderService.SendAsync(MouseCommand.LeftButtonDown);
             }
@@ -190,7 +212,9 @@ namespace PointZ.SessionEventHandler
 
         private async Task PrimaryMouseButtonUp()
         {
-            if (this.leftButtonIsPrimary)
+            Debug.WriteLine($"PrimaryMouseButtonUp");
+
+            if (this.leftMouseButtonIsPrimary)
             {
                 await this.commandSenderService.SendAsync(MouseCommand.LeftButtonUp);
             }
@@ -202,7 +226,9 @@ namespace PointZ.SessionEventHandler
 
         private async Task SecondaryMouseButtonClick()
         {
-            if (this.leftButtonIsPrimary)
+            Debug.WriteLine($"SecondaryMouseButtonClick");
+
+            if (this.leftMouseButtonIsPrimary)
             {
                 await this.commandSenderService.SendAsync(MouseCommand.RightButtonClick);
             }
@@ -214,7 +240,7 @@ namespace PointZ.SessionEventHandler
 
         private async Task SecondaryMouseButtonDown()
         {
-            if (this.leftButtonIsPrimary)
+            if (this.leftMouseButtonIsPrimary)
             {
                 await this.commandSenderService.SendAsync(MouseCommand.RightButtonDown);
             }
@@ -226,7 +252,7 @@ namespace PointZ.SessionEventHandler
 
         private async Task SecondaryMouseButtonUp()
         {
-            if (this.leftButtonIsPrimary)
+            if (this.leftMouseButtonIsPrimary)
             {
                 await this.commandSenderService.SendAsync(MouseCommand.RightButtonUp);
             }
