@@ -13,15 +13,15 @@
 
 ### What is PointZ?
 
-PointZ is an Android/iPhone application built using Xamarin.Forms. The application allows you to remote control any system running PointZerver, as long as they're on the same WiFi network.
+PointZ is an Android/iPhone application built using Xamarin.Forms. The application allows you to emulate mouse and keyboard on any system running PointZerver, as long as they're on the same WiFi network. 
 
 ### What is PointZerver?
 
-PointZerver is a desktop application built using .NET 5.0. PointZerver, as the name suggests, is the server that interfaces with PointZ, and must be running on a desktop system for PointZ to work.
+PointZerver is a desktop application built using .NET 5.0. PointZerver, as the name suggests, is the server that interfaces with PointZ, and must be running on a compatible system for PointZ to work.
 
-### Which OS does PointZerver support?
+### What operating system is compatible with PointZerver ?
 
-Since PointZerver is built using .NET 5.0, it should work on **Windows**, **iOS** and **Linux**.
+Since PointZerver is built using .NET 5.0, it works on **Windows**, **macOS** and **Linux**.
 
 ### Is PointZ on Google Play and App store?
 
