@@ -45,11 +45,11 @@ Click **connect** and remote control the desired device!
 
 | Action                      | Touch Action          | Sequence              | Condition                                                    | Default time frame |
 | --------------------------- | --------------------- | --------------------- | ------------------------------------------------------------ | ------------------ |
-| Primary Button Click        | Tap                   | Down, up              | Time after putting finger down and releasing it is within the set time frame. | 150ms              |
-| Primary Button Hold         | Tap and hold          | Down, up, down (hold) | Time between a tap and putting the finger down again is within the set time frame. | 250ms              |
-| Double Primary Button Click | Double tap            | Down, up, Down, up    | Two taps in a row. Time between the single taps must match the set time frame. | 250ms              |
-| Secondary Button Click      | Multi-tap (2 fingers) | Down (2 fingers)      | Time after putting fingers down and releasing them is within the set time frame. | 150ms              |
-| Middle Button Click         | Multi-tap (3 fingers) | Down (3 fingers)      | Time after putting fingers down and releasing them is within the set time frame. | 150ms              |
+| Primary Button Click        | Tap                   | Down, up              | Time after putting finger down and releasing it is within the time frame. | 150ms              |
+| Primary Button Hold         | Tap and hold          | Down, up, down (hold) | Time between a tap and putting the finger down again is within the time frame. | 250ms              |
+| Double Primary Button Click | Double tap            | Down, up, Down, up    | Two taps in a row. Time between the single taps must be within the time frame. | 250ms              |
+| Secondary Button Click      | Multi-tap (2 fingers) | Down (2 fingers)      | Time after putting fingers down and releasing them is within the time frame. | 150ms              |
+| Middle Button Click         | Multi-tap (3 fingers) | Down (3 fingers)      | Time after putting fingers down and releasing them is within the time frame. | 150ms              |
 
 # Current Version
 
