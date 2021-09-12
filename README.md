@@ -43,7 +43,7 @@ Click **connect** and remote control the desired device!
 
 ### Mouse
 
-| Mouse Action                | Touch Action          | Sequence              | Condition                                                    | Default time frame |
+| Action                      | Touch Action          | Sequence              | Condition                                                    | Default time frame |
 | --------------------------- | --------------------- | --------------------- | ------------------------------------------------------------ | ------------------ |
 | Primary Button Click        | Tap                   | Down, up              | Time after putting finger down and releasing it is within the set time frame. | 150ms              |
 | Primary Button Hold         | Tap and hold          | Down, up, down (hold) | Time between a tap and putting the finger down again is within the set time frame. | 250ms              |
