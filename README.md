@@ -33,9 +33,9 @@ PointZ is free and open-source.
 
 1. When PointZ is running, it'll immediately enter "Discovery mode", listening for any PointZerver applications on the network. 
 2. When PointZerver and PointZ runs simultaneously, PointZ will list all available devices.
-3. When you tap on the device you want to remote control, a **connect** button appears on the bottom of the screen.
+3. When you tap on the device you want to remote control, a **connect** button appears at the bottom of the screen.
 
-Click **connect** and remote control the desired device!
+Click **connect** and remote control the selected device!
 
 ![](Graphic/Guide/PointZ/Full.png)
 
