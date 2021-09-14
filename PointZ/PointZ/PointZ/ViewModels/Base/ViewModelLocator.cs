@@ -6,9 +6,9 @@ using PointZ.Services.CommandSender;
 using PointZ.Services.DeviceUserInterface;
 using PointZ.Services.Logger;
 using PointZ.Services.Navigation;
+using PointZ.Services.SessionTouchEventHandler;
 using PointZ.Services.TouchEvent;
 using PointZ.Services.UdpListener;
-using PointZ.SessionEventHandler;
 using PointZ.TinyIoC;
 using Xamarin.Forms;
 
@@ -34,7 +34,7 @@ namespace PointZ.ViewModels.Base
             Container.Register<ILogger, ConsoleLogger>();
             Container.Register<INavigationService, NavigationService>();
             Container.Register<ICommandSenderService, CommandSenderService>();
-            Container.Register<ISessionEventHandlerService, SessionEventHandlerService>();
+            Container.Register<ISessionTouchEventHandlerService, SessionTouchEventHandlerService>();
             Container.Register(DependencyService.Resolve<ITouchEventService>());
             Container.Register(DependencyService.Resolve<IPlatformNavigationService>());
             Container.Register(DependencyService.Resolve<IDeviceUserInterfaceService>());

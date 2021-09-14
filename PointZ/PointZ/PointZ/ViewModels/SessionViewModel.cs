@@ -6,8 +6,8 @@ using PointZ.Models.DisplaySettings;
 using PointZ.Models.Server;
 using PointZ.Services.DeviceUserInterface;
 using PointZ.Services.Navigation;
+using PointZ.Services.SessionTouchEventHandler;
 using PointZ.Services.TouchEvent;
-using PointZ.SessionEventHandler;
 using PointZ.ViewModels.Base;
 using Xamarin.Forms;
 using NavigationEventArgs = PointZ.Services.Navigation.NavigationEventArgs;
@@ -17,19 +17,19 @@ namespace PointZ.ViewModels
     public class SessionViewModel : ViewModelBase
     {
         private readonly ITouchEventService touchEventService;
-        private readonly ISessionEventHandlerService sessionEventHandlerService;
+        private readonly ISessionTouchEventHandlerService sessionTouchEventHandlerService;
         private readonly IDeviceUserInterfaceService deviceUserInterfaceService;
         private readonly IPlatformNavigationService platformNavigationService;
 
         private double buttonHeight;
 
         public SessionViewModel(
-            ISessionEventHandlerService sessionEventHandlerService,
+            ISessionTouchEventHandlerService sessionTouchEventHandlerService,
             ITouchEventService touchEventService,
             IDeviceUserInterfaceService deviceUserInterfaceService,
             IPlatformNavigationService platformNavigationService)
         {
-            this.sessionEventHandlerService = sessionEventHandlerService;
+            this.sessionTouchEventHandlerService = sessionTouchEventHandlerService;
             this.deviceUserInterfaceService = deviceUserInterfaceService;
             this.platformNavigationService = platformNavigationService;
             this.touchEventService = touchEventService;
@@ -47,7 +47,7 @@ namespace PointZ.ViewModels
         {
             ServerData serverData = (ServerData)parameter;
             IPAddress ipAddress = IPAddress.Parse(serverData.Address);
-            this.sessionEventHandlerService.Bind(ipAddress);
+            this.sessionTouchEventHandlerService.Bind(ipAddress);
             return Task.CompletedTask;
         }
 
@@ -65,7 +65,7 @@ namespace PointZ.ViewModels
             bool withinBounds = e.Y < screenHeight - ButtonHeightPixels;
             if (!withinBounds) return;
 
-            await this.sessionEventHandlerService.HandleAsync(e);
+            await this.sessionTouchEventHandlerService.HandleAsync(e);
         }
     }
 }

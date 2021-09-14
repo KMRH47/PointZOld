@@ -7,9 +7,9 @@ using PointZ.Models.Command;
 using PointZ.Services.CommandSender;
 using PointZ.Services.TouchEvent;
 
-namespace PointZ.SessionEventHandler
+namespace PointZ.Services.SessionTouchEventHandler
 {
-    public class SessionEventHandlerService : ISessionEventHandlerService
+    public class SessionTouchEventHandlerService : ISessionTouchEventHandlerService
     {
         private readonly ICommandSenderService commandSenderService;
 
@@ -30,7 +30,7 @@ namespace PointZ.SessionEventHandler
 
         private long tapTicks;
 
-        public SessionEventHandlerService(ICommandSenderService commandSenderService)
+        public SessionTouchEventHandlerService(ICommandSenderService commandSenderService)
         {
             this.commandSenderService = commandSenderService;
         }
