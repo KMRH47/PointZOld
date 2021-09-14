@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Net;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using PointZ.Models.DisplaySettings;
 using PointZ.Models.Server;
 using PointZ.Services.DeviceUserInterface;
@@ -9,7 +8,6 @@ using PointZ.Services.Navigation;
 using PointZ.Services.SessionTouchEventHandler;
 using PointZ.Services.TouchEvent;
 using PointZ.ViewModels.Base;
-using Xamarin.Forms;
 using NavigationEventArgs = PointZ.Services.Navigation.NavigationEventArgs;
 
 namespace PointZ.ViewModels
