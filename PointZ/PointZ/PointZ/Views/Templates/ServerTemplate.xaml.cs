@@ -4,9 +4,9 @@ using Xamarin.Forms.Xaml;
 namespace PointZ.Views.Templates
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class DiscoverServerTemplate : ContentView
+    public partial class ServerTemplate : ContentView
     {
-        public DiscoverServerTemplate()
+        public ServerTemplate()
         {
             InitializeComponent();
         }

@@ -3,33 +3,51 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="PointZ.Views.SessionView"
+             xmlns:viewModels="clr-namespace:PointZ.ViewModels;assembly=PointZ"
              xmlns:viewModelsBase="clr-namespace:PointZ.ViewModels.Base;assembly=PointZ"
+             xmlns:behaviors="clr-namespace:PointZ.Behaviors;assembly=PointZ"
              NavigationPage.HasNavigationBar="False"
-             viewModelsBase:ViewModelLocator.AutoWireViewModel="True">
+             viewModelsBase:ViewModelLocator.AutoWireViewModel="True"
+             x:DataType="viewModels:SessionViewModel">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="EntryStyle" TargetType="{x:Type Entry}">
+                <Setter Property="BackgroundColor"
+                        Value="{AppThemeBinding 
+                        Dark={StaticResource DimmedWhite},
+                        Light={StaticResource WhitenedBlack}}" />
+                <Setter Property="TextColor"
+                        Value="{AppThemeBinding 
+                        Dark={StaticResource WhitenedBlack},
+                        Light={StaticResource DimmedWhite}}" />
+                <Setter Property="FontSize" Value="Title" />
+                <Setter Property="HorizontalTextAlignment" Value="Center" />
+                <Setter Property="VerticalOptions" Value="EndAndExpand" />
+                <Setter Property="FontFamily" Value="IconFont" />
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
 
     <ContentPage.Content>
 
-        <StackLayout Orientation="Vertical"
-                     Height="{Binding StackLayoutHeightPixels}"
-                     Style="{StaticResource StackLayoutStyle}">
-            
-            <StackLayout.GestureRecognizers>
-                <TapGestureRecognizer Command="{Binding SingleTapCommand}"/>
-                <TapGestureRecognizer NumberOfTapsRequired="2" Command="{Binding DoubleTapCommand}"/>
-            </StackLayout.GestureRecognizers>
-            
-            <Grid VerticalOptions="EndAndExpand"
-                  Style="{StaticResource GridStyle}">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition /> <ColumnDefinition /> <ColumnDefinition /> <ColumnDefinition />
-                </Grid.ColumnDefinitions>
-                <Button Grid.Column="0" Text="Test" Height="{Binding ButtonHeightPixels}" />
-                <Button Grid.Column="1" Text="Test" />
-                <Button Grid.Column="2" Text="Test" />
-                <Button Grid.Column="3" Text="Test" />
-            </Grid>
-            
-        </StackLayout>
+        <Grid>
+            <StackLayout Style="{StaticResource StackLayoutStyle}">
+                <Label Text="{Binding EntryText}" VerticalOptions="StartAndExpand" TextColor="Red" Margin="20" />
+
+                <Entry ReturnCommand="{Binding ReturnPressedCommand}"
+                       ReturnCommandParameter="{Binding EntryText}"
+                       Style="{StaticResource EntryStyle}"
+                       Placeholder="{Binding EntryPlaceholderText}"
+                       Text="{Binding EntryText}" >
+                    <Entry.Behaviors>
+                        <behaviors:EventToCommandBehavior Command="{Binding EntryFocusedCommand}" EventName="Focused" />
+                        <behaviors:EventToCommandBehavior Command="{Binding EntryUnfocusedCommand}"
+                                                          EventName="Unfocused" />
+                    </Entry.Behaviors>
+                </Entry>
+            </StackLayout>
+        </Grid>
 
     </ContentPage.Content>
 </ContentPage>

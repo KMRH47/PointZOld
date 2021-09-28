@@ -68,12 +68,15 @@
     <PackageReference Include="Xamarin.Forms" Version="5.0.0.2012" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\ActivityExtensions.cs" />
+    <Compile Include="Extensions\ViewGroupExtensions.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\DeviceUserInterfaceService.cs" />
-    <Compile Include="Services\PlatformNavigationService.cs" />
-    <Compile Include="Services\TouchEventService.cs" />
+    <Compile Include="Services\KeyEventHandler\IKeyEventHandlerService.cs" />
+    <Compile Include="Services\KeyEventHandler\KeyEventHandlerService.cs" />
+    <Compile Include="Services\SessionAndroidInterfaceService.cs" />
+    <Compile Include="Services\SessionAndroidEventService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -96,9 +99,6 @@
       <Project>{1CC0931C-9E04-497D-9806-051A0F599429}</Project>
       <Name>PointZ</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\drawable\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>

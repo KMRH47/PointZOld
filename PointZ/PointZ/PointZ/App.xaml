@@ -2,8 +2,16 @@
 
 <Application xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:PointZ.Converters;assembly=PointZ"
              x:Class="PointZ.App">
     <Application.Resources>
+
+        <!-- Fonts -->
+        <!-- <OnPlatform x:Key="FontFontello" x:TypeArguments="x:String"> -->
+        <!--     <On Platform="Android" Value="fontello" /> -->
+        <!--     <On Platform="iOS" Value="fontello" /> -->
+        <!-- </OnPlatform> -->
+
 
         <!-- Colors -->
         <Color x:Key="SystemColorDark">Black</Color>
@@ -26,6 +34,12 @@
             <Setter Property="BorderWidth" Value="0" />
             <Setter Property="CornerRadius" Value="0" />
         </Style>
+        
+        
+        <!-- Converters -->
+        <converters:CountToBoolConverter x:Key="CountToBoolConverter"/>
+        <converters:InverseCountToBoolConverter x:Key="InverseCountToBoolConverter"/>
+        <converters:InverseBoolConverter x:Key="InverseBoolConverter"/>
 
     </Application.Resources>
 </Application>

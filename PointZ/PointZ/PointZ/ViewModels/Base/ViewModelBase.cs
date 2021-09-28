@@ -12,7 +12,7 @@ namespace PointZ.ViewModels.Base
     {
         protected readonly INavigationService NavigationService;
 
-        public ViewModelBase() => this.NavigationService = ViewModelLocator.Resolve<INavigationService>();
+        protected ViewModelBase() => this.NavigationService = ViewModelLocator.Resolve<INavigationService>();
 
         protected void RaisePropertyChanged<T>(Expression<Func<T>> property)
         {
@@ -20,7 +20,7 @@ namespace PointZ.ViewModels.Base
             Debug.WriteLine($"Property changed: {name}");
             OnPropertyChanged(name);
         }
-
+ 
         public virtual Task InitializeAsync(object parameter) => Task.FromResult(false);
 
         private static MemberInfo GetMemberInfo(Expression expression)

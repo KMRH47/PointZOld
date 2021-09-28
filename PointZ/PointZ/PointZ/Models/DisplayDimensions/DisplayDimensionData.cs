@@ -1,8 +1,8 @@
-﻿namespace PointZ.Models.DisplaySettings
+﻿namespace PointZ.Models.DisplayDimensions
 {
-    public readonly struct DisplaySettingsData
+    public readonly struct DisplayDimensionData
     {
-        public DisplaySettingsData(int width, int height)
+        public DisplayDimensionData(int width, int height)
         {
             Width = width;
             Height = height;

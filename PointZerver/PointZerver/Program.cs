@@ -3,6 +3,7 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
 using InputSimulatorStandard;
+using PointZerver.Services.CommandConverter;
 using PointZerver.Services.DataInterpreter;
 using PointZerver.Services.Logger;
 using PointZerver.Services.Simulators;
@@ -28,7 +29,8 @@ namespace PointZerver
 
             // Services
             IInputSimulator mouseSimulatorService = new MouseSimulatorService(new MouseSimulator(), logger);
-            IInputSimulator keyboardSimulatorService = new KeyboardSimulatorService(new KeyboardSimulator(), logger);
+            IInputSimulator keyboardSimulatorService = new KeyboardSimulatorService(new KeyboardSimulator(),
+                new VirtualKeyCodeConverterService(), logger);
             IUdpBroadcastService udpBroadcastService = new UdpBroadcastService(new UdpClient(), logger);
             IDataInterpreterService dataInterpreterService =
                 new DataInterpreterService(logger, keyboardSimulatorService, mouseSimulatorService);
@@ -44,7 +46,7 @@ namespace PointZerver
             Task listenerServiceTask = udpListenerService.StartAsync(udpListenerTokenSource.Token);
 
             // udpListenerTokenSource.Cancel();
-            
+
             Welcome();
             ListenEscape();
             return Task.CompletedTask;

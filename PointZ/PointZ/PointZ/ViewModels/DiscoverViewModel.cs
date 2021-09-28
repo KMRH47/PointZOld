@@ -10,12 +10,12 @@ namespace PointZ.ViewModels
 {
     public class DiscoverViewModel : ViewModelBase
     {
-        private bool anyServerFound = true;
+        private readonly IUdpListenerService udpListenerService;
+
         private bool isSearching = true;
         private bool isServerSelected;
+        
         private ServerData selectedServer;
-
-        private readonly IUdpListenerService udpListenerService;
 
         public DiscoverViewModel(IUdpListenerService udpListenerService)
         {
@@ -23,8 +23,11 @@ namespace PointZ.ViewModels
             ConnectCommand = new Command(OnConnect);
             udpListenerService.StartAsync(OnServerDataReceived);
         }
+        
+        public ICommand ConnectCommand { get; }
 
         public ObservableCollection<ServerData> Servers { get; } = new();
+
         public ServerData SelectedServer
         {
             get => this.selectedServer;
@@ -35,8 +38,6 @@ namespace PointZ.ViewModels
             }
         }
 
-        public ICommand ConnectCommand { get; private set; }
-
         public bool IsServerSelected
         {
             get => this.isServerSelected;
@@ -44,17 +45,6 @@ namespace PointZ.ViewModels
             {
                 this.isServerSelected = value;
                 RaisePropertyChanged(() => IsServerSelected);
-            }
-        }
-        
-
-        public bool AnyServerFound
-        {
-            get => this.anyServerFound;
-            private set
-            {
-                this.anyServerFound = value;
-                RaisePropertyChanged(() => AnyServerFound);
             }
         }
 
@@ -89,7 +79,6 @@ namespace PointZ.ViewModels
         {
             if (IsServerAlreadyAdded(server)) return;
             Servers.Add(server);
-            AnyServerFound = Servers.Count <= 0;
         }
 
         private bool IsServerAlreadyAdded(ServerData server) => Servers.Any(s => s.Address == server.Address);

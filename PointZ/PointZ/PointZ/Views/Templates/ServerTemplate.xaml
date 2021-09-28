@@ -2,7 +2,7 @@
 
 <ContentView xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="PointZ.Views.Templates.DiscoverServerTemplate">
+             x:Class="PointZ.Views.Templates.ServerTemplate">
 
     <ContentView.Resources>
         <ResourceDictionary>
@@ -17,13 +17,15 @@
         </ResourceDictionary>
     </ContentView.Resources>
 
-    <StackLayout Orientation="Horizontal"  VerticalOptions="Center" >
-        <Label Text="{Binding Name}" 
-               Style="{StaticResource ServerText}"
-               HorizontalOptions="StartAndExpand" />
-        <Label Text="{Binding Address}" 
-               Style="{StaticResource ServerText}" 
-               HorizontalOptions="EndAndExpand" />
-    </StackLayout>
+    <ContentView.Content>
+        <StackLayout Orientation="Horizontal" VerticalOptions="Center">
+            <Label Text="{Binding  Name}"
+                   Style="{StaticResource ServerText}"
+                   HorizontalOptions="StartAndExpand" />
+            <Label Text="{Binding Address}"
+                   Style="{StaticResource ServerText}"
+                   HorizontalOptions="EndAndExpand" />
+        </StackLayout>
+    </ContentView.Content>
 
 </ContentView>

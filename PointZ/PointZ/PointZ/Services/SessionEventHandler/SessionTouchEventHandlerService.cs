@@ -4,16 +4,17 @@ using System.Globalization;
 using System.Net;
 using System.Threading.Tasks;
 using PointZ.Models.Command;
+using PointZ.Models.PlatformEvent;
 using PointZ.Services.CommandSender;
-using PointZ.Services.TouchEvent;
+using PointZ.Services.PlatformEvent;
 
-namespace PointZ.Services.SessionTouchEventHandler
+namespace PointZ.Services.SessionEventHandler
 {
-    public class SessionTouchEventHandlerService : ISessionTouchEventHandlerService
+    public class SessionTouchEventHandlerService : ISessionEventHandlerService<TouchEventArgs>
     {
         private readonly ICommandSenderService commandSenderService;
 
-        private TouchEventAction previousTapEvent;
+        private TouchAction previousTapAction;
 
         private bool leftMouseButtonIsPrimary = true;
         private bool doubleTapped;
@@ -36,24 +37,25 @@ namespace PointZ.Services.SessionTouchEventHandler
         }
 
         public void Bind(IPAddress ipAddress) => this.commandSenderService.Bind(ipAddress);
-
+       
         public async Task HandleAsync(TouchEventArgs e)
         {
             int x = (int)-(this.previousX - e.X);
             int y = (int)-(this.previousY - e.Y);
+            Debug.WriteLine($"MOVING!");
 
-            switch (e.TouchEventAction)
+            switch (e.TouchAction)
             {
-                case TouchEventAction.Pointer3Down:
-                    this.previousTapEvent = e.TouchEventAction;
+                case TouchAction.Pointer3Down:
+                    this.previousTapAction = e.TouchAction;
                     this.tapTicks = DateTime.Now.Ticks;
                     break;
-                case TouchEventAction.Pointer2Down:
+                case TouchAction.Pointer2Down:
                     this.secondaryMouseButtonClicked = true;
-                    this.previousTapEvent = e.TouchEventAction;
+                    this.previousTapAction = e.TouchAction;
                     this.tapTicks = DateTime.Now.Ticks;
                     break;
-                case TouchEventAction.Down:
+                case TouchAction.Down:
                     if (this.tapped)
                     {
                         if (DoubleTapped())
@@ -66,15 +68,15 @@ namespace PointZ.Services.SessionTouchEventHandler
                         }
                     }
 
-                    this.previousTapEvent = e.TouchEventAction;
+                    this.previousTapAction = e.TouchAction;
                     this.previousX = e.X;
                     this.previousY = e.Y;
                     this.tapTicks = DateTime.Now.Ticks;
                     return;
-                case TouchEventAction.Up:
-                    switch (this.previousTapEvent)
+                case TouchAction.Up:
+                    switch (this.previousTapAction)
                     {
-                        case TouchEventAction.Down:
+                        case TouchAction.Down:
                             Debug.WriteLine($"Up -> Down");
 
                             if (Tapped())
@@ -90,7 +92,7 @@ namespace PointZ.Services.SessionTouchEventHandler
                             }
 
                             break;
-                        case TouchEventAction.Pointer2Down:
+                        case TouchAction.Pointer2Down:
                             Debug.WriteLine($"Up -> Pointer2Down");
 
                             if (Tapped())
@@ -99,10 +101,10 @@ namespace PointZ.Services.SessionTouchEventHandler
                             }
 
                             break;
-                        case TouchEventAction.Pointer3Down:
+                        case TouchAction.Pointer3Down:
                             await this.commandSenderService.SendAsync(MouseCommand.MiddleButtonClick);
                             break;
-                        case TouchEventAction.Move:
+                        case TouchAction.Move:
                             Debug.WriteLine($"Up -> Move");
 
                             if (!this.secondaryMouseButtonClicked)
@@ -115,25 +117,25 @@ namespace PointZ.Services.SessionTouchEventHandler
                     }
 
                     break;
-                case TouchEventAction.Move:
+                case TouchAction.Move:
 
                     string data;
 
-                    switch (this.previousTapEvent)
+                    switch (this.previousTapAction)
                     {
-                        case TouchEventAction.Down:
+                        case TouchAction.Down:
                             Debug.WriteLine($"Move -> Down");
 
                             if (ValueOutsideDeadzoneMove(x) || ValueOutsideDeadzoneMove(y))
                             {
                                 x = 0;
                                 y = 0;
-                                this.previousTapEvent = TouchEventAction.Move;
-                                goto case TouchEventAction.Move;
+                                this.previousTapAction = TouchAction.Move;
+                                goto case TouchAction.Move;
                             }
 
                             break;
-                        case TouchEventAction.Pointer2Down:
+                        case TouchAction.Pointer2Down:
                             Debug.WriteLine($"Move -> Pointer2Down");
 
                           
@@ -148,9 +150,9 @@ namespace PointZ.Services.SessionTouchEventHandler
                             this.previousY = e.Y;
 
                             break;
-                        case TouchEventAction.Pointer3Down:
+                        case TouchAction.Pointer3Down:
                             break;
-                        case TouchEventAction.Move:
+                        case TouchAction.Move:
 
                             Debug.WriteLine($"Move -> Move");
 

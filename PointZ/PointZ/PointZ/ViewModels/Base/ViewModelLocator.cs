@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Globalization;
-using System.Net.Sockets;
 using System.Reflection;
+using PointZ.Models.PlatformEvent;
 using PointZ.Services.CommandSender;
-using PointZ.Services.DeviceUserInterface;
 using PointZ.Services.Logger;
 using PointZ.Services.Navigation;
-using PointZ.Services.SessionTouchEventHandler;
-using PointZ.Services.TouchEvent;
+using PointZ.Services.PlatformEvent;
+using PointZ.Services.PlatformInterface;
+using PointZ.Services.SessionEventHandler;
+using PointZ.Services.SessionMessageHandler;
 using PointZ.Services.UdpListener;
 using PointZ.TinyIoC;
 using Xamarin.Forms;
@@ -30,14 +31,15 @@ namespace PointZ.ViewModels.Base
             Container.Register<SessionViewModel>();
 
             // Services
+            Container.Register<ISessionMessageHandlerService, SessionMessageHandlerService>();
             Container.Register<IUdpListenerService, UdpListenerService>();
             Container.Register<ILogger, ConsoleLogger>();
             Container.Register<INavigationService, NavigationService>();
             Container.Register<ICommandSenderService, CommandSenderService>();
-            Container.Register<ISessionTouchEventHandlerService, SessionTouchEventHandlerService>();
-            Container.Register(DependencyService.Resolve<ITouchEventService>());
-            Container.Register(DependencyService.Resolve<IPlatformNavigationService>());
-            Container.Register(DependencyService.Resolve<IDeviceUserInterfaceService>());
+            Container.Register<ISessionEventHandlerService<TouchEventArgs>, SessionTouchEventHandlerService>();
+            Container.Register<ISessionEventHandlerService<KeyEventArgs>, SessionKeyEventHandlerService>();
+            Container.Register(DependencyService.Resolve<ISessionPlatformEventService>());
+            Container.Register(DependencyService.Resolve<ISessionPlatformInterfaceService>());
         }
 
         // ReSharper disable once MemberCanBePrivate.Global

@@ -72,6 +72,7 @@ namespace PointZ.Services.Navigation
             if (page.BindingContext == null) return;
 
             ViewModelBase viewModelBaseBindingContext = (ViewModelBase) page.BindingContext;
+            
             await viewModelBaseBindingContext.InitializeAsync(parameter);
         }
 

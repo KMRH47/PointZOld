@@ -4,9 +4,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="PointZ.Views.DiscoverView"
              xmlns:viewModelsBase="clr-namespace:PointZ.ViewModels.Base;assembly=PointZ"
+             xmlns:viewModels="clr-namespace:PointZ.ViewModels;assembly=PointZ"
              xmlns:templates="clr-namespace:PointZ.Views.Templates;assembly=PointZ"
+             xmlns:converters="clr-namespace:PointZ.Converters;assembly=PointZ"
              NavigationPage.HasNavigationBar="False"
-             viewModelsBase:ViewModelLocator.AutoWireViewModel="True">
+             viewModelsBase:ViewModelLocator.AutoWireViewModel="True"
+             x:DataType="viewModels:DiscoverViewModel">
 
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -36,31 +39,31 @@
 
         <StackLayout Style="{StaticResource StackLayoutStyle}">
 
-            <StackLayout VerticalOptions="CenterAndExpand">
-                <StackLayout IsVisible="{Binding AnyServerFound}">
+            <StackLayout VerticalOptions="CenterAndExpand" Margin="20" >
+                <StackLayout
+                    IsVisible="{Binding Servers.Count, Converter={StaticResource InverseCountToBoolConverter}}">
                     <ActivityIndicator Style="{StaticResource ActivityIndicatorBigStyle}"
                                        IsRunning="{Binding IsSearching}" />
                     <Label Style="{StaticResource SearchingStyle}" />
                 </StackLayout>
 
-
                 <ListView ItemsSource="{Binding Servers}"
                           IsVisible="{Binding Servers.Count}"
-                          SelectedItem="{Binding SelectedServer}">
+                          SelectedItem="{Binding SelectedServer, Converter={StaticResource CountToBoolConverter}}">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
-                                <templates:DiscoverServerTemplate />
+                                <templates:ServerTemplate />
                             </ViewCell>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
             </StackLayout>
 
-            <Button Text="Connect" 
-                    IsEnabled="{Binding IsServerSelected}" 
-                    IsVisible="{Binding IsServerSelected}" 
-                    Command="{Binding ConnectCommand}"/>
+            <Button Text="Connect"
+                    IsEnabled="{Binding IsServerSelected}"
+                    IsVisible="{Binding IsServerSelected}"
+                    Command="{Binding ConnectCommand}" />
         </StackLayout>
 
     </ContentPage.Content>

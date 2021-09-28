@@ -13,4 +13,9 @@
     <ItemGroup>
         <PackageReference Include="Xamarin.Forms" Version="5.0.0.2012" />
     </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Resources\Fonts\fontello.ttf" />
+      <EmbeddedResource Include="Resources\Fonts\fontello.ttf" />
+    </ItemGroup>
 </Project>

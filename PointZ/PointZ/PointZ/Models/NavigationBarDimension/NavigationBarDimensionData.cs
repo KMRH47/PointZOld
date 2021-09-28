@@ -1,8 +1,8 @@
-﻿namespace PointZ.Models.NavigationBar
+﻿namespace PointZ.Models.NavigationBarDimension
 {
-    public struct NavigationBarData
+    public struct NavigationBarDimensionData
     {
-        public NavigationBarData(double widthPixels, double heightPixels)
+        public NavigationBarDimensionData(double widthPixels, double heightPixels)
         {
             WidthPixels = widthPixels;
             HeightPixels = heightPixels;

@@ -1,6 +1,6 @@
-﻿namespace PointZ.Services.TouchEvent
+﻿namespace PointZ.Models.PlatformEvent
 {
-    public enum TouchEventAction
+    public enum TouchAction
     {
         Down,
         Up,
