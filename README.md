@@ -56,10 +56,10 @@ Click **connect** and remote control the selected device!
 
 **BE AWARE THAT THIS APPLICATION IS CURRENTLY IN ITS EARLY STAGES AND THUS FUNCTIONALITY IS VERY LIMITED.**
 
-| Application | Version        |
-| ----------- | -------------- |
-| PointZ      | V0.1.1 (Alpha) |
-| PointZerver | V0.1 (Alpha)   |
+| Application | Version | Phase |
+| ----------- | ------- | ----- |
+| PointZ      | V0.2.0  | Alpha |
+| PointZerver | V0.1.1  | Alpha |
 
 
 # Download
@@ -99,10 +99,12 @@ Below is a table of all ports and protocols used by PointZ and PointZerver.
 | ------- | ------------------------------------------------------------ |
 | 0.1     | Alpha Release                                                |
 | 0.1.1   | - Mouse up command is no longer send if **Secondary Button Click** has been performed after engaging **Primary Button Hold**<br />- Scrolling no longer jumps randomly |
+| 0.2.0   | - Keyboard added<br />- Replaced buttom bar with text-input  |
 
 ### PointZerver
 
-| Version | Changes       |
-| ------- | ------------- |
-| 0.1     | Alpha Release |
+| Version | Changes                                                      |
+| ------- | ------------------------------------------------------------ |
+| 0.1     | Alpha Release                                                |
+| 0.1.1   | Adjusted keyboard interpretation (when receiving data from PointZ). |
 
