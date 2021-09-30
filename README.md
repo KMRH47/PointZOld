@@ -10,9 +10,9 @@ PointZ is an Android/iPhone application built using Xamarin.Forms. The applicati
 
 PointZerver is a desktop application built using .NET 5.0. PointZerver, as the name suggests, is the server that interfaces with PointZ, and must be running on a compatible system for PointZ to work.
 
-### What operating system is compatible with PointZerver ?
+### Which operating systems are compatible with PointZerver ?
 
-Since PointZerver is built using .NET 5.0, it works on **Windows**, **macOS** and **Linux**.
+Since PointZerver is built using .NET 5.0, it can be compiled to **Windows**, **macOS** and **Linux**.
 
 ### Is PointZ on Google Play and App store?
 
