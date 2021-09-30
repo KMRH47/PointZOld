@@ -43,14 +43,22 @@ Click **connect** and remote control the selected device!
 
 ### Mouse
 
-| Action                      | Touch Action | Finger Count | Sequence              | Condition                                                    | Default time frame |
-| --------------------------- | ------------ | ------------ | --------------------- | ------------------------------------------------------------ | ------------------ |
-| Primary Button Click        | Tap          | 1            | Down, up              | Time after putting finger down and releasing it is within the time frame. | 150ms              |
-| Primary Button Hold         | Tap and hold | 1            | Down, up, down (hold) | Time between a tap and putting the finger down again is within the time frame. | 250ms              |
-| Double Primary Button Click | Double tap   | 1            | Down, up, Down, up    | Two taps in a row. Time between the single taps must be within the time frame. | 250ms              |
-| Secondary Button Click      | Multi-tap    | 2            | Down, up              | Time after putting fingers down and releasing them is within the time frame. | 150ms              |
-| Middle Button Click         | Multi-tap    | 3            | Down, up              | Time after putting fingers down and releasing them is within the time frame. | 150ms              |
-| Scroll                      | Hold         | 2            | Down (hold)           | None.                                                        | N/A                |
+| Button           | Action       | Touch Action | Finger Count | Sequence              | Condition                                                    | Default time frame |
+| ---------------- | ------------ | ------------ | ------------ | --------------------- | ------------------------------------------------------------ | ------------------ |
+| Primary Button   | Click        | Tap          | 1            | Down, up              | Time after putting finger down and releasing it is within the time frame. | 150ms              |
+| Primary Button   | Hold         | Tap and hold | 1            | Down, up, down (hold) | Time between a tap and putting the finger down again is within the time frame. | 250ms              |
+| Primary Button   | Double click | Double tap   | 1            | Down, up, Down, up    | Two taps in a row. Time between the single taps must be within the time frame. | 250ms              |
+| Secondary Button | Click        | Multi-tap    | 2            | Down, up              | Time after putting fingers down and releasing them is within the time frame. | 150ms              |
+| Middle Button    | Click        | Multi-tap    | 3            | Down, up              | Time after putting fingers down and releasing them is within the time frame. | 150ms              |
+| Mouse wheel      | Scroll       | Hold         | 2            | Down (hold)           | None.                                                        | N/A                |
+
+### Keyboard
+
+1. Click on the text box placed at the bottom of the screen.
+2. When the text  box is focused, you are free to type whatever you want
+3. Press the enter button on the soft-keyboard to send the message.
+
+While the text box is empty, commands such as backspace and enter (new line) are sent to PointZerver immediately.
 
 # Current Version
 
