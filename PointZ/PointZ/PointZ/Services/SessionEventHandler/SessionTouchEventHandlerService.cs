@@ -54,20 +54,13 @@ namespace PointZ.Services.SessionEventHandler
                     this.tapTicks = DateTime.Now.Ticks;
                     break;
                 case TouchAction.Pointer2Down:
+                    this.tapCancellationTokenSource.Cancel();
                     this.secondaryMouseButtonClicked = true;
                     this.previousTapAction = e.TouchAction;
                     this.tapTicks = DateTime.Now.Ticks;
                     break;
                 case TouchAction.Down:
-                    if (this.tapped)
-                    {
-                        _ = TryHold();
-                    }
-                    else
-                    {
-                        _ = TryTap(this.tapTimeFrameMs, token);
-                    }
-
+                    _ = this.tapped ? TryHold() : TryTap(this.tapTimeFrameMs, token);
                     this.previousTapAction = e.TouchAction;
                     this.previousX = e.X;
                     this.previousY = e.Y;
@@ -83,8 +76,7 @@ namespace PointZ.Services.SessionEventHandler
                         case TouchAction.Down:
                             Debug.WriteLine($"Up -> Down");
 
-
-                            if (this.cancelledTap)
+                            if (token.IsCancellationRequested)
                             {
                                 await PrimaryMouseButtonClick();
                             }
@@ -97,10 +89,7 @@ namespace PointZ.Services.SessionEventHandler
                         case TouchAction.Pointer2Down:
                             Debug.WriteLine($"Up -> Pointer2Down");
 
-                            if (Tapped())
-                            {
                                 await SecondaryMouseButtonClick();
-                            }
 
                             break;
                         case TouchAction.Pointer3Down:
@@ -193,15 +182,6 @@ namespace PointZ.Services.SessionEventHandler
             this.cancelledTap = false;
         }
 
-        private bool Tapped() => !this.doubleTapped && WithinTimeFrame(this.tapTimeFrameMs);
-
-        private bool WithinTimeFrame(short timeFrameMs)
-        {
-            long ticksElapsed = DateTime.Now.Ticks - this.tapTicks;
-            double millisElapsed = TimeSpan.FromTicks(ticksElapsed).TotalMilliseconds;
-            return timeFrameMs > millisElapsed;
-        }
-
         private bool ValueOutsideDeadzoneMove(int value) => Math.Abs(value) > this.deadZoneMove;
         private bool ValueWithinDeadzoneTap(int value) => Math.Abs(value) < this.deadZoneTap;
 
@@ -258,30 +238,6 @@ namespace PointZ.Services.SessionEventHandler
             else
             {
                 await this.commandSenderService.SendAsync(MouseCommand.LeftButtonClick);
-            }
-        }
-
-        private async Task SecondaryMouseButtonDown()
-        {
-            if (this.leftMouseButtonIsPrimary)
-            {
-                await this.commandSenderService.SendAsync(MouseCommand.RightButtonDown);
-            }
-            else
-            {
-                await this.commandSenderService.SendAsync(MouseCommand.LeftButtonDown);
-            }
-        }
-
-        private async Task SecondaryMouseButtonUp()
-        {
-            if (this.leftMouseButtonIsPrimary)
-            {
-                await this.commandSenderService.SendAsync(MouseCommand.RightButtonUp);
-            }
-            else
-            {
-                await this.commandSenderService.SendAsync(MouseCommand.LeftButtonUp);
             }
         }
     }
