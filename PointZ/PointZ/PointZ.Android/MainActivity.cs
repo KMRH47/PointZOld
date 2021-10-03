@@ -10,6 +10,7 @@ using PointZ.Services.PlatformInterface;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 using Debug = System.Diagnostics.Debug;
+using View = Android.Views.View;
 
 namespace PointZ.Android
 {
@@ -17,7 +18,7 @@ namespace PointZ.Android
         ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : FormsAppCompatActivity
     {
-        private ISessionPlatformEventService sessionPlatformEventService;
+        private IPlatformEventService platformEventService;
         private IKeyEventHandlerService keyEventHandlerService;
 
         public override bool DispatchTouchEvent(MotionEvent motionEventArgs)
@@ -25,9 +26,9 @@ namespace PointZ.Android
             float x = motionEventArgs.GetX();
             float y = motionEventArgs.GetY();
             TouchAction touchAction = (TouchAction)((ushort)motionEventArgs.Action);
-
-            this.sessionPlatformEventService.NotifyOnScreenTouched(x, y, touchAction);
-
+        
+            this.platformEventService.NotifyOnScreenTouched(x, y, touchAction);
+        
             return base.DispatchTouchEvent(motionEventArgs);
         }
 
@@ -40,19 +41,19 @@ namespace PointZ.Android
 
         public override void OnBackPressed()
         {
-            this.sessionPlatformEventService.NotifyOnBackButtonPressed();
+            this.platformEventService.NotifyOnBackButtonPressed();
             base.OnBackPressed();
         }
 
         protected override void OnPause()
         {
-            this.sessionPlatformEventService.NotifyOnViewDisappearing();
+            this.platformEventService.NotifyOnViewDisappearing();
             base.OnPause();
         }
 
         protected override void OnResume()
         {
-            this.sessionPlatformEventService.NotifyOnViewAppearing();
+            this.platformEventService.NotifyOnViewAppearing();
             base.OnResume();
         }
 
@@ -66,12 +67,13 @@ namespace PointZ.Android
             Forms.SetTitleBarVisibility(this, AndroidTitleBarVisibility.Never);
             Forms.Init(this, savedInstanceState);
 
-            ISessionPlatformInterfaceService androidInterfaceService = new SessionAndroidInterfaceService(this);
+            IPlatformInterfaceService androidInterfaceService = new AndroidInterfaceService(this);
             DependencyService.RegisterSingleton(androidInterfaceService);
-            this.sessionPlatformEventService = DependencyService.Resolve<ISessionPlatformEventService>();
-            this.keyEventHandlerService = new KeyEventHandlerService(this.sessionPlatformEventService);
+            this.platformEventService = DependencyService.Resolve<IPlatformEventService>();
+            this.keyEventHandlerService = new KeyEventHandlerService(this.platformEventService);
 
             LoadApplication(new App());
         }
+
     }
 }

@@ -1,12 +1,13 @@
 ﻿using PointZ.Models.DisplayDimensions;
-using PointZ.Models.NavigationBarDimension;
 
 namespace PointZ.Services.PlatformInterface
 {
-    public interface ISessionPlatformInterfaceService
+    public interface IPlatformInterfaceService
     {
+        
+        
+        float DisplayDensity { get;  set; }
         DisplayDimensionData GetDisplayDimensions();
-        NavigationBarDimensionData GetNavigationBarDimensions();
         void ToggleKeyboard();
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Net;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using PointZ.Models.DisplayDimensions;
@@ -21,31 +20,29 @@ namespace PointZ.ViewModels
         private readonly ISessionEventHandlerService<TouchEventArgs> sessionTouchEventHandlerService;
         private readonly ISessionEventHandlerService<KeyEventArgs> sessionKeyEventHandlerService;
         private readonly ISessionMessageHandlerService sessionMessageHandlerService;
-        private readonly ISessionPlatformInterfaceService sessionPlatformInterfaceService;
-        private readonly ISessionPlatformEventService sessionPlatformEventService;
+        private readonly IPlatformInterfaceService platformInterfaceService;
+        private readonly IPlatformEventService platformEventService;
 
-       // private const string EntryPlaceholderTextConst = "&#xf11c;";
         private const string EntryPlaceholderTextConst = "\uf11c";
         private bool entryEnabled = true;
         private string entryText = "";
         private string entryTextPrevious = "";
 
-        private double buttonHeight;
         private string entryPlaceholderText = EntryPlaceholderTextConst;
+        private double entryHeight;
 
         public SessionViewModel(
             ISessionEventHandlerService<TouchEventArgs> sessionTouchEventHandlerService,
             ISessionEventHandlerService<KeyEventArgs> sessionKeyEventHandlerService,
             ISessionMessageHandlerService sessionMessageHandlerService,
-            ISessionPlatformInterfaceService sessionPlatformInterfaceService,
-            ISessionPlatformEventService sessionPlatformEventService)
+            IPlatformInterfaceService platformInterfaceService,
+            IPlatformEventService platformEventService)
         {
             this.sessionTouchEventHandlerService = sessionTouchEventHandlerService;
             this.sessionKeyEventHandlerService = sessionKeyEventHandlerService;
             this.sessionMessageHandlerService = sessionMessageHandlerService;
-            this.sessionPlatformInterfaceService = sessionPlatformInterfaceService;
-            this.sessionPlatformEventService = sessionPlatformEventService;
-            ToggleKeyboardCommand = new Command(OnToggleKeyboard);
+            this.platformInterfaceService = platformInterfaceService;
+            this.platformEventService = platformEventService;
             ToggleSendEveryKeyPressCommand = new Command(OnToggleSendEveryKeyPress);
             ReturnPressedCommand = new Command(OnReturnPressed);
             EntryFocusedCommand = new Command(OnEntryFocused);
@@ -53,7 +50,6 @@ namespace PointZ.ViewModels
         }
 
 
-        public ICommand ToggleKeyboardCommand { get; set; }
         public ICommand ToggleSendEveryKeyPressCommand { get; set; }
         public ICommand ReturnPressedCommand { get; set; }
         public ICommand EntryFocusedCommand { get; set; }
@@ -92,17 +88,17 @@ namespace PointZ.ViewModels
             }
         }
 
-        public double ButtonHeightPixels
+        public double EntryHeight
         {
-            get
+            get => this.entryHeight * this.platformInterfaceService.DisplayDensity;
+            set
             {
-                double l = this.buttonHeight * Math.PI;
-                Debug.WriteLine($"buttonHeight: {this.buttonHeight}");
-                Debug.WriteLine($"buttonHeight * PI: {l}");
-                return this.buttonHeight * Math.PI;
+                this.entryHeight = value;
+                Debug.WriteLine($"EntryHeight is: {value}");
+                RaisePropertyChanged(() => EntryHeight);
             }
-            set => this.buttonHeight = value;
         }
+
 
         public override Task InitializeAsync(object parameter)
         {
@@ -113,43 +109,47 @@ namespace PointZ.ViewModels
             return Task.CompletedTask;
         }
 
-        private void OnViewAppearing(object sender, EventArgs e)
-        {
-            Debug.WriteLine($"OnViewAppearing");
-            this.sessionPlatformEventService.OnScreenTouched += OnScreenTouched;
-            this.sessionPlatformEventService.OnKeyDown += OnKeyDown;
-            this.sessionPlatformEventService.OnBackButtonPressed += OnBackButtonPressed;
-            this.sessionPlatformEventService.OnViewDisappearing += OnViewDisappearing;
-        }
-
+        private void OnViewAppearing(object sender, EventArgs e) => AddPlatformListeners();
         private void OnViewDisappearing(object sender, EventArgs e)
         {
-            Debug.WriteLine($"OnViewDisappearing");
-            this.sessionPlatformEventService.OnScreenTouched -= OnScreenTouched;
-            this.sessionPlatformEventService.OnKeyDown -= OnKeyDown;
-            this.sessionPlatformEventService.OnBackButtonPressed -= OnBackButtonPressed;
-            this.sessionPlatformEventService.OnViewDisappearing -= OnViewDisappearing;
+            RemovePlatformListeners();
+            this.platformEventService.OnViewAppearing += OnViewAppearing;
+        }
+
+        private void AddPlatformListeners()
+        {
+            this.platformEventService.OnScreenTouched += OnScreenTouched;
+            this.platformEventService.OnBackButtonPressed += OnBackButtonPressed;
+            this.platformEventService.OnViewDisappearing += OnViewDisappearing;
+        }
+
+        private void RemovePlatformListeners()
+        {
+            this.platformEventService.OnScreenTouched -= OnScreenTouched;
+            this.platformEventService.OnBackButtonPressed -= OnBackButtonPressed;
+            this.platformEventService.OnViewDisappearing -= OnViewDisappearing;
+        }
+        
+        private void RemoveAllPlatformListeners()
+        {
+            RemovePlatformListeners();
+            this.platformEventService.OnViewAppearing -= OnViewAppearing;
         }
 
         private async void OnScreenTouched(object sender, TouchEventArgs e)
         {
-            DisplayDimensionData displayDimensions = this.sessionPlatformInterfaceService.GetDisplayDimensions();
-            int screenHeight = displayDimensions.Height;
+            DisplayDimensionData displayDimensions = this.platformInterfaceService.GetDisplayDimensions();
+            double screenHeight = displayDimensions.Height;
 
-            bool withinBounds = e.Y < screenHeight - ButtonHeightPixels;
+            bool withinBounds = e.Y < screenHeight - EntryHeight;
             if (!withinBounds) return;
 
             await this.sessionTouchEventHandlerService.HandleAsync(e);
         }
 
-        private async void OnKeyDown(object sender, KeyEventArgs e)
-        {
-            await this.sessionKeyEventHandlerService.HandleAsync(e);
-        }
-
         private void OnToggleSendEveryKeyPress() { EntryEnabled = !EntryEnabled; }
 
-        private void OnTextChanged()
+        private async void OnTextChanged()
         {
             Debug.WriteLine($"OnTextChanged VIEWMODEL");
 
@@ -163,7 +163,7 @@ namespace PointZ.ViewModels
             if (backSpacePressed)
             {
                 KeyEventArgs e = new(KeyAction.Down, KeyCodeAction.Del.ToString());
-                OnKeyDown(this, e);
+                await this.sessionKeyEventHandlerService.HandleAsync(e);
             }
             else
             {
@@ -174,21 +174,21 @@ namespace PointZ.ViewModels
 
         private async void OnReturnPressed(object o)
         {
+            Debug.WriteLine($"OnReturnPressed");
             string message = o.ToString();
             await this.sessionMessageHandlerService.SendMessageAsync(message);
             EntryText = string.Empty;
         }
 
-        private void OnToggleKeyboard()
-        {
-            Debug.WriteLine($"FocusChangeRequested...!");
-            //this.sessionPlatformInterfaceService.ToggleKeyboard();
-        }
-
+        /// <summary>
+        /// Not called when a view has focus.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OnBackButtonPressed(object sender, EventArgs e)
         {
-            base.NavigationService.RemoveLastFromBackStackAsync();
-            OnViewDisappearing(sender, e);
+            RemoveAllPlatformListeners();
+            base.NavigationService.NavigateBackAsync();
         }
 
         private void OnEntryUnfocused() => EntryPlaceholderText = EntryPlaceholderTextConst;

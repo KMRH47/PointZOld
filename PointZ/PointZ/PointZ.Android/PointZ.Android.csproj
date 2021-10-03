@@ -75,8 +75,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\KeyEventHandler\IKeyEventHandlerService.cs" />
     <Compile Include="Services\KeyEventHandler\KeyEventHandlerService.cs" />
-    <Compile Include="Services\SessionAndroidInterfaceService.cs" />
-    <Compile Include="Services\SessionAndroidEventService.cs" />
+    <Compile Include="Services\AndroidInterfaceService.cs" />
+    <Compile Include="Services\AndroidEventService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />

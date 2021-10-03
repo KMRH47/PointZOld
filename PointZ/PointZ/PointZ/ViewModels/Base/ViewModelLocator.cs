@@ -38,8 +38,8 @@ namespace PointZ.ViewModels.Base
             Container.Register<ICommandSenderService, CommandSenderService>();
             Container.Register<ISessionEventHandlerService<TouchEventArgs>, SessionTouchEventHandlerService>();
             Container.Register<ISessionEventHandlerService<KeyEventArgs>, SessionKeyEventHandlerService>();
-            Container.Register(DependencyService.Resolve<ISessionPlatformEventService>());
-            Container.Register(DependencyService.Resolve<ISessionPlatformInterfaceService>());
+            Container.Register(DependencyService.Resolve<IPlatformEventService>());
+            Container.Register(DependencyService.Resolve<IPlatformInterfaceService>());
         }
 
         // ReSharper disable once MemberCanBePrivate.Global

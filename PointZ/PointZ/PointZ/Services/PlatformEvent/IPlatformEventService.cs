@@ -3,7 +3,7 @@ using PointZ.Models.PlatformEvent;
 
 namespace PointZ.Services.PlatformEvent
 {
-    public interface ISessionPlatformEventService
+    public interface IPlatformEventService
     {
         event EventHandler OnViewAppearing;
         event EventHandler OnViewDisappearing;

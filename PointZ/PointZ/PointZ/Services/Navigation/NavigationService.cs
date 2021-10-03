@@ -11,49 +11,19 @@ namespace PointZ.Services.Navigation
 {
     public class NavigationService : INavigationService
     {
-        public ViewModelBase PreviousPageViewModel
-        {
-            get
-            {
-                Page mainPage = Application.Current.MainPage;
-                bool mainPageIsCustomNavigationView = mainPage is CustomNavigationView;
-
-                if (mainPageIsCustomNavigationView) return null;
-
-                object viewModel = mainPage.Navigation.NavigationStack[mainPage.Navigation.NavigationStack.Count - 2]
-                    .BindingContext;
-                return viewModel as ViewModelBase;
-            }
-        }
-
         public Task NavigateToAsync<TViewModel>() where TViewModel : ViewModelBase =>
             InternalNavigateToAsync(typeof(TViewModel), null);
 
         public Task NavigateToAsync<TViewModel>(object parameter) where TViewModel : ViewModelBase =>
             InternalNavigateToAsync(typeof(TViewModel), parameter);
 
-        public Task RemoveLastFromBackStackAsync()
+        public async Task NavigateBackAsync()
         {
             CustomNavigationView mainPage = Application.Current.MainPage as CustomNavigationView;
 
-            mainPage?.Navigation.RemovePage(
-                mainPage.Navigation.NavigationStack[mainPage.Navigation.NavigationStack.Count - 2]);
+            if (mainPage == null) throw new Exception();
 
-            return Task.FromResult(true);
-        }
-
-        public Task RemoveBackStackAsync()
-        {
-            if (Application.Current.MainPage is not CustomNavigationView mainPage)
-                return Task.FromResult(true);
-
-            for (int i = 0; i < mainPage.Navigation.NavigationStack.Count - 1; i++)
-            {
-                Page page = mainPage.Navigation.NavigationStack[i];
-                mainPage.Navigation.RemovePage(page);
-            }
-
-            return Task.FromResult(true);
+            await mainPage.PopAsync();
         }
 
         private static async Task InternalNavigateToAsync(Type viewModelType, object parameter)

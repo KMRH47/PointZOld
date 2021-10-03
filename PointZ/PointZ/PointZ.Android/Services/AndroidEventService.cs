@@ -3,11 +3,11 @@ using PointZ.Models.PlatformEvent;
 using PointZ.Services.PlatformEvent;
 using Xamarin.Forms;
 
-[assembly: Dependency(typeof(PointZ.Android.Services.SessionAndroidEventService))]
+[assembly: Dependency(typeof(PointZ.Android.Services.AndroidEventService))]
 
 namespace PointZ.Android.Services
 {
-    public class SessionAndroidEventService : ISessionPlatformEventService
+    public class AndroidEventService : IPlatformEventService
     {
         public event EventHandler OnViewAppearing;
         public event EventHandler OnViewDisappearing;

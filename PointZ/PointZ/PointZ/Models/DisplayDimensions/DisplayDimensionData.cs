@@ -2,13 +2,13 @@
 {
     public readonly struct DisplayDimensionData
     {
-        public DisplayDimensionData(int width, int height)
+        public DisplayDimensionData(double width, double height)
         {
             Width = width;
             Height = height;
         }
         
-        public int Height { get; }
-        public int Width { get; }
+        public double Height { get; }
+        public double Width { get; }
     }
 }

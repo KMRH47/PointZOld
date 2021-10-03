@@ -32,14 +32,18 @@
     <ContentPage.Content>
 
         <Grid>
-            <StackLayout Style="{StaticResource StackLayoutStyle}">
+            <StackLayout Style="{StaticResource StackLayoutStyle}"  >
+                <StackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding }"/>
+                </StackLayout.GestureRecognizers>
                 <Label Text="{Binding EntryText}" VerticalOptions="StartAndExpand" TextColor="Red" Margin="20" />
 
                 <Entry ReturnCommand="{Binding ReturnPressedCommand}"
                        ReturnCommandParameter="{Binding EntryText}"
                        Style="{StaticResource EntryStyle}"
+                       Height="{Binding EntryHeight}"
                        Placeholder="{Binding EntryPlaceholderText}"
-                       Text="{Binding EntryText}" >
+                       Text="{Binding EntryText}">
                     <Entry.Behaviors>
                         <behaviors:EventToCommandBehavior Command="{Binding EntryFocusedCommand}" EventName="Focused" />
                         <behaviors:EventToCommandBehavior Command="{Binding EntryUnfocusedCommand}"

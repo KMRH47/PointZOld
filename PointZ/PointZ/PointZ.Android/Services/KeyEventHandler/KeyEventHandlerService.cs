@@ -8,11 +8,11 @@ namespace PointZ.Android.Services.KeyEventHandler
 {
     public class KeyEventHandlerService : IKeyEventHandlerService
     {
-        private readonly ISessionPlatformEventService sessionPlatformEventService;
+        private readonly IPlatformEventService platformEventService;
 
-        public KeyEventHandlerService(ISessionPlatformEventService sessionPlatformEventService)
+        public KeyEventHandlerService(IPlatformEventService platformEventService)
         {
-            this.sessionPlatformEventService = sessionPlatformEventService;
+            this.platformEventService = platformEventService;
         }
 
         public void Handle(KeyEvent e)
@@ -28,19 +28,19 @@ namespace PointZ.Android.Services.KeyEventHandler
                     {
                         if (e.UnicodeChar == 0)
                         {
-                            this.sessionPlatformEventService.NotifyOnKeyDown(keyAction, e.KeyCode.ToString());
+                            this.platformEventService.NotifyOnKeyDown(keyAction, e.KeyCode.ToString());
                         }
                         else
                         {
                             char symbol = (char)e.UnicodeChar;
-                            this.sessionPlatformEventService.NotifyOnKeyDown(keyAction, symbol.ToString()); 
+                            this.platformEventService.NotifyOnKeyDown(keyAction, symbol.ToString()); 
                         }
                     }
                     else
                     {
                         if (e.Characters.Length > 0)
                         {
-                            this.sessionPlatformEventService.NotifyOnKeyDown(keyAction, e.Characters);
+                            this.platformEventService.NotifyOnKeyDown(keyAction, e.Characters);
                         }
                     }
 
