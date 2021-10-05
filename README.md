@@ -66,8 +66,8 @@ While the text box is empty, commands such as backspace and enter (new line) are
 
 | Application | Version | Phase |
 | ----------- | ------- | ----- |
-| PointZ      | V0.2.0  | Alpha |
-| PointZerver | V0.1.1  | Alpha |
+| PointZ      | V0.2.1  | Alpha |
+| PointZerver | V0.1.2  | Alpha |
 
 
 # Download
