@@ -15,29 +15,21 @@ namespace PointZ.Services.SessionEventHandler
         private readonly ICommandSenderService commandSenderService;
 
         private TouchAction previousTapAction;
-        private CancellationTokenSource tapCancellationTokenSource;
+        private CancellationTokenSource tapCancellationTokenSource = new();
 
         private bool leftMouseButtonIsPrimary = true;
-        private bool doubleTapped;
         private bool tapped;
-        private bool secondaryMouseButtonClicked;
-        private bool cancelledTap;
+        private bool tappedSecondary;
 
-        private double scrollSpeed = 1;
-        private short tapTimeFrameMs = 200;
-        private short deadZoneMove = 10;
-        private short deadZoneTap = 70;
         private double previousX;
         private double previousY;
+        private double scrollSpeed = 1;
+        private short tapTimeFrameMs = 200;
+        private short deadZoneMove = 20;
+        private short deadZoneTap = 70;
 
-
-        private long tapTicks;
-
-        public SessionTouchEventHandlerService(ICommandSenderService commandSenderService)
-        {
+        public SessionTouchEventHandlerService(ICommandSenderService commandSenderService) =>
             this.commandSenderService = commandSenderService;
-            this.tapCancellationTokenSource = new CancellationTokenSource();
-        }
 
         public void Bind(IPAddress ipAddress) => this.commandSenderService.Bind(ipAddress);
 
@@ -51,25 +43,25 @@ namespace PointZ.Services.SessionEventHandler
             {
                 case TouchAction.Pointer3Down:
                     this.previousTapAction = e.TouchAction;
-                    this.tapTicks = DateTime.Now.Ticks;
                     break;
                 case TouchAction.Pointer2Down:
-                    this.tapCancellationTokenSource.Cancel();
-                    this.secondaryMouseButtonClicked = true;
+                    Debug.WriteLine($"Pointer2Down");
+                    this.tappedSecondary = true;
                     this.previousTapAction = e.TouchAction;
-                    this.tapTicks = DateTime.Now.Ticks;
                     break;
                 case TouchAction.Down:
+                    this.tappedSecondary = false;
                     _ = this.tapped ? TryHold() : TryTap(this.tapTimeFrameMs, token);
                     this.previousTapAction = e.TouchAction;
                     this.previousX = e.X;
                     this.previousY = e.Y;
-
                     return;
                 case TouchAction.Up:
 
                     if (token.IsCancellationRequested)
+                    {
                         this.tapCancellationTokenSource = new CancellationTokenSource();
+                    }
 
                     switch (this.previousTapAction)
                     {
@@ -89,7 +81,8 @@ namespace PointZ.Services.SessionEventHandler
                         case TouchAction.Pointer2Down:
                             Debug.WriteLine($"Up -> Pointer2Down");
 
-                                await SecondaryMouseButtonClick();
+                            if (token.IsCancellationRequested) break;
+                            await SecondaryMouseButtonClick();
 
                             break;
                         case TouchAction.Pointer3Down:
@@ -98,12 +91,11 @@ namespace PointZ.Services.SessionEventHandler
                         case TouchAction.Move:
                             Debug.WriteLine($"Up -> Move");
 
-                            if (!this.secondaryMouseButtonClicked)
+                            if (!this.tappedSecondary)
                             {
                                 await PrimaryMouseButtonUp();
                             }
 
-                            this.doubleTapped = false;
                             break;
                     }
 
@@ -117,10 +109,9 @@ namespace PointZ.Services.SessionEventHandler
                         case TouchAction.Down:
                             Debug.WriteLine($"Move -> Down");
 
-                            this.tapCancellationTokenSource.Cancel();
-
                             if (ValueOutsideDeadzoneMove(x) || ValueOutsideDeadzoneMove(y))
                             {
+                                this.tapCancellationTokenSource.Cancel();
                                 x = 0;
                                 y = 0;
                                 this.previousTapAction = TouchAction.Move;
@@ -165,6 +156,8 @@ namespace PointZ.Services.SessionEventHandler
             {
                 this.tapped = true;
                 await Task.Delay(delayMs, token);
+                if (this.tappedSecondary) return;
+
                 await PrimaryMouseButtonClick();
             }
             finally
@@ -176,10 +169,8 @@ namespace PointZ.Services.SessionEventHandler
         private async Task TryHold()
         {
             this.tapCancellationTokenSource.Cancel();
-            this.cancelledTap = true;
             await PrimaryMouseButtonDown();
             await Task.Delay(150);
-            this.cancelledTap = false;
         }
 
         private bool ValueOutsideDeadzoneMove(int value) => Math.Abs(value) > this.deadZoneMove;
@@ -188,7 +179,6 @@ namespace PointZ.Services.SessionEventHandler
         private async Task PrimaryMouseButtonClick()
         {
             Debug.WriteLine($"PrimaryMouseButtonClick");
-            this.secondaryMouseButtonClicked = false;
             if (this.leftMouseButtonIsPrimary)
             {
                 await this.commandSenderService.SendAsync(MouseCommand.LeftButtonClick);

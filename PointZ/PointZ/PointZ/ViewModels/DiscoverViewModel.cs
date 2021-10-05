@@ -44,7 +44,7 @@ namespace PointZ.ViewModels
             private set
             {
                 this.isServerSelected = value;
-                RaisePropertyChanged(() => IsServerSelected);
+                OnPropertyChanged();
             }
         }
 
@@ -54,7 +54,7 @@ namespace PointZ.ViewModels
             set
             {
                 this.isSearching = value;
-                RaisePropertyChanged(() => IsSearching);
+                OnPropertyChanged();
             }
         }
 

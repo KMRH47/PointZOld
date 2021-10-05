@@ -24,7 +24,7 @@ namespace PointZ.ViewModels
         private readonly IPlatformEventService platformEventService;
 
         private const string EntryPlaceholderTextConst = "\uf11c";
-        private bool entryEnabled = true;
+        private bool entryFocused = true;
         private string entryText = "";
         private string entryTextPrevious = "";
 
@@ -43,26 +43,33 @@ namespace PointZ.ViewModels
             this.sessionMessageHandlerService = sessionMessageHandlerService;
             this.platformInterfaceService = platformInterfaceService;
             this.platformEventService = platformEventService;
-            ToggleSendEveryKeyPressCommand = new Command(OnToggleSendEveryKeyPress);
             ReturnPressedCommand = new Command(OnReturnPressed);
             EntryFocusedCommand = new Command(OnEntryFocused);
             EntryUnfocusedCommand = new Command(OnEntryUnfocused);
         }
 
+        public override Task InitializeAsync(object parameter)
+        {
+            ServerData serverData = (ServerData)parameter;
+            IPAddress ipAddress = IPAddress.Parse(serverData.Address);
+            this.sessionTouchEventHandlerService.Bind(ipAddress);
+            this.sessionKeyEventHandlerService.Bind(ipAddress);
+            OnViewAppearing(this, EventArgs.Empty);
+            return Task.CompletedTask;
+        }
 
-        public ICommand ToggleSendEveryKeyPressCommand { get; set; }
         public ICommand ReturnPressedCommand { get; set; }
         public ICommand EntryFocusedCommand { get; set; }
         public ICommand EntryUnfocusedCommand { get; set; }
 
 
-        public bool EntryEnabled
+        public bool EntryFocused
         {
-            get => this.entryEnabled;
+            get => this.entryFocused;
             set
             {
-                this.entryEnabled = value;
-                RaisePropertyChanged(() => EntryEnabled);
+                this.entryFocused = value;
+                OnPropertyChanged();
             }
         }
 
@@ -73,8 +80,7 @@ namespace PointZ.ViewModels
             {
                 this.entryTextPrevious = this.entryText;
                 this.entryText = value;
-                OnTextChanged();
-                RaisePropertyChanged(() => EntryText);
+                OnPropertyChanged();
             }
         }
 
@@ -84,7 +90,7 @@ namespace PointZ.ViewModels
             set
             {
                 this.entryPlaceholderText = value;
-                RaisePropertyChanged(() => EntryPlaceholderText);
+                OnPropertyChanged();
             }
         }
 
@@ -95,24 +101,21 @@ namespace PointZ.ViewModels
             {
                 this.entryHeight = value;
                 Debug.WriteLine($"EntryHeight is: {value}");
-                RaisePropertyChanged(() => EntryHeight);
+                OnPropertyChanged();
             }
         }
 
-
-        public override Task InitializeAsync(object parameter)
+        private void OnViewAppearing(object sender, EventArgs e)
         {
-            ServerData serverData = (ServerData)parameter;
-            IPAddress ipAddress = IPAddress.Parse(serverData.Address);
-            this.sessionTouchEventHandlerService.Bind(ipAddress);
-            OnViewAppearing(this, EventArgs.Empty);
-            return Task.CompletedTask;
+            AddPlatformListeners();
+            this.platformEventService.OnViewDisappearing += OnViewDisappearing;
+            this.platformEventService.OnViewAppearing -= OnViewAppearing;
         }
 
-        private void OnViewAppearing(object sender, EventArgs e) => AddPlatformListeners();
         private void OnViewDisappearing(object sender, EventArgs e)
         {
             RemovePlatformListeners();
+            this.platformEventService.OnViewDisappearing -= OnViewDisappearing;
             this.platformEventService.OnViewAppearing += OnViewAppearing;
         }
 
@@ -120,20 +123,15 @@ namespace PointZ.ViewModels
         {
             this.platformEventService.OnScreenTouched += OnScreenTouched;
             this.platformEventService.OnBackButtonPressed += OnBackButtonPressed;
-            this.platformEventService.OnViewDisappearing += OnViewDisappearing;
+            this.platformEventService.OnKeyDown += OnKeyDown;
         }
 
         private void RemovePlatformListeners()
         {
             this.platformEventService.OnScreenTouched -= OnScreenTouched;
             this.platformEventService.OnBackButtonPressed -= OnBackButtonPressed;
-            this.platformEventService.OnViewDisappearing -= OnViewDisappearing;
-        }
-        
-        private void RemoveAllPlatformListeners()
-        {
-            RemovePlatformListeners();
-            this.platformEventService.OnViewAppearing -= OnViewAppearing;
+            this.platformEventService.OnKeyDown -= OnKeyDown;
+
         }
 
         private async void OnScreenTouched(object sender, TouchEventArgs e)
@@ -147,29 +145,13 @@ namespace PointZ.ViewModels
             await this.sessionTouchEventHandlerService.HandleAsync(e);
         }
 
-        private void OnToggleSendEveryKeyPress() { EntryEnabled = !EntryEnabled; }
-
-        private async void OnTextChanged()
+        private async void OnKeyDown(object o, KeyEventArgs e)
         {
             Debug.WriteLine($"OnTextChanged VIEWMODEL");
 
-            if (EntryEnabled) return;
-
-            bool backSpacePressed = this.entryText.Length < this.entryTextPrevious.Length;
-            bool anyText = this.entryText.Length > 0;
-
-            if (!anyText) return;
-
-            if (backSpacePressed)
-            {
-                KeyEventArgs e = new(KeyAction.Down, KeyCodeAction.Del.ToString());
-                await this.sessionKeyEventHandlerService.HandleAsync(e);
-            }
-            else
-            {
-                char lastChar = this.entryText[this.entryTextPrevious.Length];
-                Debug.WriteLine($"Character: {lastChar}");
-            }
+            if (!EntryFocused) return;
+            
+            await this.sessionKeyEventHandlerService.HandleAsync(e);
         }
 
         private async void OnReturnPressed(object o)
@@ -187,11 +169,22 @@ namespace PointZ.ViewModels
         /// <param name="e"></param>
         private void OnBackButtonPressed(object sender, EventArgs e)
         {
-            RemoveAllPlatformListeners();
+            RemovePlatformListeners();
+            this.platformEventService.OnViewAppearing -= OnViewAppearing;
+            this.platformEventService.OnViewDisappearing -= OnViewDisappearing;
             base.NavigationService.NavigateBackAsync();
         }
 
-        private void OnEntryUnfocused() => EntryPlaceholderText = EntryPlaceholderTextConst;
-        private void OnEntryFocused() => EntryPlaceholderText = string.Empty;
+        private void OnEntryUnfocused()
+        {
+            EntryFocused = false;
+            EntryPlaceholderText = EntryPlaceholderTextConst;
+        }
+
+        private void OnEntryFocused()
+        {
+            EntryFocused = true;
+            EntryPlaceholderText = string.Empty;
+        }
     }
 }

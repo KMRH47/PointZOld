@@ -108,6 +108,7 @@ Below is a table of all ports and protocols used by PointZ and PointZerver.
 | 0.1     | Alpha Release                                                |
 | 0.1.1   | - Mouse up command is no longer send if **Secondary Button Click** has been performed after engaging **Primary Button Hold**<br />- Scrolling no longer jumps randomly |
 | 0.2.0   | - Keyboard added<br />- Replaced bottom bar with text-input  |
+| 0.2.1   | - Tap and hold now works correctly<br />- Textbox can no longer be clicked through<br />- Touch and key events no longer break when leaving/reentering activity |
 
 ### PointZerver
 
@@ -115,4 +116,5 @@ Below is a table of all ports and protocols used by PointZ and PointZerver.
 | ------- | ------------------------------------------------------------ |
 | 0.1     | Alpha Release                                                |
 | 0.1.1   | Adjusted keyboard interpretation (when receiving data from PointZ). |
+| 0.1.2   | Fixed data interpreter incorrectly deserializing payloads containing commas |
 
