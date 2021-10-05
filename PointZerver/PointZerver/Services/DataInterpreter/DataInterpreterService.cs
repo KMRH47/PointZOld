@@ -27,7 +27,6 @@ namespace PointZerver.Services.DataInterpreter
             catch (Exception e)
             {
                 logger.Log($"Initialization of object {nameof(DataInterpreterService)} failed: {e.Message}", this);
-                throw;
             }
         }
 
@@ -37,17 +36,14 @@ namespace PointZerver.Services.DataInterpreter
             {
                 byte[] shavedBytes = await bytes.CopyRemovingNulls();
                 string data = Encoding.UTF8.GetString(shavedBytes);
-                string[] deserializedData = data.Split(',');
-                string commandType = deserializedData[0];
 
-                this.inputSimulatorServiceMap.TryGetValue(commandType, out IInputSimulator inputSimulatorService);
+                this.inputSimulatorServiceMap.TryGetValue(data[0].ToString(), out IInputSimulator inputSimulatorService);
                 if (inputSimulatorService == null) throw new NullReferenceException();
-                await inputSimulatorService.ExecuteCommand(deserializedData);
+                await inputSimulatorService.ExecuteCommand(data);
             }
             catch (Exception e)
             {
                 await this.logger.Log($"{e.Message}\n{e.StackTrace}", this);
-                throw;
             }
         }
     }

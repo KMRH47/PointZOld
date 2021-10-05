@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using InputSimulatorStandard;
 using InputSimulatorStandard.Native;
+using PointZerver.Extensions;
 using PointZerver.Services.CommandConverter;
 using PointZerver.Services.Logger;
 
@@ -13,8 +14,6 @@ namespace PointZerver.Services.Simulators
         private readonly IKeyboardSimulator keyboardSimulator;
         private readonly IVirtualKeyCodeConverterService virtualKeyCodeConverterService;
 
-        private bool shift;
-
         public KeyboardSimulatorService(IKeyboardSimulator keyboardSimulator,
             IVirtualKeyCodeConverterService virtualKeyCodeConverterService, ILogger logger) : base(logger)
         {
@@ -24,14 +23,15 @@ namespace PointZerver.Services.Simulators
 
         public override string CommandId => "K";
 
-        public override async Task ExecuteCommand(string[] data)
+        public override Task ExecuteCommand(string data)
         {
-            string command = data[1];
-
+            string command = data.TakeFromToNext(',', 2);
+            int headerLength = command.Length + 3;
+            
             switch (command)
             {
                 case "KeyDown":
-                    string keyCode = data[2];
+                    string keyCode = data.TakeFrom(',', headerLength);
 
                     if (keyCode.Length == 1)
                     {
@@ -40,7 +40,6 @@ namespace PointZerver.Services.Simulators
                     else
                     {
                         VirtualKeyCode virtualKeyCode = this.virtualKeyCodeConverterService.ParseString(keyCode);
-
                         this.keyboardSimulator.KeyPress(virtualKeyCode);
                     }
 
@@ -48,15 +47,17 @@ namespace PointZerver.Services.Simulators
                 case "KeyPress":
                     break;
                 case "TextEntry":
-                    string message = data[2];
+                    string message = data.TakeFrom(',', headerLength);
                     this.keyboardSimulator.TextEntry(message);
                     break;
                 case "ModifiedKeyStroke":
-                    VirtualKeyCode[] parameters = await GetParams(data);
-                    this.keyboardSimulator.KeyPress(parameters);
+                    //VirtualKeyCode[] parameters = await GetParams(data);
+                    //this.keyboardSimulator.KeyPress(parameters);
                     // this.keyboardSimulator.ModifiedKeyStroke();
                     break;
             }
+
+            return Task.CompletedTask;
         }
 
         private Task<VirtualKeyCode[]> GetParams(IReadOnlyList<string> data)

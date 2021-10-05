@@ -5,5 +5,5 @@ namespace PointZerver.Services.DataInterpreter
     public interface IDataInterpreterService
     {
         Task InterpretAsync(byte[] bytes);
-}
+    }
 }

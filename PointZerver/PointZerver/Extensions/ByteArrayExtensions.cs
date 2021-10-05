@@ -10,7 +10,7 @@ namespace PointZerver.Extensions
         /// </summary>
         /// <param name="bytes">This byte array.</param>
         /// <returns></returns>
-        public static Task<byte[]> CopyRemovingNulls(this byte[]  bytes)
+        public static Task<byte[]> CopyRemovingNulls(this byte[] bytes)
         {
             List<byte> byteList = new(200);
             byte count = 0;

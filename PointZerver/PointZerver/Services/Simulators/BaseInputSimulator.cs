@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using PointZerver.Services.Logger;
 
 namespace PointZerver.Services.Simulators
@@ -11,15 +10,6 @@ namespace PointZerver.Services.Simulators
         protected BaseInputSimulator(ILogger logger) => this.Logger = logger;
         
         public virtual string CommandId => null;
-
-        public virtual Task ExecuteCommand(string[] data)
-        {
-            string command = data[1];
-            
-            if (command == null)
-                throw new NullReferenceException(
-                    $"No command sent with the data passed to {nameof(ExecuteCommand)} in {nameof(BaseInputSimulator)}.");
-            return Task.CompletedTask;
-        }
+        public virtual Task ExecuteCommand(string data) => Task.CompletedTask;
     }
 }

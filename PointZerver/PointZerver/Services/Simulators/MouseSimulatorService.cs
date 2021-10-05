@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Threading.Tasks;
 using InputSimulatorStandard;
+using PointZerver.Extensions;
 using PointZerver.Services.Logger;
 
 namespace PointZerver.Services.Simulators
@@ -14,17 +15,17 @@ namespace PointZerver.Services.Simulators
 
         public override string CommandId => "M";
 
-        public override Task ExecuteCommand(string[] data)
+        public override Task ExecuteCommand(string data)
         {
-            string command = data[1];
-            
-            switch (command)
+            string[] dataSplit = data.Split(',');
+
+            switch (dataSplit[1])
             {
                 case "HorizontalScroll":
-                    this.mouseSimulator.HorizontalScroll(int.Parse(data[2]));
+                    this.mouseSimulator.HorizontalScroll(int.Parse(dataSplit[2]));
                     break;
                 case "VerticalScroll":
-                    this.mouseSimulator.VerticalScroll(int.Parse(data[2]));
+                    this.mouseSimulator.VerticalScroll(int.Parse(dataSplit[2]));
                     break;
                 case "LeftButtonClick":
                     this.mouseSimulator.LeftButtonClick();
@@ -54,15 +55,15 @@ namespace PointZerver.Services.Simulators
                     this.mouseSimulator.RightButtonUp();
                     break;
                 case "MoveMouseBy":
-                    Debug.WriteLine($"Moving mouse by {data[2]}, {data[3]}");
-                    this.mouseSimulator.MoveMouseBy(int.Parse(data[2]), int.Parse(data[3]));
+                    Debug.WriteLine($"Moving mouse by {dataSplit[2]}, {dataSplit[3]}");
+                    this.mouseSimulator.MoveMouseBy(int.Parse(dataSplit[2]), int.Parse(dataSplit[3]));
                     break;
                 case "MoveMouseTo":
-                    base.Logger.Log($"x: {data[2]} y: {data[3]}", this);
-                    this.mouseSimulator.MoveMouseTo(double.Parse(data[2]), double.Parse(data[3]));
+                    base.Logger.Log($"x: {dataSplit[2]} y: {dataSplit[3]}", this);
+                    this.mouseSimulator.MoveMouseTo(double.Parse(dataSplit[2]), double.Parse(dataSplit[3]));
                     break;
                 case "MoveMouseToPositionOnVirtualDesktop":
-                    this.mouseSimulator.MoveMouseToPositionOnVirtualDesktop(double.Parse(data[2]), double.Parse(data[3]));
+                    this.mouseSimulator.MoveMouseToPositionOnVirtualDesktop(double.Parse(dataSplit[2]), double.Parse(dataSplit[3]));
                     break;
             }
 
