@@ -67,7 +67,7 @@ While the text box is empty, commands such as backspace and enter (new line) are
 | Application | Version | Phase |
 | ----------- | ------- | ----- |
 | PointZ      | V0.2.1  | Alpha |
-| PointZerver | V0.1.2  | Alpha |
+| PointZerver | V0.1.3  | Alpha |
 
 
 # Download
@@ -115,4 +115,5 @@ Below is a table of all ports and protocols used by PointZ and PointZerver.
 | 0.1     | Alpha Release                                                |
 | 0.1.1   | Adjusted keyboard interpretation (when receiving data from PointZ). |
 | 0.1.2   | Fixed data interpreter incorrectly deserializing payloads containing commas |
+| 0.1.3   | No longer binds to virtual network interfaces.               |
 
