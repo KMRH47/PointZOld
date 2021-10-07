@@ -20,24 +20,26 @@ namespace PointZerver.Services.UdpBroadcast
             this.logger = logger;
         }
 
-        public async Task StartAsync(CancellationToken token, ushort port = 45455, int delayMs = 1000)
+        public async Task StartAsync(CancellationToken token, ushort port, int delayMs = 1000)
         {
             try
             {
-                string hostName = Dns.GetHostName();
-                TimeSpan delay = TimeSpan.FromMilliseconds(delayMs);
+                EndPoint localEndPoint = this.udpClient.Client.LocalEndPoint;
+                IPEndPoint localIpEndPoint = (IPEndPoint)localEndPoint;
                 await this.udpClient.Client.ConnectAsync(IPAddress.Broadcast, port, token);
+                await this.logger.Log($"Broadcasting from '{localIpEndPoint.Address}'.", this);
+                string hostName = Dns.GetHostName();
 
                 while (true)
                 {
                     byte[] bytes = Encoding.UTF8.GetBytes(hostName);
-                    await this.udpClient.Client.SendAsync(bytes, SocketFlags.None, token);
+                    await this.udpClient.SendAsync(bytes, bytes.Length);
                     await Task.Delay(delayMs, token);
                 }
             }
             catch (TaskCanceledException)
             {
-                 await this.logger.Log(TaskCancelledMessage, this);
+                await this.logger.Log(TaskCancelledMessage, this);
             }
             catch (OperationCanceledException)
             {

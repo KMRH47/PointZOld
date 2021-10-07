@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
@@ -27,10 +28,8 @@ namespace PointZerver.Services.UdpListener
         {
             try
             {
-                string localIpv4Address = await NetworkTools.GetLocalIpv4Address(token);
-                int port = this.udpClient.GetBoundPort();
-                string hostNameAndIpAddress = $"{localIpv4Address}:{port}";
-                await this.logger.Log($"Listening on '{hostNameAndIpAddress}'.", this);
+                EndPoint endPoint = this.udpClient.Client.LocalEndPoint;
+                await this.logger.Log($"Listening on '{endPoint}'.", this);
 
                 while (true)
                 {
@@ -46,10 +45,6 @@ namespace PointZerver.Services.UdpListener
             catch (OperationCanceledException)
             {
                 await this.logger.Log(TaskCancelledMessage, this);
-            }
-            catch (SocketException e)
-            {
-                await this.logger.Log($"[{nameof(SocketException)}] {e.Message}", this);
             }
             catch (Exception e)
             {
