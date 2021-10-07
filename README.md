@@ -94,10 +94,8 @@ Below is a table of all ports and protocols used by PointZ and PointZerver.
 
 | Application | Port     | Protocol | Role             |
 | ----------- | ----- | -------- | ---------------- |
-| PointZ      | 45454 | UDP      | Command Sender   |
 | PointZ      | 45455 | UDP      | Listener         |
 | PointZerver | 45454 | UDP      | Command Receiver |
-| PointZerver | 45455 | UDP      | Broadcaster      |
 
 # Changelog
 
