@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Reflection;
 using PointZ.Models.PlatformEvent;
 using PointZ.Services.CommandSender;
+using PointZ.Services.CommandSender.Base;
 using PointZ.Services.Logger;
 using PointZ.Services.Navigation;
 using PointZ.Services.PlatformEvent;
@@ -35,7 +36,7 @@ namespace PointZ.ViewModels.Base
             Container.Register<IUdpListenerService, UdpListenerService>();
             Container.Register<ILogger, ConsoleLogger>();
             Container.Register<INavigationService, NavigationService>();
-            Container.Register<ICommandSenderService, CommandSenderService>();
+            Container.Register<ICommandSender, CommandSender>();
             Container.Register<ISessionEventHandlerService<TouchEventArgs>, SessionTouchEventHandlerService>();
             Container.Register<ISessionEventHandlerService<KeyEventArgs>, SessionKeyEventHandlerService>();
             Container.Register(DependencyService.Resolve<IPlatformEventService>());

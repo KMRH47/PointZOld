@@ -1,8 +1,5 @@
-﻿using System;
-using System.Diagnostics;
-using System.Globalization;
+﻿using System.Diagnostics;
 using System.Net;
-using System.Threading;
 using System.Threading.Tasks;
 using PointZ.Models.Command;
 using PointZ.Models.PlatformEvent;
@@ -12,180 +9,102 @@ namespace PointZ.Services.SessionEventHandler
 {
     public class SessionTouchEventHandlerService : ISessionEventHandlerService<TouchEventArgs>
     {
-        private readonly ICommandSenderService commandSenderService;
+        private readonly ITouchCommandSenderService touchCommandSenderService;
 
         private TouchAction previousTapAction;
-        private CancellationTokenSource tapCancellationTokenSource = new();
-
-        private bool leftMouseButtonIsPrimary = true;
-        private bool tapped;
-        private bool tappedSecondary;
-
         private double previousX;
         private double previousY;
-        private double scrollSpeed = 1;
-        private short tapTimeFrameMs = 200;
-        private short deadZoneMove = 20;
-        private short deadZoneTap = 70;
+        private bool leftMouseButtonIsPrimary = true;
 
-        public SessionTouchEventHandlerService(ICommandSenderService commandSenderService) =>
-            this.commandSenderService = commandSenderService;
+        public SessionTouchEventHandlerService(ITouchCommandSenderService touchCommandSenderService) =>
+            this.touchCommandSenderService = touchCommandSenderService;
 
-        public void Bind(IPAddress ipAddress) => this.commandSenderService.Bind(ipAddress);
+        public void Bind(IPEndPoint ipEndPoint) => this.touchCommandSenderService.Bind(ipEndPoint);
+
+        private async Task ExecuteTapAction()
+        {
+            switch (this.previousTapAction)
+            {
+                case TouchAction.Down:
+                    await PrimaryMouseButtonClick();
+                    break;
+                case TouchAction.PointerDown:
+                    Debug.WriteLine($"PointerDown.... What is this?");
+                    break;
+                case TouchAction.Pointer2Down:
+                    await SecondaryMouseButtonClick();
+                    break;
+                case TouchAction.Pointer3Down:
+                    await this.touchCommandSenderService.SendAsync(MouseCommand.MiddleButtonClick);
+                    break;
+            }
+        }
 
         public async Task HandleAsync(TouchEventArgs e)
         {
-            CancellationToken token = this.tapCancellationTokenSource.Token;
-            int x = (int)-(this.previousX - e.X);
-            int y = (int)-(this.previousY - e.Y);
-
             switch (e.TouchAction)
             {
-                case TouchAction.Pointer3Down:
-                    this.previousTapAction = e.TouchAction;
-                    break;
-                case TouchAction.Pointer2Down:
-                    Debug.WriteLine($"Pointer2Down");
-                    this.tappedSecondary = true;
-                    this.previousTapAction = e.TouchAction;
-                    break;
                 case TouchAction.Down:
-                    this.tappedSecondary = false;
-                    _ = this.tapped ? TryHold() : TryTap(this.tapTimeFrameMs, token);
-                    this.previousTapAction = e.TouchAction;
+                case TouchAction.Pointer2Down:
+                case TouchAction.Pointer3Down:
+                    Debug.WriteLine($"{e.TouchAction}");
                     this.previousX = e.X;
                     this.previousY = e.Y;
-                    return;
+                    this.previousTapAction = e.TouchAction;
+                    break;
                 case TouchAction.Up:
-
-                    if (token.IsCancellationRequested)
-                    {
-                        this.tapCancellationTokenSource = new CancellationTokenSource();
-                    }
-
-                    switch (this.previousTapAction)
-                    {
-                        case TouchAction.Down:
-                            Debug.WriteLine($"Up -> Down");
-
-                            if (token.IsCancellationRequested)
-                            {
-                                await PrimaryMouseButtonClick();
-                            }
-                            else
-                            {
-                                await PrimaryMouseButtonUp();
-                            }
-
-                            break;
-                        case TouchAction.Pointer2Down:
-                            Debug.WriteLine($"Up -> Pointer2Down");
-
-                            if (token.IsCancellationRequested) break;
-                            await SecondaryMouseButtonClick();
-
-                            break;
-                        case TouchAction.Pointer3Down:
-                            await this.commandSenderService.SendAsync(MouseCommand.MiddleButtonClick);
-                            break;
-                        case TouchAction.Move:
-                            Debug.WriteLine($"Up -> Move");
-
-                            if (!this.tappedSecondary)
-                            {
-                                await PrimaryMouseButtonUp();
-                            }
-
-                            break;
-                    }
-
+                    Debug.WriteLine($"{e.TouchAction}");
+                    await ExecuteTapAction();
                     break;
                 case TouchAction.Move:
-
-                    string data;
-
-                    switch (this.previousTapAction)
-                    {
-                        case TouchAction.Down:
-                            Debug.WriteLine($"Move -> Down");
-
-                            if (ValueOutsideDeadzoneMove(x) || ValueOutsideDeadzoneMove(y))
-                            {
-                                this.tapCancellationTokenSource.Cancel();
-                                x = 0;
-                                y = 0;
-                                this.previousTapAction = TouchAction.Move;
-                                goto case TouchAction.Move;
-                            }
-
-                            break;
-                        case TouchAction.Pointer2Down:
-                            Debug.WriteLine($"Move -> Pointer2Down");
-
-                            if (y == 0) break;
-                            double scrollAdjustment = y < 0 ? -this.scrollSpeed : this.scrollSpeed;
-                            Debug.WriteLine($"y: {y}");
-                            Debug.WriteLine($"scroll adjustment: {scrollAdjustment}");
-                            data = scrollAdjustment.ToString(CultureInfo.InvariantCulture);
-                            await this.commandSenderService.SendAsync(MouseCommand.VerticalScroll, data);
-
-                            this.previousX = e.X;
-                            this.previousY = e.Y;
-
-                            break;
-                        case TouchAction.Pointer3Down:
-                            break;
-                        case TouchAction.Move:
-
-                            Debug.WriteLine($"Move -> Move");
-
-                            data = $"{x},{y}";
-                            await this.commandSenderService.SendAsync(MouseCommand.MoveMouseBy, data);
-                            this.previousX = e.X;
-                            this.previousY = e.Y;
-                            break;
-                    }
-
+                    int x = (int)-(this.previousX - e.X);
+                    int y = (int)-(this.previousY - e.Y);
+                    await this.touchCommandSenderService.MoveMouseByAsync(x, y);
+                    Debug.WriteLine($"Move");
+                    break;
+                case TouchAction.Cancel:
+                    Debug.WriteLine($"Cancel");
+                    break;
+                case TouchAction.Outside:
+                    Debug.WriteLine($"Outside");
+                    break;
+                case TouchAction.PointerDown:
+                    Debug.WriteLine($"PointerDown");
+                    break;
+                case TouchAction.PointerUp:
+                    Debug.WriteLine($"PointerUp");
+                    break;
+                case TouchAction.HoverMove:
+                    Debug.WriteLine($"HoverMove");
+                    break;
+                case TouchAction.Scroll:
+                    Debug.WriteLine($"Scroll");
+                    break;
+                case TouchAction.HoverEnter:
+                    Debug.WriteLine($"HoverEnter");
+                    break;
+                case TouchAction.HoverExit:
+                    Debug.WriteLine($"HoverExit");
+                    break;
+                case TouchAction.ButtonPress:
+                    Debug.WriteLine($"ButtonPress");
+                    break;
+                case TouchAction.ButtonRelease:
+                    Debug.WriteLine($"ButtonRelease");
                     break;
             }
         }
-
-        private async Task TryTap(int delayMs, CancellationToken token)
-        {
-            try
-            {
-                this.tapped = true;
-                await Task.Delay(delayMs, token);
-                if (this.tappedSecondary) return;
-
-                await PrimaryMouseButtonClick();
-            }
-            finally
-            {
-                this.tapped = false;
-            }
-        }
-
-        private async Task TryHold()
-        {
-            this.tapCancellationTokenSource.Cancel();
-            await PrimaryMouseButtonDown();
-            await Task.Delay(150);
-        }
-
-        private bool ValueOutsideDeadzoneMove(int value) => Math.Abs(value) > this.deadZoneMove;
-        private bool ValueWithinDeadzoneTap(int value) => Math.Abs(value) < this.deadZoneTap;
 
         private async Task PrimaryMouseButtonClick()
         {
             Debug.WriteLine($"PrimaryMouseButtonClick");
             if (this.leftMouseButtonIsPrimary)
             {
-                await this.commandSenderService.SendAsync(MouseCommand.LeftButtonClick);
+                await this.touchCommandSenderService.SendAsync(MouseCommand.LeftButtonClick);
             }
             else
             {
-                await this.commandSenderService.SendAsync(MouseCommand.RightButtonClick);
+                await this.touchCommandSenderService.SendAsync(MouseCommand.RightButtonClick);
             }
         }
 
@@ -195,11 +114,11 @@ namespace PointZ.Services.SessionEventHandler
 
             if (this.leftMouseButtonIsPrimary)
             {
-                await this.commandSenderService.SendAsync(MouseCommand.LeftButtonDown);
+                await this.touchCommandSenderService.SendAsync(MouseCommand.LeftButtonDown);
             }
             else
             {
-                await this.commandSenderService.SendAsync(MouseCommand.RightButtonDown);
+                await this.touchCommandSenderService.SendAsync(MouseCommand.RightButtonDown);
             }
         }
 
@@ -209,11 +128,11 @@ namespace PointZ.Services.SessionEventHandler
 
             if (this.leftMouseButtonIsPrimary)
             {
-                await this.commandSenderService.SendAsync(MouseCommand.LeftButtonUp);
+                await this.touchCommandSenderService.SendAsync(MouseCommand.LeftButtonUp);
             }
             else
             {
-                await this.commandSenderService.SendAsync(MouseCommand.RightButtonUp);
+                await this.touchCommandSenderService.SendAsync(MouseCommand.RightButtonUp);
             }
         }
 
@@ -223,11 +142,11 @@ namespace PointZ.Services.SessionEventHandler
 
             if (this.leftMouseButtonIsPrimary)
             {
-                await this.commandSenderService.SendAsync(MouseCommand.RightButtonClick);
+                await this.touchCommandSenderService.SendAsync(MouseCommand.RightButtonClick);
             }
             else
             {
-                await this.commandSenderService.SendAsync(MouseCommand.LeftButtonClick);
+                await this.touchCommandSenderService.SendAsync(MouseCommand.LeftButtonClick);
             }
         }
     }

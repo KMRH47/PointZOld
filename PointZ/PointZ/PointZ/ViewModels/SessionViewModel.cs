@@ -51,9 +51,8 @@ namespace PointZ.ViewModels
         public override Task InitializeAsync(object parameter)
         {
             ServerData serverData = (ServerData)parameter;
-            IPAddress ipAddress = IPAddress.Parse(serverData.Address);
-            this.sessionTouchEventHandlerService.Bind(ipAddress);
-            this.sessionKeyEventHandlerService.Bind(ipAddress);
+            this.sessionTouchEventHandlerService.Bind(serverData.IpEndPoint);
+            this.sessionKeyEventHandlerService.Bind(serverData.IpEndPoint);
             OnViewAppearing(this, EventArgs.Empty);
             return Task.CompletedTask;
         }

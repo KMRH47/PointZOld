@@ -58,7 +58,7 @@ namespace PointZ.Services.UdpListener
         private Task HandleReceivedData(UdpReceiveResult result)
         {
             string data = Encoding.UTF8.GetString(result.Buffer);
-            ServerData serverData = new(data, result.RemoteEndPoint.Address.ToString());
+            ServerData serverData = new(data, result.RemoteEndPoint);
             this.onServerDataReceived(serverData);
             return Task.CompletedTask;
         }

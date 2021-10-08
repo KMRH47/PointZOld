@@ -1,22 +1,23 @@
 ﻿using System.Threading.Tasks;
 using PointZ.Models.Command;
 using PointZ.Services.CommandSender;
+using PointZ.Services.CommandSender.Base;
 
 namespace PointZ.Services.SessionMessageHandler
 {
     public class SessionMessageHandlerService : ISessionMessageHandlerService
     {
         
-        private readonly ICommandSenderService commandSenderService;
+        private readonly ICommandSender commandSender;
 
-        public SessionMessageHandlerService(ICommandSenderService commandSenderService)
+        public SessionMessageHandlerService(ICommandSender commandSender)
         {
-            this.commandSenderService = commandSenderService;
+            this.commandSender = commandSender;
         }
         
         public async Task SendMessageAsync(string message)
         {
-            await this.commandSenderService.SendAsync(KeyboardCommand.TextEntry, message);
+            await this.commandSender.SendAsync(KeyboardCommand.TextEntry, message);
         }
     }
 }

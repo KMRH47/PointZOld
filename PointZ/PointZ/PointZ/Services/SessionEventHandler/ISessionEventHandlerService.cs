@@ -5,7 +5,7 @@ namespace PointZ.Services.SessionEventHandler
 {
     public interface ISessionEventHandlerService<in TEventArgs>
     {
-        void Bind(IPAddress ipAddress);
+        void Bind(IPEndPoint ipEndPoint);
         Task HandleAsync(TEventArgs e);
     }
 }

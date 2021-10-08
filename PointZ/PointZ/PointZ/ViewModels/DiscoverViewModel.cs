@@ -81,6 +81,6 @@ namespace PointZ.ViewModels
             Servers.Add(server);
         }
 
-        private bool IsServerAlreadyAdded(ServerData server) => Servers.Any(s => s.Address == server.Address);
+        private bool IsServerAlreadyAdded(ServerData server) => Servers.Any(s => s.IpEndPoint == server.IpEndPoint);
     }
 }

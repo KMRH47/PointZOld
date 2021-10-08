@@ -4,19 +4,20 @@ using System.Threading.Tasks;
 using PointZ.Models.Command;
 using PointZ.Models.PlatformEvent;
 using PointZ.Services.CommandSender;
+using PointZ.Services.CommandSender.Base;
 
 namespace PointZ.Services.SessionEventHandler
 {
     public class SessionKeyEventHandlerService : ISessionEventHandlerService<KeyEventArgs>
     {
-        private readonly ICommandSenderService commandSenderService;
+        private readonly ICommandSender commandSender;
 
-        public SessionKeyEventHandlerService(ICommandSenderService commandSenderService)
+        public SessionKeyEventHandlerService(ICommandSender commandSender)
         {
-            this.commandSenderService = commandSenderService;
+            this.commandSender = commandSender;
         }
 
-        public void Bind(IPAddress ipAddress) => this.commandSenderService.Bind(ipAddress);
+        public void Bind(IPEndPoint ipEndPoint) => this.commandSender.Bind(ipEndPoint);
 
       
 
@@ -30,7 +31,7 @@ namespace PointZ.Services.SessionEventHandler
                 case KeyAction.Down:
                     string data = $"{e.KeyCode}";
 
-                    await this.commandSenderService.SendAsync(KeyboardCommand.KeyDown, data);
+                    await this.commandSender.SendAsync(KeyboardCommand.KeyDown, data);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
