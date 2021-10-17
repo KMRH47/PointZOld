@@ -4,7 +4,7 @@
 
 ### What is PointZ?
 
-PointZ is an Android/iPhone application built using Xamarin.Forms. The application allows you to emulate mouse and keyboard on any system running PointZerver, as long as they're on the same Wi-Fi network. 
+PointZ is an Android/<s>iPhone</s> (coming in the future) application built using Xamarin.Forms. The application allows you to emulate mouse and keyboard on any system running PointZerver, as long as they're on the same Wi-Fi network. 
 
 ### What is PointZerver?
 
@@ -13,6 +13,8 @@ PointZerver is a desktop application built using .NET 5.0. PointZerver, as the n
 ### Which operating systems are compatible with PointZerver ?
 
 Since PointZerver is built using .NET 5.0, it can be compiled to **Windows**, **macOS** and **Linux**.
+
+<u>*However, it's not currently being worked on for **iOS** or **macOS***</u>
 
 ### Is PointZ on Google Play and App store?
 
@@ -62,12 +64,12 @@ While the text box is empty, commands such as backspace and enter (new line) are
 
 # Current Version
 
-**BE AWARE THAT THIS APPLICATION IS CURRENTLY IN ITS EARLY STAGES AND THUS FUNCTIONALITY IS VERY LIMITED.**
+**BE AWARE THAT THIS APPLICATION IS CURRENTLY IN ITS EARLY STAGES AND FUNCTIONALITY IS LIMITED.**
 
 | Application | Version | Phase |
 | ----------- | ------- | ----- |
 | PointZ      | V0.3.0  | Alpha |
-| PointZerver | V0.1.3  | Alpha |
+| PointZerver | V0.1.4  | Alpha |
 
 
 # Download
@@ -84,7 +86,7 @@ https://drive.google.com/drive/folders/1E1ca5ZQqQigOoMo5ikrgok3YpFGECbMH
 
 ### PointZ isn't discovering my PC
 
-**First of all, ensure that the mobile device running PointZ and the PC running PointZerver, are on the same WiFi-network.**
+**First of all, ensure that the mobile device running PointZ and the PC running PointZerver are on the same Wi-Fi-network.**
 
 PointZerver constantly broadcasts UDP packets for the clients running PointZ to pick up. These broadcast messages might be blocked by a firewall on the network.
 
