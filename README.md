@@ -4,7 +4,7 @@
 
 ### What is PointZ?
 
-PointZ is an Android/iPhone application built using Xamarin.Forms. The application allows you to emulate mouse and keyboard on any system running PointZerver, as long as they're on the same WiFi network. 
+PointZ is an Android/iPhone application built using Xamarin.Forms. The application allows you to emulate mouse and keyboard on any system running PointZerver, as long as they're on the same Wi-Fi network. 
 
 ### What is PointZerver?
 
@@ -43,14 +43,14 @@ Click **connect** and remote control the selected device!
 
 ### Mouse
 
-| Button           | Action       | Touch Action | Finger Count | Sequence              | Condition                                                    | Default time frame |
-| ---------------- | ------------ | ------------ | ------------ | --------------------- | ------------------------------------------------------------ | ------------------ |
-| Primary Button   | Click        | Tap          | 1            | Down, up              | Time after putting finger down and releasing it is within the time frame. | 150ms              |
-| Primary Button   | Hold         | Tap and hold | 1            | Down, up, down (hold) | Time between a tap and putting the finger down again is within the time frame. | 250ms              |
-| Primary Button   | Double click | Double tap   | 1            | Down, up, Down, up    | Two taps in a row. Time between the single taps must be within the time frame. | 250ms              |
-| Secondary Button | Click        | Multi-tap    | 2            | Down, up              | Time after putting fingers down and releasing them is within the time frame. | 150ms              |
-| Middle Button    | Click        | Multi-tap    | 3            | Down, up              | Time after putting fingers down and releasing them is within the time frame. | 150ms              |
-| Mouse wheel      | Scroll       | Hold         | 2            | Down (hold)           | None.                                                        | N/A                |
+| Button           | Mouse Action | Touch Action | Finger Count | Sequence              | Condition                                                    | Time  |
+| ---------------- | ------------ | ------------ | ------------ | --------------------- | ------------------------------------------------------------ | ----- |
+| Primary Button   | Click        | Tap          | 1            | Down, up              | Single tap without movement. Happens after:                  | 200ms |
+| Primary Button   | Hold         | Tap and hold | 1            | Down, up, down (hold) | Time between a tap and putting the finger down again is within: | 200ms |
+| Primary Button   | Double click | Double tap   | 1            | Down, up, Down, up    | Two taps in a row. Time between the first and second tap must be within: | 200ms |
+| Secondary Button | Click        | Multi-tap    | 2            | Down, up              | Single tap with two fingers. Happens instantly.              | 0ms   |
+| Middle Button    | Click        | Multi-tap    | 3            | Down, up              | Single tap with three fingers. Happens instantly.            | 0ms   |
+| Mouse wheel      | Scroll       | Hold         | 2            | Down (hold)           | Hold with two fingers. Moving fingers up scrolls down and vice versa. | 0ms   |
 
 ### Keyboard
 
@@ -66,7 +66,7 @@ While the text box is empty, commands such as backspace and enter (new line) are
 
 | Application | Version | Phase |
 | ----------- | ------- | ----- |
-| PointZ      | V0.2.1  | Alpha |
+| PointZ      | V0.3.0  | Alpha |
 | PointZerver | V0.1.3  | Alpha |
 
 
@@ -107,6 +107,7 @@ Below is a table of all ports and protocols used by PointZ and PointZerver.
 | 0.1.1   | - Mouse up command is no longer send if **Secondary Button Click** has been performed after engaging **Primary Button Hold**<br />- Scrolling no longer jumps randomly |
 | 0.2.0   | - Keyboard added<br />- Replaced bottom bar with text-input  |
 | 0.2.1   | - Tap and hold now works correctly<br />- Textbox can no longer be clicked through<br />- Touch and key events no longer break when leaving/reentering activity |
+| 0.3.0   | Reworked touch-to-mouse code                                 |
 
 ### PointZerver
 
@@ -116,4 +117,5 @@ Below is a table of all ports and protocols used by PointZ and PointZerver.
 | 0.1.1   | Adjusted keyboard interpretation (when receiving data from PointZ). |
 | 0.1.2   | Fixed data interpreter incorrectly deserializing payloads containing commas |
 | 0.1.3   | No longer binds to virtual network interfaces.               |
+| 0.1.4   | Minor code-refactor.                                         |
 
