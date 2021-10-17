@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Globalization;
+using System.Net.Sockets;
 using System.Reflection;
 using PointZ.Models.PlatformEvent;
-using PointZ.Services.CommandSender;
-using PointZ.Services.CommandSender.Base;
+using PointZ.Services.InputCommandSender;
+using PointZ.Services.InputEventHandler;
 using PointZ.Services.Logger;
 using PointZ.Services.Navigation;
 using PointZ.Services.PlatformEvent;
-using PointZ.Services.PlatformInterface;
-using PointZ.Services.SessionEventHandler;
-using PointZ.Services.SessionMessageHandler;
+using PointZ.Services.PlatformSettings;
+using PointZ.Services.Settings;
 using PointZ.Services.UdpListener;
 using PointZ.TinyIoC;
 using Xamarin.Forms;
@@ -32,15 +32,16 @@ namespace PointZ.ViewModels.Base
             Container.Register<SessionViewModel>();
 
             // Services
-            Container.Register<ISessionMessageHandlerService, SessionMessageHandlerService>();
-            Container.Register<IUdpListenerService, UdpListenerService>();
-            Container.Register<ILogger, ConsoleLogger>();
-            Container.Register<INavigationService, NavigationService>();
-            Container.Register<ICommandSender, CommandSender>();
-            Container.Register<ISessionEventHandlerService<TouchEventArgs>, SessionTouchEventHandlerService>();
-            Container.Register<ISessionEventHandlerService<KeyEventArgs>, SessionKeyEventHandlerService>();
+            Container.Register<IUdpListenerService, UdpListenerService>().AsSingleton();
+            Container.Register<ILogger, ConsoleLogger>().AsSingleton();;
+            Container.Register<INavigationService, NavigationService>().AsSingleton();;
+            Container.Register<IInputCommandSender<TouchEventArgs>, TouchEventHandler>().AsSingleton();;
+            Container.Register<IInputCommandSender<KeyEventArgs>, KeyboardEventHandler>().AsSingleton();;
+            Container.Register<IKeyboardCommandSender, KeyboardCommandSender>().AsSingleton();;
+            Container.Register<IMouseCommandSender, MouseCommandSender>().AsSingleton();;
+            Container.Register<ISettingsService, SettingsService>().AsSingleton();;
             Container.Register(DependencyService.Resolve<IPlatformEventService>());
-            Container.Register(DependencyService.Resolve<IPlatformInterfaceService>());
+            Container.Register(DependencyService.Resolve<IPlatformSettingsService>());
         }
 
         // ReSharper disable once MemberCanBePrivate.Global

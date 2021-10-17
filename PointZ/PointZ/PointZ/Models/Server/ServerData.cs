@@ -9,11 +9,9 @@ namespace PointZ.Models.Server
         {
             Name = name;
             IpEndPoint = ipEndPoint;
-            LastUpdated = DateTime.Now;
         }
 
         public string Name { get; }
         public IPEndPoint IpEndPoint { get; }
-        public DateTime LastUpdated { get; }
     }
 }

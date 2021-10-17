@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows.Input;
 using PointZ.Models.Server;
@@ -14,7 +15,7 @@ namespace PointZ.ViewModels
 
         private bool isSearching = true;
         private bool isServerSelected;
-        
+
         private ServerData selectedServer;
 
         public DiscoverViewModel(IUdpListenerService udpListenerService)
@@ -23,7 +24,7 @@ namespace PointZ.ViewModels
             ConnectCommand = new Command(OnConnect);
             udpListenerService.StartAsync(OnServerDataReceived);
         }
-        
+
         public ICommand ConnectCommand { get; }
 
         public ObservableCollection<ServerData> Servers { get; } = new();
@@ -70,17 +71,17 @@ namespace PointZ.ViewModels
                 this.udpListenerService.Stop();
         }
 
-        private void OnConnect()
-        {
-            this.NavigationService.NavigateToAsync<SessionViewModel>(SelectedServer);
-        }
+        private void OnConnect() => this.NavigationService.NavigateToAsync<SessionViewModel>(SelectedServer);
 
         private void OnServerDataReceived(ServerData server)
         {
             if (IsServerAlreadyAdded(server)) return;
+            Debug.WriteLine($"Address: {server.IpEndPoint.Address}");
+            Debug.WriteLine($"Port: {server.IpEndPoint.Port}");
             Servers.Add(server);
         }
 
-        private bool IsServerAlreadyAdded(ServerData server) => Servers.Any(s => s.IpEndPoint == server.IpEndPoint);
+        private bool IsServerAlreadyAdded(ServerData server) =>
+            Servers.Any(s => Equals(s.IpEndPoint.Address, server.IpEndPoint.Address));
     }
 }

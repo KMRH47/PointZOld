@@ -6,7 +6,7 @@ using PointZ.Android.Services;
 using PointZ.Android.Services.KeyEventHandler;
 using PointZ.Models.PlatformEvent;
 using PointZ.Services.PlatformEvent;
-using PointZ.Services.PlatformInterface;
+using PointZ.Services.PlatformSettings;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 using Debug = System.Diagnostics.Debug;
@@ -67,7 +67,7 @@ namespace PointZ.Android
             Forms.SetTitleBarVisibility(this, AndroidTitleBarVisibility.Never);
             Forms.Init(this, savedInstanceState);
 
-            IPlatformInterfaceService androidInterfaceService = new AndroidInterfaceService(this);
+            IPlatformSettingsService androidInterfaceService = new AndroidInterfaceService(this);
             DependencyService.RegisterSingleton(androidInterfaceService);
             this.platformEventService = DependencyService.Resolve<IPlatformEventService>();
             this.keyEventHandlerService = new KeyEventHandlerService(this.platformEventService);

@@ -3,14 +3,14 @@
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
         <LangVersion>9</LangVersion>
-        <PackageVersion>0.2.1</PackageVersion>
+        <PackageVersion>0.3.0</PackageVersion>
         <Title>PointZ</Title>
         <Authors>Sunflower Sensei</Authors>
         <Description>Android/iOS app that emulates mouse and keyboard on some operating systems using WiFi.</Description>
         <RepositoryUrl>https://gitlab.com/KMRH47/pointz</RepositoryUrl>
         <Company>Sunflower Sensei</Company>
         <Copyright>Sunflower Sensei</Copyright>
-        <FileVersion>0.2.1</FileVersion>
+        <FileVersion>0.3.0</FileVersion>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

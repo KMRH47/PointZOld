@@ -1,11 +1,9 @@
 ﻿using PointZ.Models.DisplayDimensions;
 
-namespace PointZ.Services.PlatformInterface
+namespace PointZ.Services.PlatformSettings
 {
-    public interface IPlatformInterfaceService
+    public interface IPlatformSettingsService
     {
-        
-        
         float DisplayDensity { get;  set; }
         DisplayDimensionData GetDisplayDimensions();
         void ToggleKeyboard();

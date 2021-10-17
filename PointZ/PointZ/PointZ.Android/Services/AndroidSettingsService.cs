@@ -7,11 +7,11 @@ using Android.Views.InputMethods;
 using Android.Widget;
 using PointZ.Android.Extensions;
 using PointZ.Models.DisplayDimensions;
-using PointZ.Services.PlatformInterface;
+using PointZ.Services.PlatformSettings;
 
 namespace PointZ.Android.Services
 {
-    public class AndroidInterfaceService : IPlatformInterfaceService
+    public class AndroidInterfaceService : IPlatformSettingsService
     {
         private readonly MainActivity activity;
         private readonly DisplayDimensionData displayDimensions;

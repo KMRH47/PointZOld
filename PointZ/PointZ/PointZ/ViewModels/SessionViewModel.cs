@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Net;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using PointZ.Models.DisplayDimensions;
 using PointZ.Models.PlatformEvent;
 using PointZ.Models.Server;
+using PointZ.Services.InputCommandSender;
+using PointZ.Services.InputEventHandler;
 using PointZ.Services.PlatformEvent;
-using PointZ.Services.PlatformInterface;
-using PointZ.Services.SessionEventHandler;
-using PointZ.Services.SessionMessageHandler;
+using PointZ.Services.PlatformSettings;
+using PointZ.Services.Settings;
 using PointZ.ViewModels.Base;
 using Xamarin.Forms;
 
@@ -17,11 +17,12 @@ namespace PointZ.ViewModels
 {
     public class SessionViewModel : ViewModelBase
     {
-        private readonly ISessionEventHandlerService<TouchEventArgs> sessionTouchEventHandlerService;
-        private readonly ISessionEventHandlerService<KeyEventArgs> sessionKeyEventHandlerService;
-        private readonly ISessionMessageHandlerService sessionMessageHandlerService;
-        private readonly IPlatformInterfaceService platformInterfaceService;
+        private readonly IInputCommandSender<TouchEventArgs> sessionTouchCommandSender;
+        private readonly IInputCommandSender<KeyEventArgs> sessionKeyCommandSender;
+        private readonly IKeyboardCommandSender keyboardCommandSender;
         private readonly IPlatformEventService platformEventService;
+        private readonly IPlatformSettingsService platformSettingsService;
+        private readonly ISettingsService settingsService;
 
         private const string EntryPlaceholderTextConst = "\uf11c";
         private bool entryFocused = true;
@@ -32,16 +33,18 @@ namespace PointZ.ViewModels
         private double entryHeight;
 
         public SessionViewModel(
-            ISessionEventHandlerService<TouchEventArgs> sessionTouchEventHandlerService,
-            ISessionEventHandlerService<KeyEventArgs> sessionKeyEventHandlerService,
-            ISessionMessageHandlerService sessionMessageHandlerService,
-            IPlatformInterfaceService platformInterfaceService,
+            IInputCommandSender<TouchEventArgs> sessionTouchCommandSender,
+            IInputCommandSender<KeyEventArgs> sessionKeyCommandSender,
+            IKeyboardCommandSender keyboardCommandSender,
+            ISettingsService settingsService,
+            IPlatformSettingsService platformSettingsService,
             IPlatformEventService platformEventService)
         {
-            this.sessionTouchEventHandlerService = sessionTouchEventHandlerService;
-            this.sessionKeyEventHandlerService = sessionKeyEventHandlerService;
-            this.sessionMessageHandlerService = sessionMessageHandlerService;
-            this.platformInterfaceService = platformInterfaceService;
+            this.sessionTouchCommandSender = sessionTouchCommandSender;
+            this.sessionKeyCommandSender = sessionKeyCommandSender;
+            this.keyboardCommandSender = keyboardCommandSender;
+            this.settingsService = settingsService;
+            this.platformSettingsService = platformSettingsService;
             this.platformEventService = platformEventService;
             ReturnPressedCommand = new Command(OnReturnPressed);
             EntryFocusedCommand = new Command(OnEntryFocused);
@@ -51,8 +54,7 @@ namespace PointZ.ViewModels
         public override Task InitializeAsync(object parameter)
         {
             ServerData serverData = (ServerData)parameter;
-            this.sessionTouchEventHandlerService.Bind(serverData.IpEndPoint);
-            this.sessionKeyEventHandlerService.Bind(serverData.IpEndPoint);
+            this.settingsService.ServerIpEndPoint = serverData.IpEndPoint;
             OnViewAppearing(this, EventArgs.Empty);
             return Task.CompletedTask;
         }
@@ -95,11 +97,10 @@ namespace PointZ.ViewModels
 
         public double EntryHeight
         {
-            get => this.entryHeight * this.platformInterfaceService.DisplayDensity;
+            get => this.entryHeight * this.platformSettingsService.DisplayDensity;
             set
             {
                 this.entryHeight = value;
-                Debug.WriteLine($"EntryHeight is: {value}");
                 OnPropertyChanged();
             }
         }
@@ -130,34 +131,31 @@ namespace PointZ.ViewModels
             this.platformEventService.OnScreenTouched -= OnScreenTouched;
             this.platformEventService.OnBackButtonPressed -= OnBackButtonPressed;
             this.platformEventService.OnKeyDown -= OnKeyDown;
-
         }
 
         private async void OnScreenTouched(object sender, TouchEventArgs e)
         {
-            DisplayDimensionData displayDimensions = this.platformInterfaceService.GetDisplayDimensions();
+            DisplayDimensionData displayDimensions = this.platformSettingsService.GetDisplayDimensions();
             double screenHeight = displayDimensions.Height;
 
             bool withinBounds = e.Y < screenHeight - EntryHeight;
             if (!withinBounds) return;
 
-            await this.sessionTouchEventHandlerService.HandleAsync(e);
+            await this.sessionTouchCommandSender.HandleAsync(e);
         }
 
         private async void OnKeyDown(object o, KeyEventArgs e)
         {
-            Debug.WriteLine($"OnTextChanged VIEWMODEL");
-
             if (!EntryFocused) return;
             
-            await this.sessionKeyEventHandlerService.HandleAsync(e);
+            await this.sessionKeyCommandSender.HandleAsync(e);
         }
 
         private async void OnReturnPressed(object o)
         {
             Debug.WriteLine($"OnReturnPressed");
-            string message = o.ToString();
-            await this.sessionMessageHandlerService.SendMessageAsync(message);
+            string textEntry = o.ToString();
+            await this.keyboardCommandSender.SendTextEntryAsync(textEntry);
             EntryText = string.Empty;
         }
 

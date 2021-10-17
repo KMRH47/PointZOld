@@ -22,7 +22,7 @@
             <Label Text="{Binding  Name}"
                    Style="{StaticResource ServerText}"
                    HorizontalOptions="StartAndExpand" />
-            <Label Text="{Binding Address}"
+            <Label Text="{Binding IpEndPoint.Address}"
                    Style="{StaticResource ServerText}"
                    HorizontalOptions="EndAndExpand" />
         </StackLayout>
