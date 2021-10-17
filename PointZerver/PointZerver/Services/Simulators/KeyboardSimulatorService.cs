@@ -9,25 +9,25 @@ using PointZerver.Services.Logger;
 
 namespace PointZerver.Services.Simulators
 {
-    public class KeyboardSimulatorService : BaseInputSimulator
+    public class KeyboardSimulatorService : IInputSimulatorService
     {
         private readonly IKeyboardSimulator keyboardSimulator;
         private readonly IVirtualKeyCodeConverterService virtualKeyCodeConverterService;
 
-        public KeyboardSimulatorService(IKeyboardSimulator keyboardSimulator,
-            IVirtualKeyCodeConverterService virtualKeyCodeConverterService, ILogger logger) : base(logger)
+        public KeyboardSimulatorService(
+            IKeyboardSimulator keyboardSimulator, IVirtualKeyCodeConverterService virtualKeyCodeConverterService)
         {
             this.keyboardSimulator = keyboardSimulator;
             this.virtualKeyCodeConverterService = virtualKeyCodeConverterService;
         }
 
-        public override string CommandId => "K";
+        public string CommandId => "K";
 
-        public override Task ExecuteCommand(string data)
+        public Task ExecuteCommand(string data)
         {
             string command = data.TakeFromToNext(',', 2);
             int headerLength = command.Length + 3;
-            
+
             switch (command)
             {
                 case "KeyDown":

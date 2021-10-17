@@ -2,9 +2,9 @@
 
 namespace PointZerver.Services.Simulators
 {
-    public interface IInputSimulator
+    public interface IInputSimulatorService
     {
-        public string CommandId { get; }
+        public string CommandId { get; } 
         Task ExecuteCommand(string data);
     }
 }

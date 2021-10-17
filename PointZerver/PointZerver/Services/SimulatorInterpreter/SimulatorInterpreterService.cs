@@ -1,32 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
 using PointZerver.Extensions;
 using PointZerver.Services.Logger;
 using PointZerver.Services.Simulators;
 
-namespace PointZerver.Services.DataInterpreter
+namespace PointZerver.Services.SimulatorInterpreter
 {
-    public class DataInterpreterService : IDataInterpreterService
+    public class SimulatorInterpreterService : ISimulatorInterpreterService
     {
-        private readonly IDictionary<string, IInputSimulator> inputSimulatorServiceMap =
-            new Dictionary<string, IInputSimulator>();
+        private readonly IDictionary<string, IInputSimulatorService> inputSimulatorServiceMap =
+            new Dictionary<string, IInputSimulatorService>();
         private readonly ILogger logger;
 
-        public DataInterpreterService(ILogger logger, params IInputSimulator[] inputSimulatorServices)
+        public SimulatorInterpreterService(ILogger logger, params IInputSimulatorService[] inputSimulatorServices)
         {
             try
             {
                 this.logger = logger;
 
-                foreach (IInputSimulator inputSimulatorService in inputSimulatorServices)
+                foreach (IInputSimulatorService inputSimulatorService in inputSimulatorServices)
                     this.inputSimulatorServiceMap.Add(inputSimulatorService.CommandId, inputSimulatorService);
             }
             catch (Exception e)
             {
-                logger.Log($"Initialization of object {nameof(DataInterpreterService)} failed: {e.Message}", this);
+                logger.Log($"Initialization of object {nameof(SimulatorInterpreterService)} failed: {e.Message}", this);
             }
         }
 
@@ -37,7 +36,7 @@ namespace PointZerver.Services.DataInterpreter
                 byte[] shavedBytes = await bytes.CopyRemovingNulls();
                 string data = Encoding.UTF8.GetString(shavedBytes);
 
-                this.inputSimulatorServiceMap.TryGetValue(data[0].ToString(), out IInputSimulator inputSimulatorService);
+                this.inputSimulatorServiceMap.TryGetValue(data[0].ToString(), out IInputSimulatorService inputSimulatorService);
                 if (inputSimulatorService == null) throw new NullReferenceException();
                 await inputSimulatorService.ExecuteCommand(data);
             }

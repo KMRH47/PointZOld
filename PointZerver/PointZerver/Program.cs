@@ -4,14 +4,14 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
 using InputSimulatorStandard;
+using Microsoft.Extensions.DependencyInjection;
 using PointZerver.Services.CommandConverter;
-using PointZerver.Services.DataInterpreter;
 using PointZerver.Services.Logger;
+using PointZerver.Services.SimulatorInterpreter;
 using PointZerver.Services.Simulators;
 using PointZerver.Services.UdpBroadcast;
 using PointZerver.Services.UdpListener;
 using PointZerver.Tools;
-using IInputSimulator = PointZerver.Services.Simulators.IInputSimulator;
 
 namespace PointZerver
 {
@@ -36,19 +36,40 @@ namespace PointZerver
                 ListenEscape();
                 return Task.CompletedTask;
             }
-            
-            IPEndPoint listenerEndPoint = new (ipAddress, 45454);
-            IPEndPoint broadcastDestEndPoint = new (ipAddress, 0);
 
             // Services
-            IInputSimulator mouseSimulatorService = new MouseSimulatorService(new MouseSimulator(), logger);
-            IInputSimulator keyboardSimulatorService = new KeyboardSimulatorService(new KeyboardSimulator(),
-                new VirtualKeyCodeConverterService(), logger);
-            IUdpBroadcastService udpBroadcastService = new UdpBroadcastService(new UdpClient(broadcastDestEndPoint), logger);
-            IDataInterpreterService dataInterpreterService =
-                new DataInterpreterService(logger, keyboardSimulatorService, mouseSimulatorService);
-            IUdpListenerService udpListenerService =
-                new UdpListenerService(new UdpClient(listenerEndPoint), dataInterpreterService, logger);
+            // -Pre-registration
+            IPEndPoint serverIpEndPoint = new(ipAddress, 45454);
+            UdpClient udpClient = new();
+            udpClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+            udpClient.Client.Bind(serverIpEndPoint);
+            IVirtualKeyCodeConverterService virtualKeyCodeConverterService = new VirtualKeyCodeConverterService();
+            IMouseSimulator mouseSimulator = new MouseSimulator();
+            IKeyboardSimulator keyboardSimulator = new KeyboardSimulator();
+            IInputSimulatorService mouseSimService = new MouseSimulatorService(mouseSimulator);
+            IInputSimulatorService keyboardSimService =
+                new KeyboardSimulatorService(keyboardSimulator, virtualKeyCodeConverterService);
+            IInputSimulatorService[] inputSimulators = { mouseSimService, keyboardSimService };
+
+            // -Registration
+            IServiceCollection services = new ServiceCollection();
+            services.AddSingleton(inputSimulators);
+            services.AddSingleton(udpClient);
+            services.AddSingleton(logger);
+            services.AddScoped<MouseSimulatorService>();
+            services.AddScoped<KeyboardSimulatorService>();
+            services.AddScoped<IUdpBroadcastService, UdpBroadcastService>();
+            services.AddScoped<ISimulatorInterpreterService, SimulatorInterpreterService>();
+            services.AddScoped<IUdpListenerService, UdpListenerService>();
+            services.AddScoped<IInputSimulatorService, MouseSimulatorService>();
+            services.AddScoped<IMouseSimulator, MouseSimulator>();
+            services.AddScoped<IKeyboardSimulator, KeyboardSimulator>();
+            services.AddScoped<IVirtualKeyCodeConverterService, VirtualKeyCodeConverterService>();
+
+            IServiceProvider serviceProvider = services.BuildServiceProvider();
+
+            IUdpBroadcastService udpBroadcastService = serviceProvider.GetService<IUdpBroadcastService>();
+            IUdpListenerService udpListenerService = serviceProvider.GetService<IUdpListenerService>();
 
             // Cancellation Tokens
             CancellationTokenSource udpBroadcastTokenSource = new();
@@ -57,8 +78,6 @@ namespace PointZerver
             // Run
             Task broadcastServiceTask = udpBroadcastService.StartAsync(udpBroadcastTokenSource.Token);
             Task listenerServiceTask = udpListenerService.StartAsync(udpListenerTokenSource.Token);
-
-            // udpListenerTokenSource.Cancel();
 
             Welcome();
             ListenEscape();
@@ -70,7 +89,7 @@ namespace PointZerver
         private static void ListenEscape()
         {
             (int left, int top) = Console.GetCursorPosition();
-            Console.WriteLine("Press escape to quit.");            
+            Console.WriteLine("Press escape to quit.");
 
             while (true)
             {

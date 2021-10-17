@@ -24,16 +24,17 @@ namespace PointZerver.Services.UdpBroadcast
         {
             try
             {
+                this.udpClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.Broadcast, true);
                 EndPoint localEndPoint = this.udpClient.Client.LocalEndPoint;
                 IPEndPoint localIpEndPoint = (IPEndPoint)localEndPoint;
-                await this.udpClient.Client.ConnectAsync(IPAddress.Broadcast, port, token);
+                EndPoint remoteEndPoint = new IPEndPoint(IPAddress.Broadcast, port);
                 await this.logger.Log($"Broadcasting from '{localIpEndPoint.Address}'.", this);
                 string hostName = Dns.GetHostName();
 
                 while (true)
                 {
                     byte[] bytes = Encoding.UTF8.GetBytes(hostName);
-                    await this.udpClient.SendAsync(bytes, bytes.Length);
+                    await this.udpClient.Client.SendToAsync(bytes, SocketFlags.None, remoteEndPoint);
                     await Task.Delay(delayMs, token);
                 }
             }

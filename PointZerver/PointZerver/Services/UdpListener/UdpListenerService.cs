@@ -3,10 +3,8 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
-using PointZerver.Extensions;
-using PointZerver.Services.DataInterpreter;
 using PointZerver.Services.Logger;
-using PointZerver.Tools;
+using PointZerver.Services.SimulatorInterpreter;
 
 namespace PointZerver.Services.UdpListener
 {
@@ -14,13 +12,13 @@ namespace PointZerver.Services.UdpListener
     {
         private const string TaskCancelledMessage = "The UDP Listener service was forcefully stopped.";
         private readonly UdpClient udpClient;
-        private readonly IDataInterpreterService dataInterpreterService;
+        private readonly ISimulatorInterpreterService simulatorInterpreterService;
         private readonly ILogger logger;
 
-        public UdpListenerService(UdpClient udpClient, IDataInterpreterService dataInterpreterService, ILogger logger)
+        public UdpListenerService(UdpClient udpClient, ISimulatorInterpreterService simulatorInterpreterService, ILogger logger)
         {
             this.udpClient = udpClient;
-            this.dataInterpreterService = dataInterpreterService;
+            this.simulatorInterpreterService = simulatorInterpreterService;
             this.logger = logger;
         }
 
@@ -35,7 +33,7 @@ namespace PointZerver.Services.UdpListener
                 {
                     byte[] bytes = new byte[200];
                     await this.udpClient.Client.ReceiveAsync(bytes, SocketFlags.None, token);
-                    _ = this.dataInterpreterService.InterpretAsync(bytes);
+                    _ = this.simulatorInterpreterService.InterpretAsync(bytes);
                 }
             }
             catch (TaskCanceledException)
