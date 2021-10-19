@@ -49,7 +49,7 @@ namespace PointZerver.Extensions
             return message;
         }
 
-        public static string TakeFrom(this string s, char separator, int startIndex)
+        public static string TakeFrom(this string s, int startIndex)
         {
             string currentString = "";
 

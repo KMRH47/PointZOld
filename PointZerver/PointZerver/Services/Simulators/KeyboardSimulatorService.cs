@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using InputSimulatorStandard;
 using InputSimulatorStandard.Native;
@@ -27,28 +28,26 @@ namespace PointZerver.Services.Simulators
         {
             string command = data.TakeFromToNext(',', 2);
             int headerLength = command.Length + 3;
+            string payload = data.TakeFrom(headerLength);
 
             switch (command)
             {
                 case "KeyDown":
-                    string keyCode = data.TakeFrom(',', headerLength);
-
-                    if (keyCode.Length == 1)
+                    if (payload.Length == 1)
                     {
-                        this.keyboardSimulator.TextEntry(keyCode);
+                        this.keyboardSimulator.TextEntry(payload);
                     }
                     else
                     {
-                        VirtualKeyCode virtualKeyCode = this.virtualKeyCodeConverterService.ParseString(keyCode);
-                        this.keyboardSimulator.KeyPress(virtualKeyCode);
+                        this.keyboardSimulator.KeyPress(this.virtualKeyCodeConverterService.ParseString(payload));
                     }
 
                     break;
                 case "KeyPress":
+                    this.keyboardSimulator.KeyPress(this.virtualKeyCodeConverterService.ParseString(payload));
                     break;
                 case "TextEntry":
-                    string message = data.TakeFrom(',', headerLength);
-                    this.keyboardSimulator.TextEntry(message);
+                    this.keyboardSimulator.TextEntry(payload);
                     break;
                 case "ModifiedKeyStroke":
                     //VirtualKeyCode[] parameters = await GetParams(data);
