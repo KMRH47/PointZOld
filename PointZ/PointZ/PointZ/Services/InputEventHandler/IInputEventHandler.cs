@@ -2,7 +2,7 @@
 
 namespace PointZ.Services.InputEventHandler
 {
-    public interface IInputCommandSender<in TEventArgs>
+    public interface IInputEventHandler<in TEventArgs>
     {
         Task HandleAsync(TEventArgs e);
     }

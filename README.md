@@ -4,7 +4,7 @@
 
 ### What is PointZ?
 
-PointZ is an Android/<s>iPhone</s> (coming in the future) application built using Xamarin.Forms. The application allows you to emulate mouse and keyboard on any system running PointZerver, as long as they're on the same Wi-Fi network. 
+PointZ is an Android/<s>iOS</s> (coming in the future) application built using Xamarin.Forms. The application allows you to emulate mouse and keyboard on any system running PointZerver, as long as they're on the same Wi-Fi network. 
 
 ### What is PointZerver?
 

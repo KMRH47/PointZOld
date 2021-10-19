@@ -2,9 +2,11 @@
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using PointZ.Models.Command;
 using PointZ.Models.DisplayDimensions;
 using PointZ.Models.PlatformEvent;
 using PointZ.Models.Server;
+using PointZ.Models.SoftInput;
 using PointZ.Services.InputCommandSender;
 using PointZ.Services.InputEventHandler;
 using PointZ.Services.PlatformEvent;
@@ -17,31 +19,30 @@ namespace PointZ.ViewModels
 {
     public class SessionViewModel : ViewModelBase
     {
-        private readonly IInputCommandSender<TouchEventArgs> sessionTouchCommandSender;
-        private readonly IInputCommandSender<KeyEventArgs> sessionKeyCommandSender;
+        private readonly IInputEventHandler<TouchEventArgs> touchEventHandler;
+        private readonly IInputEventHandler<KeyEventArgs> keyEventHandler;
         private readonly IKeyboardCommandSender keyboardCommandSender;
         private readonly IPlatformEventService platformEventService;
         private readonly IPlatformSettingsService platformSettingsService;
         private readonly ISettingsService settingsService;
 
         private const string EntryPlaceholderTextConst = "\uf11c";
-        private bool entryFocused = true;
+        private bool entryFocused;
         private string entryText = "";
         private string entryTextPrevious = "";
-
         private string entryPlaceholderText = EntryPlaceholderTextConst;
         private double entryHeight;
 
         public SessionViewModel(
-            IInputCommandSender<TouchEventArgs> sessionTouchCommandSender,
-            IInputCommandSender<KeyEventArgs> sessionKeyCommandSender,
+            IInputEventHandler<TouchEventArgs> touchEventHandler,
+            IInputEventHandler<KeyEventArgs> keyEventHandler,
             IKeyboardCommandSender keyboardCommandSender,
             ISettingsService settingsService,
             IPlatformSettingsService platformSettingsService,
             IPlatformEventService platformEventService)
         {
-            this.sessionTouchCommandSender = sessionTouchCommandSender;
-            this.sessionKeyCommandSender = sessionKeyCommandSender;
+            this.touchEventHandler = touchEventHandler;
+            this.keyEventHandler = keyEventHandler;
             this.keyboardCommandSender = keyboardCommandSender;
             this.settingsService = settingsService;
             this.platformSettingsService = platformSettingsService;
@@ -55,6 +56,7 @@ namespace PointZ.ViewModels
         {
             ServerData serverData = (ServerData)parameter;
             this.settingsService.ServerIpEndPoint = serverData.IpEndPoint;
+            this.platformSettingsService.WindowSoftInputMode(SoftInput.AdjustResize);
             OnViewAppearing(this, EventArgs.Empty);
             return Task.CompletedTask;
         }
@@ -62,7 +64,6 @@ namespace PointZ.ViewModels
         public ICommand ReturnPressedCommand { get; set; }
         public ICommand EntryFocusedCommand { get; set; }
         public ICommand EntryUnfocusedCommand { get; set; }
-
 
         public bool EntryFocused
         {
@@ -135,28 +136,53 @@ namespace PointZ.ViewModels
 
         private async void OnScreenTouched(object sender, TouchEventArgs e)
         {
-            DisplayDimensionData displayDimensions = this.platformSettingsService.GetDisplayDimensions();
-            double screenHeight = displayDimensions.Height;
+            switch (EntryFocused)
+            {
+                case true:
+                    switch (e.TouchAction)
+                    {
+                        case TouchAction.Down: return;
+                    }
 
-            bool withinBounds = e.Y < screenHeight - EntryHeight;
-            if (!withinBounds) return;
+                    goto case false;
+                case false:
+                    DisplayDimensionData displayDimensions = this.platformSettingsService.GetDisplayDimensions();
+                    double screenHeight = displayDimensions.Height;
+                    bool withinBounds = e.Y < screenHeight - EntryHeight;
 
-            await this.sessionTouchCommandSender.HandleAsync(e);
+                    if (!withinBounds) return;
+
+                    await this.touchEventHandler.HandleAsync(e);
+                    break;
+            }
         }
 
         private async void OnKeyDown(object o, KeyEventArgs e)
         {
             if (!EntryFocused) return;
-            
-            await this.sessionKeyCommandSender.HandleAsync(e);
+
+            await this.keyEventHandler.HandleAsync(e);
         }
 
         private async void OnReturnPressed(object o)
         {
-            Debug.WriteLine($"OnReturnPressed");
+            Debug.WriteLine($"OnReturnPressed o: {o}");
+
             string textEntry = o.ToString();
-            await this.keyboardCommandSender.SendTextEntryAsync(textEntry);
-            EntryText = string.Empty;
+
+            if (textEntry != string.Empty)
+            {
+                await this.keyboardCommandSender.SendTextEntryAsync(textEntry);
+                EntryText = string.Empty;
+            }
+            else
+            {
+                await this.keyboardCommandSender.SendKeyboardCommandAsync(KeyboardCommand.KeyPress,
+                    KeyCodeAction.Enter);
+            }
+
+            // Clunky way making the keyboard re-appear, but it works. This will be seamless at some point in the future.
+            this.platformSettingsService.ToggleKeyboard();
         }
 
         /// <summary>

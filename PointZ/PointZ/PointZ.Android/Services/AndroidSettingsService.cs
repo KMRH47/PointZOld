@@ -1,13 +1,21 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading.Tasks;
+using Android.Animation;
 using Android.Content.Res;
-using Android.Graphics;
+using Android.Text;
 using Android.Views;
 using Android.Views.InputMethods;
 using Android.Widget;
+using AndroidX.AppCompat.Widget;
 using PointZ.Android.Extensions;
 using PointZ.Models.DisplayDimensions;
 using PointZ.Services.PlatformSettings;
+using Xamarin.Forms;
+using Xamarin.Forms.Platform.Android;
+using Point = Android.Graphics.Point;
+using RelativeLayout = Android.Widget.RelativeLayout;
 
 namespace PointZ.Android.Services
 {
@@ -15,7 +23,6 @@ namespace PointZ.Android.Services
     {
         private readonly MainActivity activity;
         private readonly DisplayDimensionData displayDimensions;
-        private readonly EditText editText;
 
         public AndroidInterfaceService(MainActivity activity)
         {
@@ -29,7 +36,7 @@ namespace PointZ.Android.Services
             IWindowManager windowManager = activity.WindowManager;
             if (windowManager == null)
                 throw new Exception($"Couldn't initialize platform: {nameof(IWindowManager)} is null.");
-            
+
             Display display = windowManager.DefaultDisplay;
             if (display == null) throw new Exception($"Couldn't initialize platform: {nameof(Display)} is null.");
 
@@ -37,11 +44,10 @@ namespace PointZ.Android.Services
             display.GetCurrentSizeRange(sizeSmall, sizeLarge);
             this.displayDimensions = new DisplayDimensionData(sizeSmall.X, sizeLarge.Y);
 
-            ViewGroup viewGroup = activity.GetViewGroup();
-            this.editText = viewGroup.FindChildOfType<EditText>();
-
-            if (resources.DisplayMetrics == null) throw new Exception($"Couldn't initialize platform: {nameof(resources.DisplayMetrics)} is null.");
+            if (resources.DisplayMetrics == null)
+                throw new Exception($"Couldn't initialize platform: {nameof(resources.DisplayMetrics)} is null.");
             DisplayDensity = resources.DisplayMetrics.Density;
+
             this.activity = activity;
         }
 
@@ -51,9 +57,22 @@ namespace PointZ.Android.Services
 
         public void ToggleKeyboard()
         {
-            this.editText.RequestFocus();
             InputMethodManager inputMethodManager = InputMethodManager.FromContext(this.activity);
-            inputMethodManager?.ToggleSoftInput(ShowFlags.Implicit, HideSoftInputFlags.ImplicitOnly);
+            inputMethodManager.ToggleSoftInput(ShowFlags.Forced, HideSoftInputFlags.None);
+        }
+
+        public void WindowSoftInputMode(Models.SoftInput.SoftInput softInput)
+        {
+            ViewGroup viewGroup = activity.GetViewGroup();
+            EditText editText = viewGroup.FindChildOfType<EditText>();
+            //editText.ShowSoftInputOnFocus = false;
+            //editText.SetRawInputType(InputTypes.Null);
+            
+            InputMethodManager inputMethodManager = InputMethodManager.FromContext(this.activity);
+            inputMethodManager.HideSoftInputFromWindow(editText.WindowToken, 0);            
+            
+            SoftInput softInputAndroid = (SoftInput)softInput;
+            this.activity.Window.SetSoftInputMode(softInputAndroid);
         }
     }
 }

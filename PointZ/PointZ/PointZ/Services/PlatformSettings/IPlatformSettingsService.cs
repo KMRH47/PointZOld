@@ -1,4 +1,5 @@
 ﻿using PointZ.Models.DisplayDimensions;
+using PointZ.Models.SoftInput;
 
 namespace PointZ.Services.PlatformSettings
 {
@@ -7,5 +8,6 @@ namespace PointZ.Services.PlatformSettings
         float DisplayDensity { get;  set; }
         DisplayDimensionData GetDisplayDimensions();
         void ToggleKeyboard();
+        void WindowSoftInputMode(SoftInput softInput);
     }
 }

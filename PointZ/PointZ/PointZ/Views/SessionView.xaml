@@ -12,7 +12,7 @@
 
     <ContentPage.Resources>
         <ResourceDictionary>
-            <Style x:Key="EntryStyle" TargetType="{x:Type Entry}">
+            <Style x:Key="EntryStyleEnterText" TargetType="{x:Type Entry}">
                 <Setter Property="BackgroundColor"
                         Value="{AppThemeBinding 
                         Dark={StaticResource DimmedWhite},
@@ -26,23 +26,30 @@
                 <Setter Property="VerticalOptions" Value="EndAndExpand" />
                 <Setter Property="FontFamily" Value="IconFont" />
             </Style>
+            <Style x:Key="LabelStylePreviewText" TargetType="{x:Type Label}">
+                <Setter Property="TextColor"
+                        Value="{AppThemeBinding 
+                        Dark={StaticResource DimmedWhite},
+                        Light={StaticResource WhitenedBlack}}" />
+                <Setter Property="VerticalOptions" Value="StartAndExpand" />
+                <Setter Property="Margin" Value="20" />
+            </Style>
         </ResourceDictionary>
     </ContentPage.Resources>
 
     <ContentPage.Content>
 
-        <Grid>
-            <StackLayout Style="{StaticResource StackLayoutStyle}"  >
-                <StackLayout.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding }"/>
-                </StackLayout.GestureRecognizers>
-                <Label Text="{Binding EntryText}" VerticalOptions="StartAndExpand" TextColor="Red" Margin="20" />
+        <Grid InputTransparent="True" CascadeInputTransparent="False">
+            <StackLayout Style="{StaticResource StackLayoutStyle}" >
+
+                <Label Text="{Binding EntryText}" Style="{StaticResource LabelStylePreviewText}" />
 
                 <Entry ReturnCommand="{Binding ReturnPressedCommand}"
                        ReturnCommandParameter="{Binding EntryText}"
-                       Style="{StaticResource EntryStyle}"
+                       Style="{StaticResource EntryStyleEnterText}"
                        Height="{Binding EntryHeight}"
                        Placeholder="{Binding EntryPlaceholderText}"
+                       
                        Text="{Binding EntryText}">
                     <Entry.Behaviors>
                         <behaviors:EventToCommandBehavior Command="{Binding EntryFocusedCommand}" EventName="Focused" />

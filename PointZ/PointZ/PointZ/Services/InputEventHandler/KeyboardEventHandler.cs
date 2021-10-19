@@ -6,7 +6,7 @@ using PointZ.Services.InputCommandSender;
 
 namespace PointZ.Services.InputEventHandler
 {
-    public class KeyboardEventHandler : IInputCommandSender<KeyEventArgs>
+    public class KeyboardEventHandler : IInputEventHandler<KeyEventArgs>
     {
         private readonly IKeyboardCommandSender keyboardCommandSender;
 
@@ -23,7 +23,7 @@ namespace PointZ.Services.InputEventHandler
                     break;
                 case KeyAction.Multiple:
                 case KeyAction.Down:
-                    await this.keyboardCommandSender.SendKeyboardCommandAsync(KeyboardCommand.KeyDown, e.KeyCode);
+                    await this.keyboardCommandSender.SendKeyboardCommandAsync(KeyboardCommand.KeyPress, e.KeyCode);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

@@ -7,7 +7,7 @@ using PointZ.Services.Settings;
 
 namespace PointZ.Services.InputEventHandler
 {
-    public class TouchEventHandler : IInputCommandSender<TouchEventArgs>
+    public class TouchEventHandler : IInputEventHandler<TouchEventArgs>
     {
         private readonly IMouseCommandSender mouseCommandSender;
         private readonly ISettingsService settingsService;
