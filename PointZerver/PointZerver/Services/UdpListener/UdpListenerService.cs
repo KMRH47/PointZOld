@@ -31,9 +31,8 @@ namespace PointZerver.Services.UdpListener
 
                 while (true)
                 {
-                    byte[] bytes = new byte[200];
-                    await this.udpClient.Client.ReceiveAsync(bytes, SocketFlags.None, token);
-                    _ = this.simulatorInterpreterService.InterpretAsync(bytes);
+                    UdpReceiveResult udpReceiveResult = await this.udpClient.ReceiveAsync();
+                   _ = this.simulatorInterpreterService.InterpretAsync(udpReceiveResult.Buffer);
                 }
             }
             catch (TaskCanceledException)

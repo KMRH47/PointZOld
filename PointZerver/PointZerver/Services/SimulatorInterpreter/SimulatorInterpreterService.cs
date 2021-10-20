@@ -33,9 +33,7 @@ namespace PointZerver.Services.SimulatorInterpreter
         {
             try
             {
-                byte[] shavedBytes = await bytes.CopyRemovingNulls();
-                string data = Encoding.UTF8.GetString(shavedBytes);
-
+                string data = Encoding.UTF8.GetString(bytes);
                 this.inputSimulatorServiceMap.TryGetValue(data[0].ToString(), out IInputSimulatorService inputSimulatorService);
                 if (inputSimulatorService == null) throw new NullReferenceException();
                 await inputSimulatorService.ExecuteCommand(data);
