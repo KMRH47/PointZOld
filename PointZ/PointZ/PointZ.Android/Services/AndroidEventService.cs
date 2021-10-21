@@ -1,9 +1,6 @@
 ﻿using System;
 using PointZ.Models.PlatformEvent;
-using PointZ.Services.PlatformEvent;
-using Xamarin.Forms;
-
-[assembly: Dependency(typeof(PointZ.Android.Services.AndroidEventService))]
+using PointZ.Services.PlatformEventService;
 
 namespace PointZ.Android.Services
 {
@@ -13,17 +10,12 @@ namespace PointZ.Android.Services
         public event EventHandler OnViewDisappearing;
         public event EventHandler OnBackButtonPressed;
         public event EventHandler<TouchEventArgs> OnScreenTouched;
-        public event EventHandler<KeyEventArgs> OnKeyDown;
+        public event EventHandler<KeyEventArgs> OnCustomEntryKeyPress;
 
         public void NotifyOnBackButtonPressed() => this.OnBackButtonPressed?.Invoke(this, EventArgs.Empty);
         public void NotifyOnViewDisappearing() => this.OnViewDisappearing?.Invoke(this, EventArgs.Empty);
         public void NotifyOnViewAppearing() => this.OnViewAppearing?.Invoke(this, EventArgs.Empty);
-
-        public void NotifyOnKeyDown(KeyAction keyAction, string data)
-        {
-            KeyEventArgs args = new(keyAction, data);
-            this.OnKeyDown?.Invoke(this, args);
-        }
+        public void NotifyOnCustomEntryKeyPress(KeyEventArgs e) => this.OnCustomEntryKeyPress?.Invoke(this, e);
 
         public void NotifyOnScreenTouched(float x, float y, TouchAction touchAction)
         {

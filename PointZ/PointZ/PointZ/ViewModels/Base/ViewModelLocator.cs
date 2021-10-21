@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Globalization;
-using System.Net.Sockets;
 using System.Reflection;
 using PointZ.Models.PlatformEvent;
 using PointZ.Services.InputCommandSender;
 using PointZ.Services.InputEventHandler;
 using PointZ.Services.Logger;
 using PointZ.Services.Navigation;
-using PointZ.Services.PlatformEvent;
+using PointZ.Services.PlatformEventService;
 using PointZ.Services.PlatformSettings;
 using PointZ.Services.Settings;
 using PointZ.Services.UdpListener;

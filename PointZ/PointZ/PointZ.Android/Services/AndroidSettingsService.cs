@@ -1,21 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Threading.Tasks;
-using Android.Animation;
 using Android.Content.Res;
-using Android.Text;
 using Android.Views;
-using Android.Views.InputMethods;
 using Android.Widget;
-using AndroidX.AppCompat.Widget;
 using PointZ.Android.Extensions;
 using PointZ.Models.DisplayDimensions;
 using PointZ.Services.PlatformSettings;
-using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 using Point = Android.Graphics.Point;
-using RelativeLayout = Android.Widget.RelativeLayout;
 
 namespace PointZ.Android.Services
 {
@@ -28,10 +19,6 @@ namespace PointZ.Android.Services
         {
             Resources resources = activity.Resources;
             if (resources == null) throw new Exception($"Couldn't initialize platform: {nameof(Resources)} is null.");
-            int navBarHeightResId = resources.GetIdentifier("navigation_bar_height", "dimen", "android");
-            int navBarWidthResId = resources.GetIdentifier("navigation_bar_width", "dimen", "android");
-            float navBarHeightPixels = resources.GetDimensionPixelSize(navBarHeightResId);
-            float navBarWidthPixels = resources.GetDimensionPixelSize(navBarWidthResId);
 
             IWindowManager windowManager = activity.WindowManager;
             if (windowManager == null)
@@ -57,22 +44,25 @@ namespace PointZ.Android.Services
 
         public void ToggleKeyboard()
         {
-            InputMethodManager inputMethodManager = InputMethodManager.FromContext(this.activity);
-            inputMethodManager.ToggleSoftInput(ShowFlags.Forced, HideSoftInputFlags.None);
+            //InputMethodManager inputMethodManager = InputMethodManager.FromContext(this.activity);
+            //inputMethodManager.ToggleSoftInput(ShowFlags.Forced, HideSoftInputFlags.None);
         }
 
+        /// <summary>
+        /// Primarily for the soft input not to push the current view up... 
+        /// </summary>
+        /// <param name="softInput"></param>
         public void WindowSoftInputMode(Models.SoftInput.SoftInput softInput)
         {
-            ViewGroup viewGroup = activity.GetViewGroup();
-            EditText editText = viewGroup.FindChildOfType<EditText>();
-            //editText.ShowSoftInputOnFocus = false;
-            //editText.SetRawInputType(InputTypes.Null);
-            
-            InputMethodManager inputMethodManager = InputMethodManager.FromContext(this.activity);
-            inputMethodManager.HideSoftInputFromWindow(editText.WindowToken, 0);            
-            
             SoftInput softInputAndroid = (SoftInput)softInput;
             this.activity.Window.SetSoftInputMode(softInputAndroid);
+
+            ViewGroup viewGroup = this.activity.GetViewGroup();
+            EditText editText = viewGroup.FindChildOfType<EditText>();
+            
+            editText.SetCursorVisible(false);
+            editText.SetTextIsSelectable(false);
+            editText.SetBackground(null);
         }
     }
 }

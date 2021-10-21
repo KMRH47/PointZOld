@@ -1,19 +1,19 @@
 ﻿using System;
 using PointZ.Models.PlatformEvent;
 
-namespace PointZ.Services.PlatformEvent
+namespace PointZ.Services.PlatformEventService
 {
     public interface IPlatformEventService
     {
         event EventHandler OnViewAppearing;
         event EventHandler OnViewDisappearing;
         event EventHandler OnBackButtonPressed;
-        event EventHandler<TouchEventArgs> OnScreenTouched;
-        event EventHandler<KeyEventArgs> OnKeyDown;
-        void NotifyOnScreenTouched(float x, float y, TouchAction touchAction);
+        event EventHandler<KeyEventArgs> OnCustomEntryKeyPress;
+        public event EventHandler<TouchEventArgs> OnScreenTouched;
         void NotifyOnBackButtonPressed();
         void NotifyOnViewDisappearing();
         void NotifyOnViewAppearing();
-        void NotifyOnKeyDown(KeyAction keyAction, string data);
+        void NotifyOnCustomEntryKeyPress(KeyEventArgs e);
+        void NotifyOnScreenTouched(float x, float y, TouchAction touchAction);
     }
 }

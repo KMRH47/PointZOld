@@ -6,58 +6,89 @@
              xmlns:viewModels="clr-namespace:PointZ.ViewModels;assembly=PointZ"
              xmlns:viewModelsBase="clr-namespace:PointZ.ViewModels.Base;assembly=PointZ"
              xmlns:behaviors="clr-namespace:PointZ.Behaviors;assembly=PointZ"
+             xmlns:controls="clr-namespace:PointZ.Controls;assembly=PointZ"
              NavigationPage.HasNavigationBar="False"
              viewModelsBase:ViewModelLocator.AutoWireViewModel="True"
              x:DataType="viewModels:SessionViewModel">
 
     <ContentPage.Resources>
         <ResourceDictionary>
-            <Style x:Key="EntryStyleEnterText" TargetType="{x:Type Entry}">
-                <Setter Property="BackgroundColor"
-                        Value="{AppThemeBinding 
-                        Dark={StaticResource DimmedWhite},
-                        Light={StaticResource WhitenedBlack}}" />
-                <Setter Property="TextColor"
-                        Value="{AppThemeBinding 
-                        Dark={StaticResource WhitenedBlack},
-                        Light={StaticResource DimmedWhite}}" />
+            <Style x:Key="EntryStyleEnterText" TargetType="{x:Type controls:CustomEntry}">
                 <Setter Property="FontSize" Value="Title" />
                 <Setter Property="HorizontalTextAlignment" Value="Center" />
                 <Setter Property="VerticalOptions" Value="EndAndExpand" />
                 <Setter Property="FontFamily" Value="IconFont" />
+                <Setter Property="Placeholder" Value="&#xF11C;" />
+                <Setter Property="PlaceholderColor"
+                        Value="{AppThemeBinding 
+                        Dark={StaticResource WhitenedBlack},
+                        Light={StaticResource DimmedWhite}}" />
+                <Setter Property="BackgroundColor" Value="Transparent" />
             </Style>
+
+            <Style x:Key="ButtonStyle" TargetType="{x:Type Button}">
+                <Setter Property="FontSize" Value="Title" />
+                <Setter Property="FontFamily" Value="IconFont" />
+                <Setter Property="Text" Value="&#xE800;" />
+                <Setter Property="BackgroundColor" Value="Transparent" />
+            </Style>
+
             <Style x:Key="LabelStylePreviewText" TargetType="{x:Type Label}">
-                <Setter Property="TextColor"
+                <Setter Property="VerticalOptions" Value="StartAndExpand" />
+                <Setter Property="FontSize" Value="Title" />
+                <Setter Property="Margin" Value="20" />
+            </Style>
+
+            <Style x:Key="GridBarStyle" TargetType="{x:Type Grid}">
+                <Setter Property="BackgroundColor"
                         Value="{AppThemeBinding 
                         Dark={StaticResource DimmedWhite},
                         Light={StaticResource WhitenedBlack}}" />
-                <Setter Property="VerticalOptions" Value="StartAndExpand" />
-                <Setter Property="Margin" Value="20" />
             </Style>
+
         </ResourceDictionary>
     </ContentPage.Resources>
 
     <ContentPage.Content>
 
-        <Grid InputTransparent="True" CascadeInputTransparent="False">
-            <StackLayout Style="{StaticResource StackLayoutStyle}" >
-
+        <Grid Style="{StaticResource GridStyle}" >
+            
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            
+            <!-- Input text on background -->
                 <Label Text="{Binding EntryText}" Style="{StaticResource LabelStylePreviewText}" />
 
-                <Entry ReturnCommand="{Binding ReturnPressedCommand}"
-                       ReturnCommandParameter="{Binding EntryText}"
-                       Style="{StaticResource EntryStyleEnterText}"
-                       Height="{Binding EntryHeight}"
-                       Placeholder="{Binding EntryPlaceholderText}"
-                       
-                       Text="{Binding EntryText}">
-                    <Entry.Behaviors>
-                        <behaviors:EventToCommandBehavior Command="{Binding EntryFocusedCommand}" EventName="Focused" />
-                        <behaviors:EventToCommandBehavior Command="{Binding EntryUnfocusedCommand}"
-                                                          EventName="Unfocused" />
-                    </Entry.Behaviors>
-                </Entry>
-            </StackLayout>
+                <!-- Bottom bar -->
+                <Grid Grid.Row="1" Style="{StaticResource GridBarStyle}">
+                    
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Keyboard Button (CustomEntry) -->
+                    <controls:CustomEntry
+                        
+                        Grid.Column="0"
+                        ReturnCommand="{Binding ReturnPressedCommand}"
+                        ReturnCommandParameter="{Binding EntryText}"
+                        Style="{StaticResource EntryStyleEnterText}"
+                        Height="{Binding EntryHeight}"
+                        Text="{Binding EntryText}">
+                        <Entry.Behaviors>
+                            <behaviors:EventToCommandBehavior
+                                Command="{Binding EntryFocusedCommand}" EventName="Focused" />
+                            <behaviors:EventToCommandBehavior
+                                Command="{Binding EntryUnfocusedCommand}" EventName="Unfocused" />
+                        </Entry.Behaviors>
+                    </controls:CustomEntry>
+
+                    <!-- Settings Button -->
+                    <Button Grid.Column="1" Style="{StaticResource ButtonStyle}" />
+                </Grid>
         </Grid>
 
     </ContentPage.Content>

@@ -71,10 +71,9 @@
     <Compile Include="Extensions\ActivityExtensions.cs" />
     <Compile Include="Extensions\ViewGroupExtensions.cs" />
     <Compile Include="MainActivity.cs" />
+    <Compile Include="Renderers\CustomEntryRenderer.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\KeyEventHandler\IKeyEventHandlerService.cs" />
-    <Compile Include="Services\KeyEventHandler\KeyEventHandlerService.cs" />
     <Compile Include="Services\AndroidSettingsService.cs" />
     <Compile Include="Services\AndroidEventService.cs" />
   </ItemGroup>

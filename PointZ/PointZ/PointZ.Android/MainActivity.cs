@@ -2,14 +2,13 @@
 using Android.Content.PM;
 using Android.OS;
 using Android.Views;
+using PointZ.Android.Renderers;
 using PointZ.Android.Services;
-using PointZ.Android.Services.KeyEventHandler;
 using PointZ.Models.PlatformEvent;
-using PointZ.Services.PlatformEvent;
+using PointZ.Services.PlatformEventService;
 using PointZ.Services.PlatformSettings;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
-using Debug = System.Diagnostics.Debug;
 using View = Android.Views.View;
 
 namespace PointZ.Android
@@ -19,7 +18,9 @@ namespace PointZ.Android
     public class MainActivity : FormsAppCompatActivity
     {
         private IPlatformEventService platformEventService;
-        private IKeyEventHandlerService keyEventHandlerService;
+        private bool customEntryFocused;
+
+        public override View CurrentFocus => this.customEntryFocused ? null : base.CurrentFocus;
 
         public override bool DispatchTouchEvent(MotionEvent motionEventArgs)
         {
@@ -29,14 +30,34 @@ namespace PointZ.Android
         
             this.platformEventService.NotifyOnScreenTouched(x, y, touchAction);
         
-            return base.DispatchTouchEvent(motionEventArgs);
+            View viewInFocus = CurrentFocus;
+
+            if (viewInFocus is null) return base.DispatchTouchEvent(motionEventArgs);
+            if (viewInFocus.Parent is not CustomEntryRenderer) return base.DispatchTouchEvent(motionEventArgs);
+
+            this.customEntryFocused = true;
+            bool result = base.DispatchTouchEvent(motionEventArgs);
+            this.customEntryFocused = false;
+            return result;
         }
 
-        public override bool DispatchKeyEvent(KeyEvent e)
+        protected override void OnCreate(Bundle savedInstanceState)
         {
-            Debug.WriteLine($"KeyEvent: {e}");
-            this.keyEventHandlerService.Handle(e);
-            return base.DispatchKeyEvent(e);
+            TabLayoutResource = Resource.Layout.Tabbar;
+            ToolbarResource = Resource.Layout.Toolbar;
+
+            base.OnCreate(savedInstanceState);
+
+            Forms.SetTitleBarVisibility(this, AndroidTitleBarVisibility.Never);
+            Forms.Init(this, savedInstanceState);
+
+            IPlatformSettingsService androidInterfaceService = new AndroidInterfaceService(this);
+            IPlatformEventService androidEventService = new AndroidEventService();
+            DependencyService.RegisterSingleton(androidEventService);
+            DependencyService.RegisterSingleton(androidInterfaceService);
+            this.platformEventService = androidEventService;
+
+            LoadApplication(new App());
         }
 
         public override void OnBackPressed()
@@ -56,24 +77,5 @@ namespace PointZ.Android
             this.platformEventService.NotifyOnViewAppearing();
             base.OnResume();
         }
-
-        protected override void OnCreate(Bundle savedInstanceState)
-        {
-            TabLayoutResource = Resource.Layout.Tabbar;
-            ToolbarResource = Resource.Layout.Toolbar;
-            
-            base.OnCreate(savedInstanceState);
-
-            Forms.SetTitleBarVisibility(this, AndroidTitleBarVisibility.Never);
-            Forms.Init(this, savedInstanceState);
-
-            IPlatformSettingsService androidInterfaceService = new AndroidInterfaceService(this);
-            DependencyService.RegisterSingleton(androidInterfaceService);
-            this.platformEventService = DependencyService.Resolve<IPlatformEventService>();
-            this.keyEventHandlerService = new KeyEventHandlerService(this.platformEventService);
-
-            LoadApplication(new App());
-        }
-
     }
 }

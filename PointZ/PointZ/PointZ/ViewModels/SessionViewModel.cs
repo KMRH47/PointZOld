@@ -9,7 +9,7 @@ using PointZ.Models.Server;
 using PointZ.Models.SoftInput;
 using PointZ.Services.InputCommandSender;
 using PointZ.Services.InputEventHandler;
-using PointZ.Services.PlatformEvent;
+using PointZ.Services.PlatformEventService;
 using PointZ.Services.PlatformSettings;
 using PointZ.Services.Settings;
 using PointZ.ViewModels.Base;
@@ -26,11 +26,8 @@ namespace PointZ.ViewModels
         private readonly IPlatformSettingsService platformSettingsService;
         private readonly ISettingsService settingsService;
 
-        private const string EntryPlaceholderTextConst = "\uf11c";
         private bool entryFocused;
         private string entryText = "";
-        private string entryTextPrevious = "";
-        private string entryPlaceholderText = EntryPlaceholderTextConst;
         private double entryHeight;
 
         public SessionViewModel(
@@ -80,18 +77,7 @@ namespace PointZ.ViewModels
             get => this.entryText;
             set
             {
-                this.entryTextPrevious = this.entryText;
                 this.entryText = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public string EntryPlaceholderText
-        {
-            get => this.entryPlaceholderText;
-            set
-            {
-                this.entryPlaceholderText = value;
                 OnPropertyChanged();
             }
         }
@@ -124,43 +110,42 @@ namespace PointZ.ViewModels
         {
             this.platformEventService.OnScreenTouched += OnScreenTouched;
             this.platformEventService.OnBackButtonPressed += OnBackButtonPressed;
-            this.platformEventService.OnKeyDown += OnKeyDown;
+            this.platformEventService.OnCustomEntryKeyPress += OnCustomEntryKeyPress;
         }
 
         private void RemovePlatformListeners()
         {
             this.platformEventService.OnScreenTouched -= OnScreenTouched;
             this.platformEventService.OnBackButtonPressed -= OnBackButtonPressed;
-            this.platformEventService.OnKeyDown -= OnKeyDown;
+            this.platformEventService.OnCustomEntryKeyPress -= OnCustomEntryKeyPress;
         }
 
+        /// <summary>
+        /// Not called when a view has focus.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnBackButtonPressed(object sender, EventArgs e)
+        {
+            RemovePlatformListeners();
+            this.platformEventService.OnViewAppearing -= OnViewAppearing;
+            this.platformEventService.OnViewDisappearing -= OnViewDisappearing;
+            base.NavigationService.NavigateBackAsync();
+        }
+        
         private async void OnScreenTouched(object sender, TouchEventArgs e)
         {
-            switch (EntryFocused)
-            {
-                case true:
-                    switch (e.TouchAction)
-                    {
-                        case TouchAction.Down: return;
-                    }
+            DisplayDimensionData displayDimensions = this.platformSettingsService.GetDisplayDimensions();
+            double screenHeight = displayDimensions.Height;
+            bool withinBounds = e.Y < screenHeight - EntryHeight;
 
-                    goto case false;
-                case false:
-                    DisplayDimensionData displayDimensions = this.platformSettingsService.GetDisplayDimensions();
-                    double screenHeight = displayDimensions.Height;
-                    bool withinBounds = e.Y < screenHeight - EntryHeight;
+            if (!withinBounds) return;
 
-                    if (!withinBounds) return;
-
-                    await this.touchEventHandler.HandleAsync(e);
-                    break;
-            }
+            await this.touchEventHandler.HandleAsync(e);
         }
 
-        private async void OnKeyDown(object o, KeyEventArgs e)
+        private async void OnCustomEntryKeyPress(object o, KeyEventArgs e)
         {
-            if (!EntryFocused) return;
-
             await this.keyEventHandler.HandleAsync(e);
         }
 
@@ -180,34 +165,17 @@ namespace PointZ.ViewModels
                 await this.keyboardCommandSender.SendKeyboardCommandAsync(KeyboardCommand.KeyPress,
                     KeyCodeAction.Enter);
             }
-
-            // Clunky way making the keyboard re-appear, but it works. This will be seamless at some point in the future.
-            this.platformSettingsService.ToggleKeyboard();
-        }
-
-        /// <summary>
-        /// Not called when a view has focus.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void OnBackButtonPressed(object sender, EventArgs e)
-        {
-            RemovePlatformListeners();
-            this.platformEventService.OnViewAppearing -= OnViewAppearing;
-            this.platformEventService.OnViewDisappearing -= OnViewDisappearing;
-            base.NavigationService.NavigateBackAsync();
         }
 
         private void OnEntryUnfocused()
         {
             EntryFocused = false;
-            EntryPlaceholderText = EntryPlaceholderTextConst;
+            EntryText = string.Empty;
         }
 
         private void OnEntryFocused()
         {
             EntryFocused = true;
-            EntryPlaceholderText = string.Empty;
         }
     }
 }
