@@ -109,20 +109,8 @@ namespace PointZ.ViewModels
 
         private async void OnScreenTouched(object sender, TouchEventArgs e)
         {
-            switch (e.TouchAction)
-            {
-                case TouchAction.Down:
-                    if (e.Y > TouchpadHeight) return;
-                    this.touchedVisibleGrid = true;
-                    await this.inputEventHandlerService.HandleTouchEventAsync(e);
-                    break;
-                case TouchAction.Move:
-                    if (this.touchedVisibleGrid) await this.inputEventHandlerService.HandleTouchEventAsync(e);
-                    break;
-                case TouchAction.Up:
-                    this.touchedVisibleGrid = false;
-                    break;
-            }
+            if (e.Y > TouchpadHeight) return;
+            await this.inputEventHandlerService.HandleTouchEventAsync(e);
         }
 
         private async void OnCustomEntryKeyPress(object o, KeyEventArgs e) =>
