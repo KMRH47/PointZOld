@@ -5,7 +5,6 @@
              x:Class="PointZ.Views.SessionView"
              xmlns:viewModels="clr-namespace:PointZ.ViewModels;assembly=PointZ"
              xmlns:viewModelsBase="clr-namespace:PointZ.ViewModels.Base;assembly=PointZ"
-             xmlns:behaviors="clr-namespace:PointZ.Behaviors;assembly=PointZ"
              xmlns:controls="clr-namespace:PointZ.Controls;assembly=PointZ"
              NavigationPage.HasNavigationBar="False"
              viewModelsBase:ViewModelLocator.AutoWireViewModel="True"
@@ -51,44 +50,43 @@
 
     <ContentPage.Content>
 
-        <Grid Style="{StaticResource GridStyle}" >
-            
+        <Grid Style="{StaticResource GridStyle}">
+
             <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            
-            <!-- Input text on background -->
-                <Label Text="{Binding EntryText}" Style="{StaticResource LabelStylePreviewText}" />
 
-                <!-- Bottom bar -->
-                <Grid Grid.Row="1" Style="{StaticResource GridBarStyle}">
-                    
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition />
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
+            <!-- Touchpad -->
+            <StackLayout Grid.Row="0"
+                         Style="{StaticResource StackLayoutStyle}"
+                         Height="{Binding TouchpadHeight, Mode=OneWayToSource}">
 
-                    <!-- Keyboard Button (CustomEntry) -->
-                    <controls:CustomEntry
-                        
-                        Grid.Column="0"
-                        ReturnCommand="{Binding ReturnPressedCommand}"
-                        ReturnCommandParameter="{Binding EntryText}"
-                        Style="{StaticResource EntryStyleEnterText}"
-                        Height="{Binding EntryHeight}"
-                        Text="{Binding EntryText}">
-                        <Entry.Behaviors>
-                            <behaviors:EventToCommandBehavior
-                                Command="{Binding EntryFocusedCommand}" EventName="Focused" />
-                            <behaviors:EventToCommandBehavior
-                                Command="{Binding EntryUnfocusedCommand}" EventName="Unfocused" />
-                        </Entry.Behaviors>
-                    </controls:CustomEntry>
+                <!-- Input text on background -->
+                <Label Text="{Binding EntryText, Mode=OneWay}"
+                       Style="{StaticResource LabelStylePreviewText}"
+                       VerticalOptions="StartAndExpand"/>
+            </StackLayout>
 
-                    <!-- Settings Button -->
-                    <Button Grid.Column="1" Style="{StaticResource ButtonStyle}" />
-                </Grid>
+            <!-- Bottom Bar -->
+            <Grid Grid.Row="1" Style="{StaticResource GridBarStyle}" VerticalOptions="EndAndExpand">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
+                <!-- Keyboard Button (CustomEntry) -->
+                <controls:CustomEntry
+                    Grid.Column="0"
+                    ReturnCommand="{Binding ReturnPressedCommand}"
+                    ReturnCommandParameter="{Binding EntryText}"
+                    Style="{StaticResource EntryStyleEnterText}"
+                    Text="{Binding EntryText, Mode=OneWayToSource}" />
+
+                <!-- Settings Button -->
+                <Button Grid.Column="1" Style="{StaticResource ButtonStyle}" />
+            </Grid>
         </Grid>
 
     </ContentPage.Content>

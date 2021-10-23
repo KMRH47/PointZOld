@@ -4,6 +4,6 @@ namespace PointZ.Controls
 {
     public class CustomEntry : Entry
     {
-       
+        
     }
 }

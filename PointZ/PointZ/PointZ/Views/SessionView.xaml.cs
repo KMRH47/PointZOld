@@ -10,6 +10,5 @@ namespace PointZ.Views
         {
             InitializeComponent();
         }
-
     }
 }

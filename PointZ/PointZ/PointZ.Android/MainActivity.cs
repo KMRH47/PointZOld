@@ -9,6 +9,7 @@ using PointZ.Services.PlatformEventService;
 using PointZ.Services.PlatformSettings;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
+using Debug = System.Diagnostics.Debug;
 using View = Android.Views.View;
 
 namespace PointZ.Android
@@ -21,6 +22,7 @@ namespace PointZ.Android
         private bool customEntryFocused;
 
         public override View CurrentFocus => this.customEntryFocused ? null : base.CurrentFocus;
+
 
         public override bool DispatchTouchEvent(MotionEvent motionEventArgs)
         {
@@ -52,10 +54,10 @@ namespace PointZ.Android
             Forms.Init(this, savedInstanceState);
 
             IPlatformSettingsService androidInterfaceService = new AndroidInterfaceService(this);
-            IPlatformEventService androidEventService = new AndroidEventService();
-            DependencyService.RegisterSingleton(androidEventService);
+            IPlatformEventService platformEventService = new AndroidEventService();
+            DependencyService.RegisterSingleton(platformEventService);
             DependencyService.RegisterSingleton(androidInterfaceService);
-            this.platformEventService = androidEventService;
+            this.platformEventService = platformEventService;
 
             LoadApplication(new App());
         }

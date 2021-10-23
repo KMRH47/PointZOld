@@ -36,6 +36,7 @@ namespace PointZ.ViewModels.Base
             Container.Register<INavigationService, NavigationService>().AsSingleton();;
             Container.Register<IInputEventHandler<TouchEventArgs>, TouchEventHandler>().AsSingleton();;
             Container.Register<IInputEventHandler<KeyEventArgs>, KeyboardEventHandler>().AsSingleton();;
+            Container.Register<IInputEventHandlerService, InputEventHandlerService>().AsSingleton();;
             Container.Register<IKeyboardCommandSender, KeyboardCommandSender>().AsSingleton();;
             Container.Register<IMouseCommandSender, MouseCommandSender>().AsSingleton();;
             Container.Register<ISettingsService, SettingsService>().AsSingleton();;
