@@ -68,7 +68,7 @@ While the text box is empty, commands such as backspace and enter (new line) are
 
 | Application | Version | Phase |
 | ----------- | ------- | ----- |
-| PointZ      | V0.3.0  | Alpha |
+| PointZ      | V0.3.1  | Alpha |
 | PointZerver | V0.1.4  | Alpha |
 
 
@@ -110,6 +110,7 @@ Below is a table of all ports and protocols used by PointZ and PointZerver.
 | 0.2.0   | - Keyboard added<br />- Replaced bottom bar with text-input  |
 | 0.2.1   | - Tap and hold now works correctly<br />- Textbox can no longer be clicked through<br />- Touch and key events no longer break when leaving/reentering activity |
 | 0.3.0   | Reworked touch-to-mouse code                                 |
+| 0.3.1   | - Reworked keyboard code<br />- Added send button (paper plane)<br />- Added settings button ((cog wheel) no functionality yet) |
 
 ### PointZerver
 
