@@ -19,9 +19,7 @@ namespace PointZ.Services.Navigation
 
         public async Task NavigateBackAsync()
         {
-            CustomNavigationView mainPage = Application.Current.MainPage as CustomNavigationView;
-
-            if (mainPage == null) throw new Exception();
+            if (Application.Current.MainPage is not CustomNavigationView mainPage) throw new Exception();
 
             await mainPage.PopAsync();
         }

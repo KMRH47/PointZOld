@@ -7,12 +7,6 @@
              x:Class="PointZ.App">
     <Application.Resources>
 
-        <!-- Fonts -->
-        <!-- <OnPlatform x:Key="FontFontello" x:TypeArguments="x:String"> -->
-        <!--     <On Platform="Android" Value="fontello" /> -->
-        <!--     <On Platform="iOS" Value="fontello" /> -->
-        <!-- </OnPlatform> -->
-
         <!-- Colors -->
         <Color x:Key="SystemColorDark">Black</Color>
         <Color x:Key="SystemColorLight">White</Color>
@@ -26,7 +20,7 @@
                         Dark={StaticResource WhitenedBlack},
                         Light={StaticResource DimmedWhite}}" />
         </Style>
-        
+
         <Style x:Key="GridStyle" TargetType="{x:Type Grid}">
             <Setter Property="BackgroundColor"
                     Value="{AppThemeBinding 
@@ -35,15 +29,15 @@
             <Setter Property="ColumnSpacing" Value="0" />
         </Style>
 
-        <Style TargetType="{x:Type controls:CustomEntry}">
+        <Style TargetType="{x:Type controls:CustomEditor}">
             <Setter Property="TextColor"
                     Value="{AppThemeBinding 
-                    Dark={StaticResource WhitenedBlack},
-                    Light={StaticResource DimmedWhite}}" />
+                    Dark={StaticResource DimmedWhite},
+                    Light={StaticResource WhitenedBlack}}" />
             <Setter Property="BackgroundColor"
                     Value="{AppThemeBinding 
-                        Dark={StaticResource DimmedWhite},
-                        Light={StaticResource WhitenedBlack}}" />
+                        Dark={StaticResource WhitenedBlack},
+                        Light={StaticResource DimmedWhite}}" />
         </Style>
 
         <Style TargetType="{x:Type Label}">
@@ -53,9 +47,14 @@
                     Light={StaticResource WhitenedBlack}}" />
         </Style>
 
-        <Style TargetType="{x:Type Button}">
+        <Style x:Key="ButtonStyle" TargetType="{x:Type Button}">
             <Setter Property="BorderWidth" Value="0" />
             <Setter Property="CornerRadius" Value="0" />
+            <Setter Property="FontSize" Value="Title" />
+            <Setter Property="BackgroundColor"
+                    Value="{AppThemeBinding 
+                    Dark={StaticResource DimmedWhite},
+                    Light={StaticResource WhitenedBlack}}" />
             <Setter Property="TextColor"
                     Value="{AppThemeBinding 
                     Dark={StaticResource WhitenedBlack},
@@ -66,6 +65,7 @@
         <converters:CountToBoolConverter x:Key="CountToBoolConverter" />
         <converters:InverseCountToBoolConverter x:Key="InverseCountToBoolConverter" />
         <converters:InverseBoolConverter x:Key="InverseBoolConverter" />
+        <converters:StringLengthToBoolConverter x:Key="StringLengthToBoolConverter" />
 
     </Application.Resources>
 </Application>

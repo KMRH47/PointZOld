@@ -12,37 +12,18 @@
 
     <ContentPage.Resources>
         <ResourceDictionary>
-            <Style x:Key="EntryStyleEnterText" TargetType="{x:Type controls:CustomEntry}">
-                <Setter Property="FontSize" Value="Title" />
-                <Setter Property="HorizontalTextAlignment" Value="Center" />
-                <Setter Property="VerticalOptions" Value="EndAndExpand" />
-                <Setter Property="FontFamily" Value="IconFont" />
-                <Setter Property="Placeholder" Value="&#xF11C;" />
-                <Setter Property="PlaceholderColor"
-                        Value="{AppThemeBinding 
-                        Dark={StaticResource WhitenedBlack},
-                        Light={StaticResource DimmedWhite}}" />
-                <Setter Property="BackgroundColor" Value="Transparent" />
-            </Style>
-
-            <Style x:Key="ButtonStyle" TargetType="{x:Type Button}">
-                <Setter Property="FontSize" Value="Title" />
-                <Setter Property="FontFamily" Value="IconFont" />
-                <Setter Property="Text" Value="&#xE800;" />
-                <Setter Property="BackgroundColor" Value="Transparent" />
-            </Style>
-
-            <Style x:Key="LabelStylePreviewText" TargetType="{x:Type Label}">
-                <Setter Property="VerticalOptions" Value="StartAndExpand" />
-                <Setter Property="FontSize" Value="Title" />
-                <Setter Property="Margin" Value="20" />
-            </Style>
 
             <Style x:Key="GridBarStyle" TargetType="{x:Type Grid}">
                 <Setter Property="BackgroundColor"
                         Value="{AppThemeBinding 
                         Dark={StaticResource DimmedWhite},
                         Light={StaticResource WhitenedBlack}}" />
+            </Style>
+
+            <Style x:Key="EditorStyle" TargetType="{x:Type controls:CustomEditor}">
+                <Setter Property="Margin" Value="20,40,20,0" />
+                <Setter Property="VerticalOptions" Value="FillAndExpand" />
+
             </Style>
 
         </ResourceDictionary>
@@ -58,15 +39,15 @@
             </Grid.RowDefinitions>
 
             <!-- Touchpad -->
-            <StackLayout Grid.Row="0"
-                         Style="{StaticResource StackLayoutStyle}"
-                         Height="{Binding TouchpadHeight, Mode=OneWayToSource}">
+            <controls:StackLayoutTouchpad Grid.Row="0"
+                                          Style="{StaticResource StackLayoutStyle}"
+                                          Height="{Binding TouchpadHeight, Mode=OneWayToSource}">
 
-                <!-- Input text on background -->
-                <Label Text="{Binding EntryText, Mode=OneWay}"
-                       Style="{StaticResource LabelStylePreviewText}"
-                       VerticalOptions="StartAndExpand"/>
-            </StackLayout>
+                <controls:CustomEditor Style="{StaticResource EditorStyle}"
+                                       Text="{Binding EditorText}"
+                                       InputTransparent="True"
+                                       IsFocused="{Binding EditorFocused}" />
+            </controls:StackLayoutTouchpad>
 
             <!-- Bottom Bar -->
             <Grid Grid.Row="1" Style="{StaticResource GridBarStyle}" VerticalOptions="EndAndExpand">
@@ -77,15 +58,26 @@
                 </Grid.ColumnDefinitions>
 
                 <!-- Keyboard Button (CustomEntry) -->
-                <controls:CustomEntry
-                    Grid.Column="0"
-                    ReturnCommand="{Binding ReturnPressedCommand}"
-                    ReturnCommandParameter="{Binding EntryText}"
-                    Style="{StaticResource EntryStyleEnterText}"
-                    Text="{Binding EntryText, Mode=OneWayToSource}" />
+                <controls:KeyboardButton Grid.Column="0"
+                                         Text="&#xF11C;"
+                                         FontFamily="IconFont"
+                                         Style="{StaticResource ButtonStyle}" />
 
                 <!-- Settings Button -->
-                <Button Grid.Column="1" Style="{StaticResource ButtonStyle}" />
+                <Button Grid.Column="1"
+                        Text="&#xE800;"
+                        FontFamily="IconFont"
+                        Style="{StaticResource ButtonStyle}"
+                        IsVisible="{Binding EditorFocused, Converter={StaticResource InverseBoolConverter}}" />
+
+                <!-- Send Text Button (visible when editor is focused)-->
+                <Button Grid.Column="1"
+                        Text="&#xf1d9;"
+                        FontFamily="IconFont"
+                        Style="{StaticResource ButtonStyle}"
+                        Command="{Binding SendEditorTextCommand}"
+                        CommandParameter="{Binding EditorText }"
+                        IsVisible="{Binding EditorFocused}" />
             </Grid>
         </Grid>
 

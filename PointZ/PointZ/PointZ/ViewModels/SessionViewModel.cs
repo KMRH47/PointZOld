@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Net;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using PointZ.Models.Command;
 using PointZ.Models.PlatformEvent;
-using PointZ.Models.Server;
 using PointZ.Services.InputEventHandler;
 using PointZ.Services.PlatformEventService;
 using PointZ.Services.PlatformSettings;
@@ -19,36 +19,44 @@ namespace PointZ.ViewModels
     {
         private readonly IInputEventHandlerService inputEventHandlerService;
         private readonly IPlatformEventService platformEventService;
-        private readonly IPlatformSettingsService platformSettingsService;
         private readonly ISettingsService settingsService;
+        private readonly IPlatformSettingsService platformSettingsService;
 
-        private string entryText;
+        private string editorText;
         private double touchpadHeight;
-        private bool touchedVisibleGrid;
+        private bool editorFocused;
 
         public SessionViewModel(
-            IInputEventHandlerService inputEventHandlerService,
-            ISettingsService settingsService,
-            IPlatformSettingsService platformSettingsService,
-            IPlatformEventService platformEventService)
+            IInputEventHandlerService inputEventHandlerService, IPlatformSettingsService platformSettingsService,
+            IPlatformEventService platformEventService, ISettingsService settingsService)
         {
             this.inputEventHandlerService = inputEventHandlerService;
-            this.settingsService = settingsService;
             this.platformSettingsService = platformSettingsService;
             this.platformEventService = platformEventService;
-            ReturnPressedCommand = new Command(OnReturnPressed);
+            this.settingsService = settingsService;
+            SendEditorTextCommand = new Command(OnEditorTextSend);
         }
 
         public override Task InitializeAsync(object parameter)
         {
-            ServerData serverData = (ServerData)parameter;
-            this.settingsService.ServerIpEndPoint = serverData.IpEndPoint;
+            IPEndPoint serverIpEndPoint = (IPEndPoint)parameter;
+            this.settingsService.ServerIpEndPoint = serverIpEndPoint;
             this.platformSettingsService.SetSoftInputModeAdjustResize();
             OnViewAppearing(this, EventArgs.Empty);
             return Task.CompletedTask;
         }
 
-        public ICommand ReturnPressedCommand { get; set; }
+        public ICommand SendEditorTextCommand { get; set; }
+
+        public bool EditorFocused
+        {
+            get => this.editorFocused;
+            set
+            {
+                this.editorFocused = value;
+                OnPropertyChanged();
+            }
+        }
 
         public double TouchpadHeight
         {
@@ -56,12 +64,12 @@ namespace PointZ.ViewModels
             set => this.touchpadHeight = value * this.platformSettingsService.DisplayDensity;
         }
 
-        public string EntryText
+        public string EditorText
         {
-            get => this.entryText;
+            get => this.editorText;
             set
             {
-                this.entryText = value;
+                this.editorText = value;
                 OnPropertyChanged();
             }
         }
@@ -82,16 +90,16 @@ namespace PointZ.ViewModels
 
         private void AddPlatformListeners()
         {
+            this.platformEventService.OnCustomEditorBackPressed += OnCustomEditorBackPressed;
             this.platformEventService.OnScreenTouched += OnScreenTouched;
             this.platformEventService.OnBackButtonPressed += OnBackButtonPressed;
-            this.platformEventService.OnCustomEntryKeyPress += OnCustomEntryKeyPress;
         }
 
         private void RemovePlatformListeners()
         {
+            this.platformEventService.OnCustomEditorBackPressed -= OnCustomEditorBackPressed;
             this.platformEventService.OnScreenTouched -= OnScreenTouched;
             this.platformEventService.OnBackButtonPressed -= OnBackButtonPressed;
-            this.platformEventService.OnCustomEntryKeyPress -= OnCustomEntryKeyPress;
         }
 
         /// <summary>
@@ -109,29 +117,34 @@ namespace PointZ.ViewModels
 
         private async void OnScreenTouched(object sender, TouchEventArgs e)
         {
-            if (e.Y > TouchpadHeight) return;
+            if (e.Y > TouchpadHeight)
+                if (e.TouchAction != TouchAction.Move)
+                    return;
+
             await this.inputEventHandlerService.HandleTouchEventAsync(e);
         }
 
-        private async void OnCustomEntryKeyPress(object o, KeyEventArgs e) =>
-            await this.inputEventHandlerService.HandleKeyEventAsync(e);
+        private void OnCustomEditorBackPressed(object sender, KeyEventArgs e) =>
+            this.inputEventHandlerService.HandleKeyEventAsync(e);
 
-        private async void OnReturnPressed(object o)
+        private async void OnEditorTextSend(object o)
         {
             try
             {
-                string entryText = o.ToString();
+                if (o != null)
+                {
+                    string editorText = o.ToString();
 
-                if (entryText != string.Empty)
-                {
-                    await this.inputEventHandlerService.KeyboardCommandSender.SendTextEntryAsync(entryText);
-                    EntryText = string.Empty;
+                    if (editorText != string.Empty)
+                    {
+                        await this.inputEventHandlerService.KeyboardCommandSender.SendTextEntryAsync(editorText);
+                        EditorText = string.Empty;
+                        return;
+                    }
                 }
-                else
-                {
-                    await this.inputEventHandlerService.KeyboardCommandSender.SendKeyboardCommandAsync(
-                        KeyboardCommand.KeyPress, KeyCodeAction.Enter);
-                }
+
+                await this.inputEventHandlerService.KeyboardCommandSender.SendKeyboardCommandAsync(
+                    KeyboardCommand.KeyPress, KeyCodeAction.Enter);
             }
             catch (Exception e)
             {

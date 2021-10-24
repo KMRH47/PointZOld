@@ -23,7 +23,6 @@ namespace PointZ.Android
 
         public override View CurrentFocus => this.customEntryFocused ? null : base.CurrentFocus;
 
-
         public override bool DispatchTouchEvent(MotionEvent motionEventArgs)
         {
             float x = motionEventArgs.GetX();
@@ -35,7 +34,7 @@ namespace PointZ.Android
             View viewInFocus = CurrentFocus;
 
             if (viewInFocus is null) return base.DispatchTouchEvent(motionEventArgs);
-            if (viewInFocus.Parent is not CustomEntryRenderer) return base.DispatchTouchEvent(motionEventArgs);
+            if (viewInFocus.Parent is not CustomEditorRenderer) return base.DispatchTouchEvent(motionEventArgs);
 
             this.customEntryFocused = true;
             bool result = base.DispatchTouchEvent(motionEventArgs);

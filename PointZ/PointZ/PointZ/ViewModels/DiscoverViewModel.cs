@@ -71,7 +71,7 @@ namespace PointZ.ViewModels
                 this.udpListenerService.Stop();
         }
 
-        private void OnConnect() => this.NavigationService.NavigateToAsync<SessionViewModel>(SelectedServer);
+        private void OnConnect() => this.NavigationService.NavigateToAsync<SessionViewModel>(SelectedServer.IpEndPoint);
 
         private void OnServerDataReceived(ServerData server)
         {

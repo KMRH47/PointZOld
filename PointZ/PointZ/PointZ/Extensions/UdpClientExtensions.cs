@@ -4,7 +4,7 @@ using System.Net.Sockets;
 
 namespace PointZ.Extensions
 {
-    public static class UdpClientExtension
+    public static class UdpClientExtensions
     {
         /// <summary>
         /// Gets the port that this UdpClient is currently bound to.

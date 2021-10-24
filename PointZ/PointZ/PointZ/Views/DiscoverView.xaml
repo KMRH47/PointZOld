@@ -6,7 +6,6 @@
              xmlns:viewModelsBase="clr-namespace:PointZ.ViewModels.Base;assembly=PointZ"
              xmlns:viewModels="clr-namespace:PointZ.ViewModels;assembly=PointZ"
              xmlns:templates="clr-namespace:PointZ.Views.Templates;assembly=PointZ"
-             xmlns:converters="clr-namespace:PointZ.Converters;assembly=PointZ"
              NavigationPage.HasNavigationBar="False"
              viewModelsBase:ViewModelLocator.AutoWireViewModel="True"
              x:DataType="viewModels:DiscoverViewModel">
@@ -40,10 +39,13 @@
         <StackLayout Style="{StaticResource StackLayoutStyle}">
 
             <StackLayout VerticalOptions="CenterAndExpand" Margin="20" >
-                <StackLayout
-                    IsVisible="{Binding Servers.Count, Converter={StaticResource InverseCountToBoolConverter}}">
+                <StackLayout 
+                    IsVisible="{Binding Servers.Count, 
+                    Converter={StaticResource InverseCountToBoolConverter}}">
+                    
                     <ActivityIndicator Style="{StaticResource ActivityIndicatorBigStyle}"
                                        IsRunning="{Binding IsSearching}" />
+                    
                     <Label Style="{StaticResource SearchingStyle}" />
                 </StackLayout>
 
@@ -61,6 +63,7 @@
             </StackLayout>
 
             <Button Text="Connect"
+                    Style="{StaticResource ButtonStyle}"
                     IsEnabled="{Binding IsServerSelected}"
                     IsVisible="{Binding IsServerSelected}"
                     Command="{Binding ConnectCommand}" />

@@ -2,8 +2,7 @@
 
 namespace PointZ.Controls
 {
-    public class CustomEntry : Entry
+    public class KeyboardButton : Button
     {
-        
     }
 }
