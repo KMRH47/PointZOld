@@ -2,13 +2,13 @@
 {
     public class KeyEventArgs
     {
-        public KeyEventArgs(KeyAction keyAction, string keyCode)
+        public KeyEventArgs(KeyAction keyAction, KeyCodeAction keyCodeAction)
         {
             KeyAction = keyAction;
-            KeyCode = keyCode;
+            KeyCodeAction = keyCodeAction;
         }
 
         public KeyAction KeyAction { get; }
-        public string KeyCode { get; }
+        public KeyCodeAction KeyCodeAction { get; }
     }
 }

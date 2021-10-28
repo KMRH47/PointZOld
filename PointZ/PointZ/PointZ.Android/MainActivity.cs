@@ -47,7 +47,8 @@ namespace PointZ.Android
             if (e.Action != KeyEventActions.Down) return base.DispatchKeyEvent(e);
             
             KeyAction keyEventAction = (KeyAction)e.Action;
-            KeyEventArgs keyEventArgs = new(keyEventAction, e.KeyCode.ToString());
+            KeyCodeAction keyCodeAction = (KeyCodeAction)e.KeyCode;
+            KeyEventArgs keyEventArgs = new(keyEventAction, keyCodeAction);
             this.platformEventService.OnKeyEvent(keyEventArgs);
             return base.DispatchKeyEvent(e);
         }

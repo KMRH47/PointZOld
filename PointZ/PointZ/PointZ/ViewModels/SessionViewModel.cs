@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Net;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using PointZ.Models.CustomEditor;
 using PointZ.Models.Input;
 using PointZ.Models.KeyEvent;
 using PointZ.Models.TouchEvent;
@@ -110,25 +111,23 @@ namespace PointZ.ViewModels
                             KeyboardCommand.KeyDown, KeyCodeAction.Del);
                     }
                 }
-                else
-                {
-                    OnPropertyChanged();
-                }
+
 
                 this.customEditorText = value;
+                OnPropertyChanged();
             }
         }
 
         private void AddPlatformListeners()
         {
-            this.platformEventService.CustomEditorBackPressed += OnCustomEditorBackPressed;
+            this.platformEventService.CustomEditorAction += OnCustomEditorAction;
             this.platformEventService.ScreenTouched += OnScreenTouched;
             this.platformEventService.BackPressed += OnBackPressed;
         }
 
         private void RemovePlatformListeners()
         {
-            this.platformEventService.CustomEditorBackPressed -= OnCustomEditorBackPressed;
+            this.platformEventService.CustomEditorAction -= OnCustomEditorAction;
             this.platformEventService.ScreenTouched -= OnScreenTouched;
             this.platformEventService.BackPressed -= OnBackPressed;
         }
@@ -164,10 +163,14 @@ namespace PointZ.ViewModels
         private void OnInputModeButtonPressed()
         {
             this.platformSettingsService.DisplayPopupHint(
-                !DirectInputDisabled ? "Input mode: Direct" : "Input mode: Text", 0);
+                DirectInputDisabled ? "Input mode: Direct" : "Input mode: Text", 0);
             DirectInputDisabled = !DirectInputDisabled;
             CustomEditorTextTransform = DirectInputDisabled;
-            this.platformEventService.OnCustomEditorInputModeChanged();
+
+            this.platformEventService.OnCustomEditorSetInputType(
+                DirectInputDisabled
+                    ? new CustomEditorEventArgs(TextInputTypes.ClassText | TextInputTypes.TextFlagMultiLine)
+                    : new CustomEditorEventArgs(TextInputTypes.TextVariationVisiblePassword));
         }
 
         private async void OnScreenTouched(object sender, TouchEventArgs e)
@@ -181,7 +184,7 @@ namespace PointZ.ViewModels
             await this.inputEventHandlerService.HandleTouchEventAsync(e);
         }
 
-        private void OnCustomEditorBackPressed(object sender, KeyEventArgs e)
+        private void OnCustomEditorAction(object sender, KeyEventArgs e)
         {
             this.inputEventHandlerService.HandleKeyEventAsync(e);
         }

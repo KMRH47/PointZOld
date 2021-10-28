@@ -23,7 +23,7 @@ namespace PointZ.Services.InputEventHandler
                     break;
                 case KeyAction.Multiple:
                 case KeyAction.Down:
-                    await this.keyboardCommandSender.SendKeyboardCommandAsync(KeyboardCommand.KeyPress, e.KeyCode);
+                    await this.keyboardCommandSender.SendKeyboardCommandAsync(KeyboardCommand.KeyPress, e.KeyCodeAction);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
