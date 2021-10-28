@@ -65,7 +65,7 @@
         <converters:CountToBoolConverter x:Key="CountToBoolConverter" />
         <converters:InverseCountToBoolConverter x:Key="InverseCountToBoolConverter" />
         <converters:InverseBoolConverter x:Key="InverseBoolConverter" />
-        <converters:StringLengthToBoolConverter x:Key="StringLengthToBoolConverter" />
+        <converters:BoolToTextTransformConverter x:Key="BoolToTextTransformConverter" />
 
     </Application.Resources>
 </Application>

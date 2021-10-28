@@ -1,21 +1,26 @@
 ﻿using System;
 using PointZ.Models.PlatformEvent;
+using PointZ.Models.TouchEvent;
 
 namespace PointZ.Services.PlatformEventService
 {
     public interface IPlatformEventService
     {
-        event EventHandler OnViewAppearing;
-        event EventHandler OnViewDisappearing;
-        event EventHandler OnBackButtonPressed;
-        event EventHandler<TouchEventArgs> OnScreenTouched;
-        event EventHandler OnCustomEditorFocusRequested;
-        public event EventHandler<KeyEventArgs> OnCustomEditorBackPressed;
-        void NotifyOnBackButtonPressed();
-        void NotifyOnViewDisappearing();
-        void NotifyOnViewAppearing();
-        void NotifyOnScreenTouched(float x, float y, TouchAction touchAction);
-        void NotifyOnCustomEditorBackPressed(KeyEventArgs e);
-        void NotifyOnCustomEditorFocusRequested();
+        event EventHandler ViewAppearing;
+        event EventHandler ViewDisappearing;
+        event EventHandler BackPressed;
+        event EventHandler CustomEditorFocusRequested;
+        event EventHandler<TouchEventArgs> ScreenTouched;
+        public event EventHandler<KeyEventArgs> CustomEditorBackPressed;
+        public event EventHandler<KeyEventArgs> KeyEvent;
+        public event EventHandler CustomEditorInputModeChanged;
+        void OnBackPressed();
+        void OnViewDisappearing();
+        void OnViewAppearing();
+        void OnScreenTouched(TouchEventArgs e);
+        void OnKeyEvent(KeyEventArgs e);
+        void OnCustomEditorBackPressed(KeyEventArgs e);
+        void OnCustomEditorFocusRequested();
+        void OnCustomEditorInputModeChanged();
     }
 }

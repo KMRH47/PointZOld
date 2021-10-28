@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using PointZ.Models.PlatformEvent;
+using PointZ.Models.TouchEvent;
 using PointZ.Services.InputCommandSender;
 
 namespace PointZ.Services.InputEventHandler

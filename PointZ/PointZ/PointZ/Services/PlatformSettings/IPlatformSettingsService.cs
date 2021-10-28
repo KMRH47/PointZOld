@@ -4,6 +4,11 @@
     {
         float DisplayDensity { get; }
         void SetSoftInputModeAdjustResize();
-        void DisplayPopupHint(string message);
+        /// <summary>
+        /// Displays a pop-up hint. 
+        /// </summary>
+        /// <param name="message">The message to display.</param>
+        /// <param name="duration">0 = short, anything else = long.</param>
+        void DisplayPopupHint(string message, byte duration);
     }
 }

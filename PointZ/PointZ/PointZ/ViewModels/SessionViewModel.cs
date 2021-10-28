@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using PointZ.Models.Command;
 using PointZ.Models.PlatformEvent;
+using PointZ.Models.TouchEvent;
 using PointZ.Services.InputEventHandler;
 using PointZ.Services.PlatformEventService;
 using PointZ.Services.PlatformSettings;
@@ -22,9 +23,12 @@ namespace PointZ.ViewModels
         private readonly ISettingsService settingsService;
         private readonly IPlatformSettingsService platformSettingsService;
 
-        private string editorText;
+        private string customEditorText = "";
         private double touchpadHeight;
         private bool editorFocused;
+        private bool directInputDisabled;
+        private bool customEditorTextTransform;
+
 
         public SessionViewModel(
             IInputEventHandlerService inputEventHandlerService, IPlatformSettingsService platformSettingsService,
@@ -34,8 +38,11 @@ namespace PointZ.ViewModels
             this.platformSettingsService = platformSettingsService;
             this.platformEventService = platformEventService;
             this.settingsService = settingsService;
-            SendEditorTextCommand = new Command(OnEditorTextSend);
+            KeyboardButtonCommand = new Command(OnKeyboardButtonPressed);
+            ChangeInputModeCommand = new Command(OnInputModeButtonPressed);
+            SendTextCommand = new Command(OnSendButtonPressed, CanPressSendButton);
         }
+
 
         public override Task InitializeAsync(object parameter)
         {
@@ -46,7 +53,19 @@ namespace PointZ.ViewModels
             return Task.CompletedTask;
         }
 
-        public ICommand SendEditorTextCommand { get; set; }
+        public ICommand KeyboardButtonCommand { get; set; }
+        public ICommand ChangeInputModeCommand { get; set; }
+        public ICommand SendTextCommand { get; set; }
+
+        public bool DirectInputDisabled
+        {
+            get => this.directInputDisabled;
+            set
+            {
+                this.directInputDisabled = value;
+                OnPropertyChanged();
+            }
+        }
 
         public bool EditorFocused
         {
@@ -64,59 +83,97 @@ namespace PointZ.ViewModels
             set => this.touchpadHeight = value * this.platformSettingsService.DisplayDensity;
         }
 
-        public string EditorText
+        public bool CustomEditorTextTransform
         {
-            get => this.editorText;
+            get => this.customEditorTextTransform;
             set
             {
-                this.editorText = value;
+                this.customEditorTextTransform = value;
                 OnPropertyChanged();
             }
+        }
+
+        public string CustomEditorText
+        {
+            get => this.customEditorText;
+            set
+            {
+                if (!DirectInputDisabled)
+                {
+                    if (value.Length > CustomEditorText.Length)
+                    {
+                        this.inputEventHandlerService.KeyboardCommandSender.SendTextEntryAsync(value[^1]);
+                    }
+                    else
+                    {
+                        this.inputEventHandlerService.KeyboardCommandSender.SendKeyboardCommandAsync(
+                            KeyboardCommand.KeyDown, KeyCodeAction.Del.ToString());
+                    }
+                }
+                else
+                {
+                    OnPropertyChanged();
+                }
+
+                this.customEditorText = value;
+            }
+        }
+
+        private void AddPlatformListeners()
+        {
+            this.platformEventService.CustomEditorBackPressed += OnCustomEditorBackPressed;
+            this.platformEventService.ScreenTouched += OnScreenTouched;
+            this.platformEventService.BackPressed += OnBackPressed;
+        }
+
+        private void RemovePlatformListeners()
+        {
+            this.platformEventService.CustomEditorBackPressed -= OnCustomEditorBackPressed;
+            this.platformEventService.ScreenTouched -= OnScreenTouched;
+            this.platformEventService.BackPressed -= OnBackPressed;
         }
 
         private void OnViewAppearing(object sender, EventArgs e)
         {
             AddPlatformListeners();
-            this.platformEventService.OnViewDisappearing += OnViewDisappearing;
-            this.platformEventService.OnViewAppearing -= OnViewAppearing;
+            this.platformEventService.ViewDisappearing += OnViewDisappearing;
+            this.platformEventService.ViewAppearing -= OnViewAppearing;
         }
 
         private void OnViewDisappearing(object sender, EventArgs e)
         {
             RemovePlatformListeners();
-            this.platformEventService.OnViewDisappearing -= OnViewDisappearing;
-            this.platformEventService.OnViewAppearing += OnViewAppearing;
+            this.platformEventService.ViewDisappearing -= OnViewDisappearing;
+            this.platformEventService.ViewAppearing += OnViewAppearing;
         }
 
-        private void AddPlatformListeners()
-        {
-            this.platformEventService.OnCustomEditorBackPressed += OnCustomEditorBackPressed;
-            this.platformEventService.OnScreenTouched += OnScreenTouched;
-            this.platformEventService.OnBackButtonPressed += OnBackButtonPressed;
-        }
-
-        private void RemovePlatformListeners()
-        {
-            this.platformEventService.OnCustomEditorBackPressed -= OnCustomEditorBackPressed;
-            this.platformEventService.OnScreenTouched -= OnScreenTouched;
-            this.platformEventService.OnBackButtonPressed -= OnBackButtonPressed;
-        }
-
-        /// <summary>
-        /// Not called when the Entry has focus.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void OnBackButtonPressed(object sender, EventArgs e)
+        private void OnBackPressed(object sender, EventArgs e)
         {
             RemovePlatformListeners();
-            this.platformEventService.OnViewAppearing -= OnViewAppearing;
-            this.platformEventService.OnViewDisappearing -= OnViewDisappearing;
+            this.platformEventService.ViewAppearing -= OnViewAppearing;
+            this.platformEventService.ViewDisappearing -= OnViewDisappearing;
             base.NavigationService.NavigateBackAsync();
+        }
+
+        private void OnKeyboardButtonPressed()
+        {
+            Debug.WriteLine($"OnKeyboardButtonPressed");
+            this.platformEventService.OnCustomEditorFocusRequested();
+        }
+
+        private void OnInputModeButtonPressed()
+        {
+            this.platformSettingsService.DisplayPopupHint(
+                !DirectInputDisabled ? "Input mode: Direct" : "Input mode: Text", 0);
+            DirectInputDisabled = !DirectInputDisabled;
+            CustomEditorTextTransform = DirectInputDisabled;
+            this.platformEventService.OnCustomEditorInputModeChanged();
         }
 
         private async void OnScreenTouched(object sender, TouchEventArgs e)
         {
+            if (EditorFocused) return;
+
             if (e.Y > TouchpadHeight)
                 if (e.TouchAction != TouchAction.Move)
                     return;
@@ -124,10 +181,14 @@ namespace PointZ.ViewModels
             await this.inputEventHandlerService.HandleTouchEventAsync(e);
         }
 
-        private void OnCustomEditorBackPressed(object sender, KeyEventArgs e) =>
+        private void OnCustomEditorBackPressed(object sender, KeyEventArgs e)
+        {
             this.inputEventHandlerService.HandleKeyEventAsync(e);
+        }
 
-        private async void OnEditorTextSend(object o)
+        private bool CanPressSendButton(object o) => DirectInputDisabled;
+
+        private async void OnSendButtonPressed(object o)
         {
             try
             {
@@ -138,7 +199,7 @@ namespace PointZ.ViewModels
                     if (editorText != string.Empty)
                     {
                         await this.inputEventHandlerService.KeyboardCommandSender.SendTextEntryAsync(editorText);
-                        EditorText = string.Empty;
+                        CustomEditorText = string.Empty;
                         return;
                     }
                 }
@@ -148,7 +209,7 @@ namespace PointZ.ViewModels
             }
             catch (Exception e)
             {
-                this.platformSettingsService.DisplayPopupHint(e.Message);
+                this.platformSettingsService.DisplayPopupHint(e.Message, 1);
                 Debug.WriteLine(e);
             }
         }

@@ -9,5 +9,6 @@ namespace PointZ.Services.InputCommandSender
         public Task SendKeyboardCommandAsync(KeyboardCommand command, KeyCodeAction keyCodeAction);
         public Task SendKeyboardCommandAsync(KeyboardCommand command, string keyCode);
         public Task SendTextEntryAsync(string textEntry);
+        public Task SendTextEntryAsync(char textEntry);
     }
 }

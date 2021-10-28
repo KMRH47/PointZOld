@@ -44,8 +44,9 @@
                                           Height="{Binding TouchpadHeight, Mode=OneWayToSource}">
 
                 <controls:CustomEditor Style="{StaticResource EditorStyle}"
-                                       Text="{Binding EditorText}"
-                                       InputTransparent="True"
+                                       Text="{Binding CustomEditorText}"
+                                       TextTransform="{Binding CustomEditorTextTransform, Converter={StaticResource BoolToTextTransformConverter}}"
+                                       InputTransparent="{Binding EditorFocused, Converter={StaticResource InverseBoolConverter}}"
                                        IsFocused="{Binding EditorFocused}" />
             </controls:StackLayoutTouchpad>
 
@@ -57,11 +58,21 @@
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
 
-                <!-- Keyboard Button (CustomEntry) -->
+                <!-- Keyboard Button -->
                 <controls:KeyboardButton Grid.Column="0"
                                          Text="&#xF11C;"
+                                         Command="{Binding KeyboardButtonCommand}"
                                          FontFamily="IconFont"
+                                         IsVisible="{Binding EditorFocused, Converter={StaticResource InverseBoolConverter}}"
                                          Style="{StaticResource ButtonStyle}" />
+
+                <!-- Input method button (visible when editor is focused) -->
+                <Button Grid.Column="0"
+                        Text="&#xF0EC;"
+                        Command="{Binding ChangeInputModeCommand}"
+                        FontFamily="IconFont"
+                        IsVisible="{Binding EditorFocused}"
+                        Style="{StaticResource ButtonStyle}" />
 
                 <!-- Settings Button -->
                 <Button Grid.Column="1"
@@ -70,13 +81,14 @@
                         Style="{StaticResource ButtonStyle}"
                         IsVisible="{Binding EditorFocused, Converter={StaticResource InverseBoolConverter}}" />
 
-                <!-- Send Text Button (visible when editor is focused)-->
+                <!-- Send Text Button (visible when editor is focused, disabled when input mode is direct) -->
                 <Button Grid.Column="1"
-                        Text="&#xf1d9;"
+                        Text="&#xF1D9;"
                         FontFamily="IconFont"
+                        IsEnabled="{Binding DirectInputDisabled}"
                         Style="{StaticResource ButtonStyle}"
-                        Command="{Binding SendEditorTextCommand}"
-                        CommandParameter="{Binding EditorText }"
+                        Command="{Binding SendTextCommand}"
+                        CommandParameter="{Binding CustomEditorText }"
                         IsVisible="{Binding EditorFocused}" />
             </Grid>
         </Grid>

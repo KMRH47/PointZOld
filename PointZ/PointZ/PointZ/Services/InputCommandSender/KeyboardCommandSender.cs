@@ -19,5 +19,8 @@ namespace PointZ.Services.InputCommandSender
         
         public async Task SendTextEntryAsync(string textEntry) =>
             await base.SendAsync(CommandType.Keyboard, KeyboardCommand.TextEntry.ToString(), textEntry);
+        
+        public async Task SendTextEntryAsync(char textEntry) =>
+            await base.SendAsync(CommandType.Keyboard, KeyboardCommand.TextEntry.ToString(), textEntry.ToString());
     }
 }

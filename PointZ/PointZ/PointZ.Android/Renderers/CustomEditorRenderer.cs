@@ -1,5 +1,6 @@
 ﻿using System;
 using Android.Content;
+using Android.Text;
 using Android.Views;
 using PointZ.Android.Renderers;
 using PointZ.Controls;
@@ -20,7 +21,8 @@ namespace PointZ.Android.Renderers
         public CustomEditorRenderer(Context context) : base(context)
         {
             this.platformEventService = DependencyService.Resolve<IPlatformEventService>();
-            this.platformEventService.OnCustomEditorFocusRequested += OnFocusRequested;
+            this.platformEventService.CustomEditorFocusRequested += OnFocusRequested;
+            this.platformEventService.CustomEditorInputModeChanged += OnInputModeChanged;
         }
 
         protected override void OnElementChanged(ElementChangedEventArgs<Editor> e)
@@ -34,29 +36,38 @@ namespace PointZ.Android.Renderers
 
             Control.SetBackground(null);
             this.editor = editor;
+            
 
             Control.KeyPress += (_, args) =>
             {
-                if (args?.Event == null) return;
-                
-                switch (args.Event.Action)
+                if (args?.Event == null) return; switch (args.Event.Action)
                 {
                     case KeyEventActions.Down:
-                        if (args.KeyCode != Keycode.Del) break;
-                        Models.PlatformEvent.KeyEventArgs keyEventArgs = new(KeyAction.Down, KeyCodeAction.Del.ToString());
-                        this.platformEventService.NotifyOnCustomEditorBackPressed(keyEventArgs);
+                        if (args.KeyCode == Keycode.Del)
+                        {
+                            Models.PlatformEvent.KeyEventArgs keyEventArgs = new(KeyAction.Down,
+                                KeyCodeAction.Del.ToString());
+                            this.platformEventService.OnCustomEditorBackPressed(keyEventArgs);
+                            System.Diagnostics.Debug.WriteLine(
+                                $"CustomEditorRenderer->Control.KeyPress(args: {args.Event})");
+                        }
+                        Control.OnKeyDown(args.KeyCode, args.Event); // Resume event
                         break;
                     case KeyEventActions.Multiple:
+                        Control.OnKeyMultiple(args.KeyCode, args.Event.RepeatCount, args.Event);
+                        break;
                     case KeyEventActions.Up:
-                        return;
+                        Control.OnKeyUp(args.KeyCode, args.Event);
+                        break;
                 }
-                    
-                Control.OnKeyDown(args.KeyCode, args.Event); // Resume event
-                System.Diagnostics.Debug.WriteLine($"CustomEditorRenderer->Control.KeyPress(args: {args.Event})");
             };
         }
 
+        private void OnFocusRequested(object sender, EventArgs e) => this.editor.Focus();
 
-        private void OnFocusRequested(object sender, EventArgs e) { this.editor.Focus(); }
+        private void OnInputModeChanged(object sender, EventArgs e)
+        {
+            this.Control.InputType = InputTypes.TextVariationVisiblePassword;
+        }
     }
 }

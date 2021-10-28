@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Threading.Tasks;
 using PointZ.Models.Command;
-using PointZ.Models.PlatformEvent;
+using PointZ.Models.TouchEvent;
 using PointZ.Services.InputCommandSender;
 using PointZ.Services.Settings;
 

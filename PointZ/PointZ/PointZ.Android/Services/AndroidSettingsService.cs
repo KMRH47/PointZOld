@@ -1,5 +1,4 @@
-﻿using Android.App;
-using Android.Views;
+﻿using Android.Views;
 using Android.Widget;
 using PointZ.Android.Extensions;
 using PointZ.Services.PlatformSettings;
@@ -19,9 +18,11 @@ namespace PointZ.Android.Services
             activityWindow?.SetSoftInputMode(SoftInput.AdjustResize);
         }
 
-        public void DisplayPopupHint(string message)
+        public void DisplayPopupHint(string message, byte duration = 0)
         {
-            Toast toast = Toast.MakeText(this.activity, message, ToastLength.Long);
+            Toast toast = duration == 0
+                ? Toast.MakeText(this.activity, message, ToastLength.Short)
+                : Toast.MakeText(this.activity, message, ToastLength.Long);
             toast?.Show();
         }
     }

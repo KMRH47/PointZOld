@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Reflection;
 using PointZ.Models.PlatformEvent;
+using PointZ.Models.TouchEvent;
 using PointZ.Services.InputCommandSender;
 using PointZ.Services.InputEventHandler;
 using PointZ.Services.Logger;

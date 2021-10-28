@@ -5,6 +5,7 @@ using Android.Views;
 using PointZ.Android.Renderers;
 using PointZ.Android.Services;
 using PointZ.Models.PlatformEvent;
+using PointZ.Models.TouchEvent;
 using PointZ.Services.PlatformEventService;
 using PointZ.Services.PlatformSettings;
 using Xamarin.Forms;
@@ -28,11 +29,10 @@ namespace PointZ.Android
             float x = motionEventArgs.GetX();
             float y = motionEventArgs.GetY();
             TouchAction touchAction = (TouchAction)((ushort)motionEventArgs.Action);
-        
-            this.platformEventService.NotifyOnScreenTouched(x, y, touchAction);
+            TouchEventArgs e = new(x, y, touchAction);
+            this.platformEventService.OnScreenTouched(e);
         
             View viewInFocus = CurrentFocus;
-
             if (viewInFocus is null) return base.DispatchTouchEvent(motionEventArgs);
             if (viewInFocus.Parent is not CustomEditorRenderer) return base.DispatchTouchEvent(motionEventArgs);
 
@@ -40,6 +40,16 @@ namespace PointZ.Android
             bool result = base.DispatchTouchEvent(motionEventArgs);
             this.customEntryFocused = false;
             return result;
+        }
+
+        public override bool DispatchKeyEvent(KeyEvent e)
+        {
+            if (e.Action != KeyEventActions.Down) return base.DispatchKeyEvent(e);
+            
+            KeyAction keyEventAction = (KeyAction)e.Action;
+            KeyEventArgs keyEventArgs = new(keyEventAction, e.KeyCode.ToString());
+            this.platformEventService.OnKeyEvent(keyEventArgs);
+            return base.DispatchKeyEvent(e);
         }
 
         protected override void OnCreate(Bundle savedInstanceState)
@@ -63,19 +73,19 @@ namespace PointZ.Android
 
         public override void OnBackPressed()
         {
-            this.platformEventService.NotifyOnBackButtonPressed();
+            this.platformEventService.OnBackPressed();
             base.OnBackPressed();
         }
 
         protected override void OnPause()
         {
-            this.platformEventService.NotifyOnViewDisappearing();
+            this.platformEventService.OnViewDisappearing();
             base.OnPause();
         }
 
         protected override void OnResume()
         {
-            this.platformEventService.NotifyOnViewAppearing();
+            this.platformEventService.OnViewAppearing();
             base.OnResume();
         }
     }
