@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
-using PointZ.Models.Command;
-using PointZ.Models.PlatformEvent;
+using PointZ.Models.Input;
+using PointZ.Models.KeyEvent;
 using PointZ.Services.InputCommandSender;
 
 namespace PointZ.Services.InputEventHandler

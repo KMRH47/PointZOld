@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
-using PointZ.Models.Command;
-using PointZ.Models.PlatformEvent;
+using PointZ.Models.Input;
+using PointZ.Models.KeyEvent;
 
 namespace PointZ.Services.InputCommandSender
 {

@@ -3,8 +3,8 @@ using System.Diagnostics;
 using System.Net;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using PointZ.Models.Command;
-using PointZ.Models.PlatformEvent;
+using PointZ.Models.Input;
+using PointZ.Models.KeyEvent;
 using PointZ.Models.TouchEvent;
 using PointZ.Services.InputEventHandler;
 using PointZ.Services.PlatformEventService;
@@ -107,7 +107,7 @@ namespace PointZ.ViewModels
                     else
                     {
                         this.inputEventHandlerService.KeyboardCommandSender.SendKeyboardCommandAsync(
-                            KeyboardCommand.KeyDown, KeyCodeAction.Del.ToString());
+                            KeyboardCommand.KeyDown, KeyCodeAction.Del);
                     }
                 }
                 else

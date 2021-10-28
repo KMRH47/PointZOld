@@ -1,7 +1,7 @@
 ﻿using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
-using PointZ.Models.Command;
+using PointZ.Models.Input;
 using PointZ.Services.Settings;
 
 namespace PointZ.Services.InputCommandSender
@@ -17,8 +17,8 @@ namespace PointZ.Services.InputCommandSender
             this.udpClient = udpClient;
         }
 
-        protected async Task SendAsync(CommandType commandType, string command, string data) =>
-            await InternalSendAsync((char)commandType, command, data);
+        protected async Task SendAsync(InputType inputType, string command, string data) =>
+            await InternalSendAsync((char)inputType, command, data);
 
         private async Task InternalSendAsync(char commandType, string command, string data)
         {

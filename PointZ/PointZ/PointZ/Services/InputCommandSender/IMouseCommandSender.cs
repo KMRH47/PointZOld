@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using PointZ.Models.Command;
+using PointZ.Models.Input;
 
 namespace PointZ.Services.InputCommandSender
 {

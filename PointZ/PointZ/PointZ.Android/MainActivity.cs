@@ -4,7 +4,7 @@ using Android.OS;
 using Android.Views;
 using PointZ.Android.Renderers;
 using PointZ.Android.Services;
-using PointZ.Models.PlatformEvent;
+using PointZ.Models.KeyEvent;
 using PointZ.Models.TouchEvent;
 using PointZ.Services.PlatformEventService;
 using PointZ.Services.PlatformSettings;

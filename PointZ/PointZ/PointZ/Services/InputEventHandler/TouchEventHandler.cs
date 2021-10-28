@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Threading.Tasks;
-using PointZ.Models.Command;
+using PointZ.Models.Input;
 using PointZ.Models.TouchEvent;
 using PointZ.Services.InputCommandSender;
 using PointZ.Services.Settings;

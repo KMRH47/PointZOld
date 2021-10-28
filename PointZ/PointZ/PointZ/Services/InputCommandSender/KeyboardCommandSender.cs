@@ -1,7 +1,7 @@
 ﻿using System.Net.Sockets;
 using System.Threading.Tasks;
-using PointZ.Models.Command;
-using PointZ.Models.PlatformEvent;
+using PointZ.Models.Input;
+using PointZ.Models.KeyEvent;
 using PointZ.Services.Settings;
 
 namespace PointZ.Services.InputCommandSender
@@ -12,15 +12,15 @@ namespace PointZ.Services.InputCommandSender
             : base(settingsService, udpClient) { }
 
         public async Task SendKeyboardCommandAsync(KeyboardCommand command, KeyCodeAction keyCodeAction) =>
-            await base.SendAsync(CommandType.Keyboard, command.ToString(), keyCodeAction.ToString());
+            await base.SendAsync(InputType.Keyboard, command.ToString(), keyCodeAction.ToString());
 
         public async Task SendKeyboardCommandAsync(KeyboardCommand command, string keyCode) =>
-            await base.SendAsync(CommandType.Keyboard, command.ToString(), keyCode);
+            await base.SendAsync(InputType.Keyboard, command.ToString(), keyCode);
         
         public async Task SendTextEntryAsync(string textEntry) =>
-            await base.SendAsync(CommandType.Keyboard, KeyboardCommand.TextEntry.ToString(), textEntry);
+            await base.SendAsync(InputType.Keyboard, KeyboardCommand.TextEntry.ToString(), textEntry);
         
         public async Task SendTextEntryAsync(char textEntry) =>
-            await base.SendAsync(CommandType.Keyboard, KeyboardCommand.TextEntry.ToString(), textEntry.ToString());
+            await base.SendAsync(InputType.Keyboard, KeyboardCommand.TextEntry.ToString(), textEntry.ToString());
     }
 }

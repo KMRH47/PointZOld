@@ -4,7 +4,7 @@ using Android.Text;
 using Android.Views;
 using PointZ.Android.Renderers;
 using PointZ.Controls;
-using PointZ.Models.PlatformEvent;
+using PointZ.Models.KeyEvent;
 using PointZ.Services.PlatformEventService;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
@@ -45,7 +45,7 @@ namespace PointZ.Android.Renderers
                     case KeyEventActions.Down:
                         if (args.KeyCode == Keycode.Del)
                         {
-                            Models.PlatformEvent.KeyEventArgs keyEventArgs = new(KeyAction.Down,
+                            Models.KeyEvent.KeyEventArgs keyEventArgs = new(KeyAction.Down,
                                 KeyCodeAction.Del.ToString());
                             this.platformEventService.OnCustomEditorBackPressed(keyEventArgs);
                             System.Diagnostics.Debug.WriteLine(

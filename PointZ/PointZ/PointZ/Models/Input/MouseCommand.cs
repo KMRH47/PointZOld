@@ -1,4 +1,4 @@
-﻿namespace PointZ.Models.Command
+﻿namespace PointZ.Models.Input
 {
     public enum MouseCommand
     {

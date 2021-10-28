@@ -1,4 +1,4 @@
-﻿namespace PointZ.Models.PlatformEvent
+﻿namespace PointZ.Models.KeyEvent
 {
     public enum KeyAction
     {

@@ -1,6 +1,6 @@
 ﻿using System.Net.Sockets;
 using System.Threading.Tasks;
-using PointZ.Models.Command;
+using PointZ.Models.Input;
 using PointZ.Services.Settings;
 
 namespace PointZ.Services.InputCommandSender
@@ -11,7 +11,7 @@ namespace PointZ.Services.InputCommandSender
             : base(settingsService, udpClient) { }
         
         public async Task SendMouseCommandAsync(MouseCommand command) =>
-            await base.SendAsync(CommandType.Mouse, command.ToString(), null);
+            await base.SendAsync(InputType.Mouse, command.ToString(), null);
 
         public async Task MoveMouseByAsync(int x, int y) => await InternalSendAsync(MouseCommand.MoveMouseBy, $"{x},{y}");
         public async Task MoveMouseToAsync(int x, int y) => await InternalSendAsync(MouseCommand.MoveMouseTo, $"{x},{y}");
@@ -26,6 +26,6 @@ namespace PointZ.Services.InputCommandSender
             await InternalSendAsync(MouseCommand.VerticalScroll, amount.ToString());
 
         private async Task InternalSendAsync(MouseCommand command, string data) =>
-            await base.SendAsync(CommandType.Mouse, command.ToString(), data);
+            await base.SendAsync(InputType.Mouse, command.ToString(), data);
     }
 }
