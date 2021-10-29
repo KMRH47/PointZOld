@@ -89,7 +89,8 @@ namespace PointZ.Android.Renderers
         private void OnSetInputType(object sender, CustomEditorEventArgs e)
         {
             InputTypes inputType = (InputTypes)e.TextInputTypes;
-            this.Control.InputType = inputType;
+            Control.InputType = inputType;
+            Control.SetSelection(Element.Text.Length);
         }
     }
 }

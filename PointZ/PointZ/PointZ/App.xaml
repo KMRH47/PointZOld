@@ -4,6 +4,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:converters="clr-namespace:PointZ.Converters;assembly=PointZ"
              xmlns:controls="clr-namespace:PointZ.Controls;assembly=PointZ"
+             xmlns:singleConverters="clr-namespace:PointZ.Converters.Single;assembly=PointZ"
+             xmlns:multiConverters="clr-namespace:PointZ.Converters.Multi;assembly=PointZ"
              x:Class="PointZ.App">
     <Application.Resources>
 
@@ -62,10 +64,10 @@
         </Style>
 
         <!-- Converters -->
-        <converters:CountToBoolConverter x:Key="CountToBoolConverter" />
-        <converters:InverseCountToBoolConverter x:Key="InverseCountToBoolConverter" />
-        <converters:InverseBoolConverter x:Key="InverseBoolConverter" />
-        <converters:BoolToTextTransformConverter x:Key="BoolToTextTransformConverter" />
+        <singleConverters:CountToBooleanConverter x:Key="CountToBoolConverter" />
+        <singleConverters:InverseCountToBooleanConverter x:Key="InverseCountToBoolConverter" />
+        <singleConverters:InverseBooleanConverter x:Key="InverseBoolConverter" />
+        <multiConverters:BooleanOrConverter x:Key="BooleanOrConverter" />
 
     </Application.Resources>
 </Application>

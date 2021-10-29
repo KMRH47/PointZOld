@@ -19,16 +19,18 @@ namespace PointZ.ViewModels
 {
     public class SessionViewModel : ViewModelBase
     {
+        private const string PopUpHintSwitchInputMode = "Input mode: ";
+        
         private readonly IInputEventHandlerService inputEventHandlerService;
         private readonly IPlatformEventService platformEventService;
         private readonly ISettingsService settingsService;
         private readonly IPlatformSettingsService platformSettingsService;
 
         private string customEditorText = "";
+        private string customEditorTextModeText = "";
         private double touchpadHeight;
         private bool editorFocused;
         private bool directInputDisabled;
-        private bool customEditorTextTransform;
 
 
         public SessionViewModel(
@@ -40,7 +42,7 @@ namespace PointZ.ViewModels
             this.platformEventService = platformEventService;
             this.settingsService = settingsService;
             KeyboardButtonCommand = new Command(OnKeyboardButtonPressed);
-            ChangeInputModeCommand = new Command(OnInputModeButtonPressed);
+            SwitchInputModeCommand = new Command(OnSwitchInputModeButtonPressed);
             SendTextCommand = new Command(OnSendButtonPressed, CanPressSendButton);
         }
 
@@ -55,7 +57,7 @@ namespace PointZ.ViewModels
         }
 
         public ICommand KeyboardButtonCommand { get; set; }
-        public ICommand ChangeInputModeCommand { get; set; }
+        public ICommand SwitchInputModeCommand { get; set; }
         public ICommand SendTextCommand { get; set; }
 
         public bool DirectInputDisabled
@@ -63,6 +65,23 @@ namespace PointZ.ViewModels
             get => this.directInputDisabled;
             set
             {
+                if (value)
+                {
+                    CustomEditorText = this.customEditorTextModeText;
+                    this.customEditorTextModeText = string.Empty;
+                    this.platformSettingsService.DisplayPopupHint(PopUpHintSwitchInputMode + "Text", 0);
+                    this.platformEventService.OnCustomEditorSetInputType(
+                        new CustomEditorEventArgs(TextInputTypes.ClassText | TextInputTypes.TextFlagMultiLine));
+                }
+                else
+                {
+                    this.customEditorTextModeText = CustomEditorText;
+                    CustomEditorText = string.Empty;
+                    this.platformSettingsService.DisplayPopupHint(PopUpHintSwitchInputMode + "Direct", 0);
+                    this.platformEventService.OnCustomEditorSetInputType(
+                        new CustomEditorEventArgs(TextInputTypes.TextVariationVisiblePassword));
+                }
+
                 this.directInputDisabled = value;
                 OnPropertyChanged();
             }
@@ -84,16 +103,6 @@ namespace PointZ.ViewModels
             set => this.touchpadHeight = value * this.platformSettingsService.DisplayDensity;
         }
 
-        public bool CustomEditorTextTransform
-        {
-            get => this.customEditorTextTransform;
-            set
-            {
-                this.customEditorTextTransform = value;
-                OnPropertyChanged();
-            }
-        }
-
         public string CustomEditorText
         {
             get => this.customEditorText;
@@ -107,11 +116,13 @@ namespace PointZ.ViewModels
                     }
                     else
                     {
-                        this.inputEventHandlerService.KeyboardCommandSender.SendKeyboardCommandAsync(
-                            KeyboardCommand.KeyDown, KeyCodeAction.Del);
+                        if (value != string.Empty)
+                        {
+                            this.inputEventHandlerService.KeyboardCommandSender.SendKeyboardCommandAsync(
+                                KeyboardCommand.KeyDown, KeyCodeAction.Del);
+                        }
                     }
                 }
-
 
                 this.customEditorText = value;
                 OnPropertyChanged();
@@ -160,18 +171,7 @@ namespace PointZ.ViewModels
             this.platformEventService.OnCustomEditorFocusRequested();
         }
 
-        private void OnInputModeButtonPressed()
-        {
-            this.platformSettingsService.DisplayPopupHint(
-                DirectInputDisabled ? "Input mode: Direct" : "Input mode: Text", 0);
-            DirectInputDisabled = !DirectInputDisabled;
-            CustomEditorTextTransform = DirectInputDisabled;
-
-            this.platformEventService.OnCustomEditorSetInputType(
-                DirectInputDisabled
-                    ? new CustomEditorEventArgs(TextInputTypes.ClassText | TextInputTypes.TextFlagMultiLine)
-                    : new CustomEditorEventArgs(TextInputTypes.TextVariationVisiblePassword));
-        }
+        private void OnSwitchInputModeButtonPressed() => DirectInputDisabled = !DirectInputDisabled;
 
         private async void OnScreenTouched(object sender, TouchEventArgs e)
         {

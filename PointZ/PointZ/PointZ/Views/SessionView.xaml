@@ -45,9 +45,14 @@
 
                 <controls:CustomEditor Style="{StaticResource EditorStyle}"
                                        Text="{Binding CustomEditorText}"
-                                       TextTransform="{Binding CustomEditorTextTransform, Converter={StaticResource BoolToTextTransformConverter}}"
-                                       InputTransparent="{Binding EditorFocused, Converter={StaticResource InverseBoolConverter}}"
-                                       IsFocused="{Binding EditorFocused}" />
+                                       IsFocused="{Binding EditorFocused}">
+                    <controls:CustomEditor.InputTransparent>
+                        <MultiBinding Converter="{StaticResource BooleanOrConverter}">
+                            <Binding Path="EditorFocused" Converter="{StaticResource InverseBoolConverter}" />
+                            <Binding Path="DirectInputDisabled" Converter="{StaticResource InverseBoolConverter}" />
+                        </MultiBinding>
+                    </controls:CustomEditor.InputTransparent>
+                </controls:CustomEditor>
             </controls:StackLayoutTouchpad>
 
             <!-- Bottom Bar -->
@@ -69,7 +74,7 @@
                 <!-- Input method button (visible when editor is focused) -->
                 <Button Grid.Column="0"
                         Text="&#xF0EC;"
-                        Command="{Binding ChangeInputModeCommand}"
+                        Command="{Binding SwitchInputModeCommand}"
                         FontFamily="IconFont"
                         IsVisible="{Binding EditorFocused}"
                         Style="{StaticResource ButtonStyle}" />

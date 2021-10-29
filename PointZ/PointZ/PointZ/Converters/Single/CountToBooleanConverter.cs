@@ -2,9 +2,9 @@
 using System.Globalization;
 using Xamarin.Forms;
 
-namespace PointZ.Converters
+namespace PointZ.Converters.Single
 {
-    public class CountToBoolConverter : IValueConverter
+    public class CountToBooleanConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

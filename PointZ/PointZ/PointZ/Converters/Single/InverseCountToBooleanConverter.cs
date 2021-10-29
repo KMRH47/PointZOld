@@ -2,13 +2,13 @@
 using System.Globalization;
 using Xamarin.Forms;
 
-namespace PointZ.Converters
+namespace PointZ.Converters.Single
 {
-    public class BoolToTextTransformConverter :IValueConverter
+    public class InverseCountToBooleanConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return (bool)value ? TextTransform.Default : TextTransform.None; 
+            return !((int)value > 0);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
