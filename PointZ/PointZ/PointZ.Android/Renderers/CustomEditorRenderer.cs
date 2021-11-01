@@ -100,9 +100,19 @@ namespace PointZ.Android.Renderers
 
         private void OnSetInputType(object sender, CustomEditorEventArgs e)
         {
-            InputTypes inputType = (InputTypes)e.TextInputTypes;
-            Control.InputType = inputType;
-            Control.SetSelection(Element.Text.Length);
+            try
+            {
+                InputTypes inputType = (InputTypes)e.TextInputTypes;
+                Control.InputType = inputType;
+                Control.SetSelection(Element.Text.Length);
+            }
+            catch (ObjectDisposedException exception)
+            {
+                // Unsubscribe from event when reconnecting from a previous session.
+                System.Diagnostics.Debug.WriteLine(exception.Message);
+                this.platformEventService.CustomEditorFocusRequested -= OnFocusRequested;
+                this.platformEventService.CustomEditorSetInputType -= OnSetInputType;
+            }
         }
     }
 }
