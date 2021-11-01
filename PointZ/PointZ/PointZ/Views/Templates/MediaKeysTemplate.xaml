@@ -15,21 +15,30 @@
     <ContentView.Content>
         <StackLayout>
             <FlexLayout>
+                <!-- Rewind -->
                 <Button Text="&#xE809;" />
+                <!-- Play/Pause -->
                 <Button Text="&#xE803;&#xE805;" />
+                <!-- Forward -->
                 <Button Text="&#xE808;" />
             </FlexLayout>
 
             <FlexLayout>
+                <!-- Previous -->
                 <Button Text="&#xE80B;" />
+                <!-- Stop -->
                 <Button Text="&#xE804;" />
+                <!-- Next -->
                 <Button Text="&#xE80A;" />
             </FlexLayout>
 
             <FlexLayout>
-                <Button Text="v up" />
-                <Button Text="m" />
-                <Button Text="v dn" />
+                <!-- Volume Up -->
+                <Button Text="&#xE80C;" />
+                <!-- Mute -->
+                <Button Text="&#xE806; &#xE807;" />
+                <!-- Volume Up-->
+                <Button Text="&#xE80D;" />
             </FlexLayout>
         </StackLayout>
     </ContentView.Content>

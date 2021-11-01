@@ -2,7 +2,7 @@
 
 namespace PointZ.Controls
 {
-    public class KeyboardButton : Button
+    public class SoftKeyboardButton : Button
     {
     }
 }

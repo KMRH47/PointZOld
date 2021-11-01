@@ -71,7 +71,7 @@
     <Compile Include="Extensions\ActivityExtensions.cs" />
     <Compile Include="Extensions\ViewGroupExtensions.cs" />
     <Compile Include="MainActivity.cs" />
-    <Compile Include="Renderers\KeyboardButtonRenderer.cs" />
+    <Compile Include="Renderers\SoftKeyboardButtonRenderer.cs" />
     <Compile Include="Renderers\CustomEditorRenderer.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -16,11 +16,11 @@
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
 
-            <!-- Keyboard Button -->
-            <controls:KeyboardButton Grid.Column="0"
-                                     Text="&#xF11C;"
-                                     Command="{Binding KeyboardButtonCommand}"
-                                     IsVisible="{Binding EditorFocused, Converter={StaticResource InverseBooleanConverter}}" />
+            <!-- Soft Keyboard Button -->
+            <controls:SoftKeyboardButton Grid.Column="0"
+                                         Text="&#xE80E; &#xE80F;"
+                                         Command="{Binding KeyboardButtonCommand}"
+                                         IsVisible="{Binding EditorFocused, Converter={StaticResource InverseBooleanConverter}}" />
 
             <!-- Text Input Mode Button -->
             <Button Grid.Column="0"
@@ -43,7 +43,7 @@
 
             <!-- Keyboard Keys Button -->
             <Button Grid.Column="1"
-                    Text="&#xE803; &#xE805;"
+                    Text="&#xF108; &#xE80F;"
                     Command="{Binding MediaKeyButtonCommand}"
                     IsVisible="{Binding DirectInputDisabled, Converter={StaticResource InverseBooleanConverter}}" />
 

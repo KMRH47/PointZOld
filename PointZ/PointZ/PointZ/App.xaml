@@ -64,7 +64,7 @@
         <Style TargetType="{x:Type Button}">
             <Setter Property="BorderWidth" Value="0" />
             <Setter Property="CornerRadius" Value="0" />
-            <Setter Property="FontSize" Value="Small" />
+            <Setter Property="FontSize" Value="Medium" />
             <Setter Property="FontFamily" Value="IconFont" />
             <Setter Property="BackgroundColor"
                     Value="{AppThemeBinding 
@@ -76,10 +76,10 @@
                     Light={StaticResource Black80}}" />
         </Style>
 
-        <Style TargetType="{x:Type controls:KeyboardButton}">
+        <Style TargetType="{x:Type controls:SoftKeyboardButton}">
             <Setter Property="BorderWidth" Value="0" />
             <Setter Property="CornerRadius" Value="0" />
-            <Setter Property="FontSize" Value="Small" />
+            <Setter Property="FontSize" Value="Medium" />
             <Setter Property="FontFamily" Value="IconFont" />
             <Setter Property="BackgroundColor"
                     Value="{AppThemeBinding 
