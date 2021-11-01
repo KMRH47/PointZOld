@@ -43,11 +43,13 @@
                 </controls:CustomEditor>
             </controls:StackLayoutTouchpad>
 
-            <!-- Keyboard Keys -->
-            <templates:KeyboardKeysTemplate Grid.Row="1" IsVisible="{Binding KeyboardKeysVisible}" />
+            <StackLayout Grid.Row="1" Orientation="Vertical">
+                <!-- Keyboard Keys -->
+                <templates:KeyboardKeysTemplate IsVisible="{Binding KeyboardKeysVisible}" />
 
-            <!-- Bottom Toolbar -->
-            <templates:ToolbarTemplate Grid.Row="1" />
+                <!-- Bottom Toolbar -->
+                <templates:ToolbarTemplate />
+            </StackLayout>
         </Grid>
     </ContentPage.Content>
 </ContentPage>
