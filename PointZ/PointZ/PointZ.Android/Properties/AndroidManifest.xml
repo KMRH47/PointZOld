@@ -10,5 +10,5 @@
 
     <uses-sdk android:minSdkVersion="18" android:targetSdkVersion="30"/>
     <uses-permission android:name="android.permission.INTERNET"/>
-    <application android:label="PointZ.Android"/>
+    <application android:label="PointZ.Android" />
 </manifest>

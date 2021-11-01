@@ -13,17 +13,21 @@
                         Dark={StaticResource White90},
                         Light={StaticResource Black90}}" />
             </Style>
+            <Style TargetType="{x:Type Grid}">
+                <Setter Property="Margin" Value="5" />
+                <Setter Property="VerticalOptions" Value="Center" />
+            </Style>
         </ResourceDictionary>
     </ContentView.Resources>
 
     <ContentView.Content>
-        <Grid Margin="5" VerticalOptions="Center">
+        <Grid VerticalOptions="Center" BackgroundColor="Transparent">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition />
             </Grid.ColumnDefinitions>
-            
-            <Label Grid.Column="0" Text="{Binding Name}" HorizontalOptions="Start" />
+
+            <Label Grid.Column="0" Text="{Binding Name}" HorizontalOptions="Start" LineBreakMode="NoWrap" />
             <Label Grid.Column="1" Text="{Binding IpEndPoint.Address}" HorizontalOptions="End" />
         </Grid>
     </ContentView.Content>

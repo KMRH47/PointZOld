@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:templates="clr-namespace:PointZ.Views.Templates;assembly=PointZ"
+             x:Class="PointZ.Views.Templates.KeyboardKeysTemplate">
+ 
+    <ContentView.Content>
+        <StackLayout>
+            <FlexLayout>
+                <templates:MediaKeysView />
+                <templates:ArrowKeysTemplate />
+            </FlexLayout>
+        </StackLayout>
+    </ContentView.Content>
+</ContentView>

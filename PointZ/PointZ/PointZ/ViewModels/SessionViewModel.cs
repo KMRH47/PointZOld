@@ -20,7 +20,7 @@ namespace PointZ.ViewModels
     public class SessionViewModel : ViewModelBase
     {
         private const string PopUpHintSwitchInputMode = "Mode: ";
-        
+
         private readonly IInputEventHandlerService inputEventHandlerService;
         private readonly IPlatformEventService platformEventService;
         private readonly ISettingsService settingsService;
@@ -31,6 +31,7 @@ namespace PointZ.ViewModels
         private double touchpadHeight;
         private bool editorFocused;
         private bool directInputDisabled;
+        private bool keyboardKeysVisible;
 
         public SessionViewModel(
             IInputEventHandlerService inputEventHandlerService, IPlatformSettingsService platformSettingsService,
@@ -45,7 +46,6 @@ namespace PointZ.ViewModels
             SendTextCommand = new Command(OnSendButtonPressed);
             MediaKeyButtonCommand = new Command(OnMediaKeyButtonPressed);
         }
-
 
 
         public override Task InitializeAsync(object parameter)
@@ -99,6 +99,16 @@ namespace PointZ.ViewModels
             }
         }
 
+        public bool KeyboardKeysVisible
+        {
+            get => this.keyboardKeysVisible;
+            set
+            {
+                this.keyboardKeysVisible = value;
+                OnPropertyChanged();
+            }
+        }
+
         public double TouchpadHeight
         {
             get => this.touchpadHeight;
@@ -137,7 +147,7 @@ namespace PointZ.ViewModels
             this.platformEventService.ScreenTouched += OnScreenTouched;
             this.platformEventService.BackPressed += OnBackPressed;
         }
-        
+
         private void RemovePlatformListeners()
         {
             this.platformEventService.CustomEditorAction -= OnCustomEditorAction;
@@ -175,7 +185,7 @@ namespace PointZ.ViewModels
 
         private void OnMediaKeyButtonPressed()
         {
-            this.platformEventService.OnCustomEditorFocusRequested();
+            KeyboardKeysVisible = !KeyboardKeysVisible;
         }
 
         private void OnSwitchInputModeButtonPressed() => DirectInputDisabled = !DirectInputDisabled;

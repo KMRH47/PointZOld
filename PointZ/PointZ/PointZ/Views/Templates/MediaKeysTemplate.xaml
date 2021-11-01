@@ -3,15 +3,34 @@
 <ContentView xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="PointZ.Views.Templates.MediaKeysView">
-    
-    
+
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <Style TargetType="{x:Type FlexLayout}">
+                <Setter Property="JustifyContent" Value="SpaceBetween" />
+            </Style>
+        </ResourceDictionary>
+    </ContentView.Resources>
+
     <ContentView.Content>
-        <StackLayout Orientation="Horizontal">
-            <Button Text="&#xE803;"/>
-            <Button Text=""/>
-            <Button Text=""/>
+        <StackLayout>
+            <FlexLayout>
+                <Button Text="&#xE809;" />
+                <Button Text="&#xE803;&#xE805;" />
+                <Button Text="&#xE808;" />
+            </FlexLayout>
+
+            <FlexLayout>
+                <Button Text="&#xE80B;" />
+                <Button Text="&#xE804;" />
+                <Button Text="&#xE80A;" />
+            </FlexLayout>
+
+            <FlexLayout>
+                <Button Text="v up" />
+                <Button Text="m" />
+                <Button Text="v dn" />
+            </FlexLayout>
         </StackLayout>
     </ContentView.Content>
-    
-    
 </ContentView>

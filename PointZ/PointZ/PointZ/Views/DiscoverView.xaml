@@ -12,7 +12,7 @@
 
     <ContentPage.Resources>
         <ResourceDictionary>
-
+            <!-- Activity Indicator Style -->
             <Style x:Key="ActivityIndicatorBigStyle" TargetType="{x:Type ActivityIndicator}">
                 <Setter Property="Color"
                         Value="{AppThemeBinding 
@@ -21,8 +21,9 @@
                 <Setter Property="WidthRequest" Value="300" />
                 <Setter Property="HeightRequest" Value="300" />
             </Style>
-
-            <Style x:Key="LabelStyle" TargetType="{x:Type Label}">
+            
+            <!-- Label Style -->
+            <Style TargetType="{x:Type Label}">
                 <Setter Property="TextColor"
                         Value="{AppThemeBinding 
                         Dark={StaticResource White90},
@@ -30,7 +31,8 @@
                 <Setter Property="FontSize" Value="Title" />
                 <Setter Property="HorizontalOptions" Value="Center" />
             </Style>
-
+            
+            <!-- ListView Style -->
             <Style TargetType="{x:Type ListView}">
                 <Setter Property="Rotation" Value="180" />
                 <Setter Property="SeparatorColor"
@@ -38,14 +40,11 @@
                         Dark={StaticResource White80},
                         Light={StaticResource Black80}}" />
             </Style>
-
         </ResourceDictionary>
     </ContentPage.Resources>
 
     <ContentPage.Content>
-
-        <Grid Style="{StaticResource GridStyle}">
-
+        <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition />
                 <RowDefinition Height="Auto" />
@@ -63,7 +62,7 @@
                                        IsRunning="{Binding IsSearching}" />
 
                     <!-- Text Beneath Spinner -->
-                    <Label Style="{StaticResource LabelStyle}" Text="Searching" />
+                    <Label Text="Searching" />
                 </StackLayout>
 
                 <!-- Server List -->
@@ -87,7 +86,6 @@
                     Text="&#xF11C; &#xF245;"
                     FontFamily="IconFont"
                     VerticalOptions="End"
-                    Style="{StaticResource ButtonStyle}"
                     IsVisible="{Binding Servers.Count, Converter={StaticResource IntToBooleanConverter}}"
                     Command="{Binding ConnectCommand}"
                     IsEnabled="{Binding SelectedServer, Converter={StaticResource ObjectNotNullBooleanConverter}}" />

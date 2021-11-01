@@ -2,6 +2,7 @@
 using Android.Content.PM;
 using Android.OS;
 using Android.Views;
+using AndroidX.Core.View;
 using PointZ.Android.Renderers;
 using PointZ.Android.Services;
 using PointZ.Models.KeyEvent;
@@ -29,8 +30,7 @@ namespace PointZ.Android
             float x = motionEventArgs.GetX();
             float y = motionEventArgs.GetY();
             TouchAction touchAction = (TouchAction)((ushort)motionEventArgs.Action);
-            TouchEventArgs e = new(x, y, touchAction);
-            this.platformEventService.OnScreenTouched(e);
+            this.platformEventService.OnScreenTouched(new TouchEventArgs(x, y, touchAction));
         
             View viewInFocus = CurrentFocus;
             if (viewInFocus is null) return base.DispatchTouchEvent(motionEventArgs);

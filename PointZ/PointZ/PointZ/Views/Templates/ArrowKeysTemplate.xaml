@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PointZ.Views.Templates.ArrowKeysTemplate">
+
+    <ContentView.Content>
+        <StackLayout>
+            <FlexLayout>
+                <Button Text="ctrl" />
+                <Button Text="&#xF17A;" />
+                <Button Text="alt" />
+            </FlexLayout>
+
+            <FlexLayout>
+                <Button Text="pg d" />
+                <Button Text="&#xF176;" />
+                <Button Text="pg up" />
+            </FlexLayout>
+
+            <FlexLayout>
+                <Button Text="&#xF177;" />
+                <Button Text="&#xF175;" />
+                <Button Text="&#xF178;" />
+            </FlexLayout>
+        </StackLayout>
+    </ContentView.Content>
+</ContentView>

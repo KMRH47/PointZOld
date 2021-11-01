@@ -7,24 +7,10 @@
              x:DataType="viewModels:SessionViewModel"
              x:Class="PointZ.Views.Templates.ToolbarTemplate">
 
-    <ContentView.Resources>
-        <ResourceDictionary>
-            
-            <Style x:Key="GridBarStyle" TargetType="{x:Type Grid}">
-                <Setter Property="BackgroundColor"
-                        Value="{AppThemeBinding 
-                        Dark={StaticResource White90},
-                        Light={StaticResource Black90}}" />
-            </Style>
-            
-        </ResourceDictionary>
-    </ContentView.Resources>
-
     <ContentView.Content>
 
         <!-- Toolbar -->
-        <Grid Style="{StaticResource GridBarStyle}">
-
+        <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
                 <ColumnDefinition />
@@ -34,16 +20,12 @@
             <controls:KeyboardButton Grid.Column="0"
                                      Text="&#xF11C;"
                                      Command="{Binding KeyboardButtonCommand}"
-                                     FontFamily="IconFont"
-                                     IsVisible="{Binding EditorFocused, Converter={StaticResource InverseBooleanConverter}}"
-                                     Style="{StaticResource ButtonStyle}" />
+                                     IsVisible="{Binding EditorFocused, Converter={StaticResource InverseBooleanConverter}}" />
 
             <!-- Text Input Mode Button -->
             <Button Grid.Column="0"
                     Command="{Binding SwitchInputModeCommand}"
-                    FontFamily="IconFont"
-                    IsVisible="{Binding EditorFocused}"
-                    Style="{StaticResource ButtonStyle}">
+                    IsVisible="{Binding EditorFocused}">
                 <Button.Triggers>
                     <DataTrigger TargetType="Button" Binding="{Binding DirectInputDisabled}" Value="true">
                         <Setter Property="Text" Value="&#xF0E5;" />
@@ -57,27 +39,21 @@
             <!-- Settings Button -->
             <Button Grid.Column="1"
                     Text="&#xE800;"
-                    FontFamily="IconFont"
-                    Style="{StaticResource ButtonStyle}"
                     IsVisible="{Binding EditorFocused, Converter={StaticResource InverseBooleanConverter}}" />
 
-            <!-- Media Keys Button -->
+            <!-- Keyboard Keys Button -->
             <Button Grid.Column="1"
                     Text="&#xE803; &#xE805;"
-                    FontFamily="IconFont"
-                    Style="{StaticResource ButtonStyle}"
                     Command="{Binding MediaKeyButtonCommand}"
                     IsVisible="{Binding DirectInputDisabled, Converter={StaticResource InverseBooleanConverter}}" />
 
             <!-- Send Text Button -->
             <Button Grid.Column="1"
                     Text="&#xF1D8;"
-                    FontFamily="IconFont"
                     IsEnabled="{Binding DirectInputDisabled}"
-                    Style="{StaticResource ButtonStyle}"
                     Command="{Binding SendTextCommand}"
                     CommandParameter="{Binding CustomEditorText }"
-                    IsVisible="{Binding DirectInputDisabled}"  />
+                    IsVisible="{Binding DirectInputDisabled}" />
         </Grid>
     </ContentView.Content>
 </ContentView>

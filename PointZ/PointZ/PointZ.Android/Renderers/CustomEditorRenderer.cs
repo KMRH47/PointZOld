@@ -19,7 +19,7 @@ namespace PointZ.Android.Renderers
     {
         private readonly IPlatformEventService platformEventService;
         private Editor editor;
-        
+
         public CustomEditorRenderer(Context context) : base(context)
         {
             this.platformEventService = DependencyService.Resolve<IPlatformEventService>();
@@ -88,9 +88,9 @@ namespace PointZ.Android.Renderers
 
         private void OnFocusRequested(object sender, EventArgs e)
         {
-            if (      this.editor.IsFocused)
+            if (this.editor.IsFocused)
             {
-                      this.editor.Unfocus();
+                this.editor.Unfocus();
             }
             else
             {
