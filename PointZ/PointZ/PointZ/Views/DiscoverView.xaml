@@ -2,72 +2,100 @@
 
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="PointZ.Views.DiscoverView"
              xmlns:viewModelsBase="clr-namespace:PointZ.ViewModels.Base;assembly=PointZ"
              xmlns:viewModels="clr-namespace:PointZ.ViewModels;assembly=PointZ"
              xmlns:templates="clr-namespace:PointZ.Views.Templates;assembly=PointZ"
+             x:DataType="viewModels:DiscoverViewModel"
+             x:Class="PointZ.Views.DiscoverView"
              NavigationPage.HasNavigationBar="False"
-             viewModelsBase:ViewModelLocator.AutoWireViewModel="True"
-             x:DataType="viewModels:DiscoverViewModel">
+             viewModelsBase:ViewModelLocator.AutoWireViewModel="True">
 
     <ContentPage.Resources>
         <ResourceDictionary>
+
             <Style x:Key="ActivityIndicatorBigStyle" TargetType="{x:Type ActivityIndicator}">
                 <Setter Property="Color"
                         Value="{AppThemeBinding 
-                        Dark={StaticResource DimmedWhite},
-                        Light={StaticResource WhitenedBlack}}" />
+                        Dark={StaticResource White90},
+                        Light={StaticResource Black90}}" />
                 <Setter Property="WidthRequest" Value="300" />
                 <Setter Property="HeightRequest" Value="300" />
-
             </Style>
 
-            <Style x:Key="SearchingStyle" TargetType="{x:Type Label}">
+            <Style x:Key="LabelStyle" TargetType="{x:Type Label}">
                 <Setter Property="TextColor"
                         Value="{AppThemeBinding 
-                        Dark={StaticResource DimmedWhite},
-                        Light={StaticResource WhitenedBlack}}" />
+                        Dark={StaticResource White90},
+                        Light={StaticResource Black90}}" />
                 <Setter Property="FontSize" Value="Title" />
-                <Setter Property="Text" Value="Searching" />
                 <Setter Property="HorizontalOptions" Value="Center" />
             </Style>
+
+            <Style TargetType="{x:Type ListView}">
+                <Setter Property="Rotation" Value="180" />
+                <Setter Property="SeparatorColor"
+                        Value="{AppThemeBinding 
+                        Dark={StaticResource White80},
+                        Light={StaticResource Black80}}" />
+            </Style>
+
         </ResourceDictionary>
     </ContentPage.Resources>
 
     <ContentPage.Content>
 
-        <StackLayout Style="{StaticResource StackLayoutStyle}">
+        <Grid Style="{StaticResource GridStyle}">
 
-            <StackLayout VerticalOptions="CenterAndExpand" Margin="20" >
-                <StackLayout 
-                    IsVisible="{Binding Servers.Count, 
-                    Converter={StaticResource InverseCountToBoolConverter}}">
-                    
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0">
+
+                <!-- Centered StackLayout -->
+                <StackLayout
+                    IsVisible="{Binding Servers.Count,  Converter={StaticResource InverseCountToBoolConverter}}"
+                    VerticalOptions="Center">
+
+                    <!-- Spinner -->
                     <ActivityIndicator Style="{StaticResource ActivityIndicatorBigStyle}"
                                        IsRunning="{Binding IsSearching}" />
-                    
-                    <Label Style="{StaticResource SearchingStyle}" />
+
+                    <!-- Text Beneath Spinner -->
+                    <Label Style="{StaticResource LabelStyle}" Text="Searching" />
                 </StackLayout>
 
-                <ListView ItemsSource="{Binding Servers}"
-                          IsVisible="{Binding Servers.Count}"
-                          SelectedItem="{Binding SelectedServer, Converter={StaticResource CountToBoolConverter}}">
+                <!-- Server List -->
+                <ListView IsVisible="{Binding Servers.Count, Converter={StaticResource IntToBooleanConverter}}"
+                          ItemsSource="{Binding Servers}"
+                          SelectedItem="{Binding SelectedServer}">
+
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
-                                <templates:ServerTemplate />
+                                <templates:ServerTemplate Rotation="180" />
                             </ViewCell>
                         </DataTemplate>
                     </ListView.ItemTemplate>
-                </ListView>
-            </StackLayout>
 
-            <Button Text="Connect"
+                </ListView>
+            </Grid>
+
+            <!-- Connect Button -->
+            <Button Grid.Row="1"
+                    Text="&#xF11C; &#xF245;"
+                    FontFamily="IconFont"
+                    VerticalOptions="End"
                     Style="{StaticResource ButtonStyle}"
-                    IsEnabled="{Binding IsServerSelected}"
-                    IsVisible="{Binding IsServerSelected}"
-                    Command="{Binding ConnectCommand}" />
-        </StackLayout>
+                    IsVisible="{Binding Servers.Count, Converter={StaticResource IntToBooleanConverter}}"
+                    Command="{Binding ConnectCommand}"
+                    IsEnabled="{Binding SelectedServer, Converter={StaticResource ObjectNotNullBooleanConverter}}" />
+            <!-- 
+                NOTICE: CanExecute does not update for ConnectCommand, therefore IsEnabled will have to suffice. 
+                IMPORTANT: IsEnabled has to come after the Command property, since the Command property changes the state of the object's IsEnabled property.
+                                                                                                                                                             -->
+        </Grid>
 
     </ContentPage.Content>
 </ContentPage>

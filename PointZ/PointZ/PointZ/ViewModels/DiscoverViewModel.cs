@@ -14,7 +14,6 @@ namespace PointZ.ViewModels
         private readonly IUdpListenerService udpListenerService;
 
         private bool isSearching = true;
-        private bool isServerSelected;
 
         private ServerData selectedServer;
 
@@ -35,16 +34,6 @@ namespace PointZ.ViewModels
             set
             {
                 this.selectedServer = value;
-                IsServerSelected = true;
-            }
-        }
-
-        public bool IsServerSelected
-        {
-            get => this.isServerSelected;
-            private set
-            {
-                this.isServerSelected = value;
                 OnPropertyChanged();
             }
         }

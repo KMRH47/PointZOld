@@ -18,7 +18,8 @@ namespace PointZ.Android.Renderers
     public sealed class CustomEditorRenderer : EditorRenderer
     {
         private readonly IPlatformEventService platformEventService;
-
+        private Editor editor;
+        
         public CustomEditorRenderer(Context context) : base(context)
         {
             this.platformEventService = DependencyService.Resolve<IPlatformEventService>();
@@ -33,6 +34,7 @@ namespace PointZ.Android.Renderers
             if (Control == null) return;
             if (Element == null) return;
 
+            this.editor = Element;
             Control.SetBackground(null);
             Control.InputType = InputTypes.TextVariationVisiblePassword;
 
@@ -77,14 +79,24 @@ namespace PointZ.Android.Renderers
                     switch (args.Event.Action)
                     {
                         case KeyEventActions.Down:
-                            Element.Text += "\n";
+                            this.editor.Text += "\n";
                             break;
                     }
                 }
             };
         }
 
-        private void OnFocusRequested(object sender, EventArgs e) => Element.Focus();
+        private void OnFocusRequested(object sender, EventArgs e)
+        {
+            if (      this.editor.IsFocused)
+            {
+                      this.editor.Unfocus();
+            }
+            else
+            {
+                this.editor.Focus();
+            }
+        }
 
         private void OnSetInputType(object sender, CustomEditorEventArgs e)
         {

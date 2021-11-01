@@ -19,7 +19,7 @@ namespace PointZ.ViewModels
 {
     public class SessionViewModel : ViewModelBase
     {
-        private const string PopUpHintSwitchInputMode = "Input mode: ";
+        private const string PopUpHintSwitchInputMode = "Mode: ";
         
         private readonly IInputEventHandlerService inputEventHandlerService;
         private readonly IPlatformEventService platformEventService;
@@ -27,11 +27,10 @@ namespace PointZ.ViewModels
         private readonly IPlatformSettingsService platformSettingsService;
 
         private string customEditorText = "";
-        private string customEditorTextModeText = "";
+        private string customEditorMessageModeText = "";
         private double touchpadHeight;
         private bool editorFocused;
         private bool directInputDisabled;
-
 
         public SessionViewModel(
             IInputEventHandlerService inputEventHandlerService, IPlatformSettingsService platformSettingsService,
@@ -43,8 +42,10 @@ namespace PointZ.ViewModels
             this.settingsService = settingsService;
             KeyboardButtonCommand = new Command(OnKeyboardButtonPressed);
             SwitchInputModeCommand = new Command(OnSwitchInputModeButtonPressed);
-            SendTextCommand = new Command(OnSendButtonPressed, CanPressSendButton);
+            SendTextCommand = new Command(OnSendButtonPressed);
+            MediaKeyButtonCommand = new Command(OnMediaKeyButtonPressed);
         }
+
 
 
         public override Task InitializeAsync(object parameter)
@@ -56,6 +57,7 @@ namespace PointZ.ViewModels
             return Task.CompletedTask;
         }
 
+        public ICommand MediaKeyButtonCommand { get; set; }
         public ICommand KeyboardButtonCommand { get; set; }
         public ICommand SwitchInputModeCommand { get; set; }
         public ICommand SendTextCommand { get; set; }
@@ -67,15 +69,15 @@ namespace PointZ.ViewModels
             {
                 if (value)
                 {
-                    CustomEditorText = this.customEditorTextModeText;
-                    this.customEditorTextModeText = string.Empty;
-                    this.platformSettingsService.DisplayPopupHint(PopUpHintSwitchInputMode + "Text", 0);
+                    CustomEditorText = this.customEditorMessageModeText;
+                    this.customEditorMessageModeText = string.Empty;
+                    this.platformSettingsService.DisplayPopupHint(PopUpHintSwitchInputMode + "Message", 0);
                     this.platformEventService.OnCustomEditorSetInputType(
                         new CustomEditorEventArgs(TextInputTypes.ClassText | TextInputTypes.TextFlagMultiLine));
                 }
                 else
                 {
-                    this.customEditorTextModeText = CustomEditorText;
+                    this.customEditorMessageModeText = CustomEditorText;
                     CustomEditorText = string.Empty;
                     this.platformSettingsService.DisplayPopupHint(PopUpHintSwitchInputMode + "Direct", 0);
                     this.platformEventService.OnCustomEditorSetInputType(
@@ -135,7 +137,7 @@ namespace PointZ.ViewModels
             this.platformEventService.ScreenTouched += OnScreenTouched;
             this.platformEventService.BackPressed += OnBackPressed;
         }
-
+        
         private void RemovePlatformListeners()
         {
             this.platformEventService.CustomEditorAction -= OnCustomEditorAction;
@@ -171,12 +173,18 @@ namespace PointZ.ViewModels
             this.platformEventService.OnCustomEditorFocusRequested();
         }
 
+        private void OnMediaKeyButtonPressed()
+        {
+            this.platformEventService.OnCustomEditorFocusRequested();
+        }
+
         private void OnSwitchInputModeButtonPressed() => DirectInputDisabled = !DirectInputDisabled;
 
         private async void OnScreenTouched(object sender, TouchEventArgs e)
         {
-            if (EditorFocused) return;
-
+            if (EditorFocused)
+                if (DirectInputDisabled)
+                    return;
             if (e.Y > TouchpadHeight)
                 if (e.TouchAction != TouchAction.Move)
                     return;
@@ -188,8 +196,6 @@ namespace PointZ.ViewModels
         {
             this.inputEventHandlerService.HandleKeyEventAsync(e);
         }
-
-        private bool CanPressSendButton(object o) => DirectInputDisabled;
 
         private async void OnSendButtonPressed(object o)
         {

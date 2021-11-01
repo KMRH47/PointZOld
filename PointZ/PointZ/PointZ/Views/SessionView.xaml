@@ -2,30 +2,21 @@
 
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="PointZ.Views.SessionView"
              xmlns:viewModels="clr-namespace:PointZ.ViewModels;assembly=PointZ"
              xmlns:viewModelsBase="clr-namespace:PointZ.ViewModels.Base;assembly=PointZ"
              xmlns:controls="clr-namespace:PointZ.Controls;assembly=PointZ"
+             xmlns:templates="clr-namespace:PointZ.Views.Templates;assembly=PointZ"
+             x:DataType="viewModels:SessionViewModel"
+             x:Class="PointZ.Views.SessionView"
              NavigationPage.HasNavigationBar="False"
-             viewModelsBase:ViewModelLocator.AutoWireViewModel="True"
-             x:DataType="viewModels:SessionViewModel">
+             viewModelsBase:ViewModelLocator.AutoWireViewModel="True">
 
     <ContentPage.Resources>
         <ResourceDictionary>
-
-            <Style x:Key="GridBarStyle" TargetType="{x:Type Grid}">
-                <Setter Property="BackgroundColor"
-                        Value="{AppThemeBinding 
-                        Dark={StaticResource DimmedWhite},
-                        Light={StaticResource WhitenedBlack}}" />
-            </Style>
-
             <Style x:Key="EditorStyle" TargetType="{x:Type controls:CustomEditor}">
                 <Setter Property="Margin" Value="20,40,20,0" />
                 <Setter Property="VerticalOptions" Value="FillAndExpand" />
-
             </Style>
-
         </ResourceDictionary>
     </ContentPage.Resources>
 
@@ -48,54 +39,15 @@
                                        IsFocused="{Binding EditorFocused}">
                     <controls:CustomEditor.InputTransparent>
                         <MultiBinding Converter="{StaticResource BooleanOrConverter}">
-                            <Binding Path="EditorFocused" Converter="{StaticResource InverseBoolConverter}" />
-                            <Binding Path="DirectInputDisabled" Converter="{StaticResource InverseBoolConverter}" />
+                            <Binding Path="EditorFocused" Converter="{StaticResource InverseBooleanConverter}" />
+                            <Binding Path="DirectInputDisabled" Converter="{StaticResource InverseBooleanConverter}" />
                         </MultiBinding>
                     </controls:CustomEditor.InputTransparent>
                 </controls:CustomEditor>
             </controls:StackLayoutTouchpad>
 
-            <!-- Bottom Bar -->
-            <Grid Grid.Row="1" Style="{StaticResource GridBarStyle}" VerticalOptions="EndAndExpand">
-
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
-
-                <!-- Keyboard Button -->
-                <controls:KeyboardButton Grid.Column="0"
-                                         Text="&#xF11C;"
-                                         Command="{Binding KeyboardButtonCommand}"
-                                         FontFamily="IconFont"
-                                         IsVisible="{Binding EditorFocused, Converter={StaticResource InverseBoolConverter}}"
-                                         Style="{StaticResource ButtonStyle}" />
-
-                <!-- Input method button (visible when editor is focused) -->
-                <Button Grid.Column="0"
-                        Text="&#xF0EC;"
-                        Command="{Binding SwitchInputModeCommand}"
-                        FontFamily="IconFont"
-                        IsVisible="{Binding EditorFocused}"
-                        Style="{StaticResource ButtonStyle}" />
-
-                <!-- Settings Button -->
-                <Button Grid.Column="1"
-                        Text="&#xE800;"
-                        FontFamily="IconFont"
-                        Style="{StaticResource ButtonStyle}"
-                        IsVisible="{Binding EditorFocused, Converter={StaticResource InverseBoolConverter}}" />
-
-                <!-- Send Text Button (visible when editor is focused, disabled when input mode is direct) -->
-                <Button Grid.Column="1"
-                        Text="&#xF1D9;"
-                        FontFamily="IconFont"
-                        IsEnabled="{Binding DirectInputDisabled}"
-                        Style="{StaticResource ButtonStyle}"
-                        Command="{Binding SendTextCommand}"
-                        CommandParameter="{Binding CustomEditorText }"
-                        IsVisible="{Binding EditorFocused}" />
-            </Grid>
+            <!-- Bottom Toolbar -->
+            <templates:ToolbarTemplate Grid.Row="1" />
         </Grid>
 
     </ContentPage.Content>

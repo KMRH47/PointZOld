@@ -4,7 +4,7 @@ using Xamarin.Forms;
 
 namespace PointZ.Converters.Single
 {
-    public class CountToBooleanConverter : IValueConverter
+    public class IntToBooleanConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

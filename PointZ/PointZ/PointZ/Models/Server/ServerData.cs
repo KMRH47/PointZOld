@@ -1,9 +1,8 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 
 namespace PointZ.Models.Server
 {
-    public readonly struct ServerData
+    public class ServerData
     {
         public ServerData(string name, IPEndPoint ipEndPoint)
         {

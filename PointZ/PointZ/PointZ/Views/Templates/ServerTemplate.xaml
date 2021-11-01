@@ -6,26 +6,26 @@
 
     <ContentView.Resources>
         <ResourceDictionary>
-            <Style x:Key="ServerText"
-                   TargetType="{x:Type Label}">
-                <Setter Property="FontSize" Value="Title" />
+            <Style TargetType="{x:Type Label}">
+                <Setter Property="FontSize" Value="Medium" />
                 <Setter Property="TextColor"
                         Value="{AppThemeBinding 
-                        Dark={StaticResource DimmedWhite},
-                        Light={StaticResource WhitenedBlack}}" />
+                        Dark={StaticResource White90},
+                        Light={StaticResource Black90}}" />
             </Style>
         </ResourceDictionary>
     </ContentView.Resources>
 
     <ContentView.Content>
-        <StackLayout Orientation="Horizontal" VerticalOptions="Center">
-            <Label Text="{Binding  Name}"
-                   Style="{StaticResource ServerText}"
-                   HorizontalOptions="StartAndExpand" />
-            <Label Text="{Binding IpEndPoint.Address}"
-                   Style="{StaticResource ServerText}"
-                   HorizontalOptions="EndAndExpand" />
-        </StackLayout>
+        <Grid Margin="5" VerticalOptions="Center">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            
+            <Label Grid.Column="0" Text="{Binding Name}" HorizontalOptions="Start" />
+            <Label Grid.Column="1" Text="{Binding IpEndPoint.Address}" HorizontalOptions="End" />
+        </Grid>
     </ContentView.Content>
 
 </ContentView>

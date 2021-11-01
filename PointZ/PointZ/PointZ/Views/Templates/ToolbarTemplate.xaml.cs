@@ -3,11 +3,8 @@
 namespace PointZ.Views.Templates
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class ServerTemplate
+    public partial class ToolbarTemplate
     {
-        public ServerTemplate()
-        {
-            InitializeComponent();
-        }
+        public ToolbarTemplate() { InitializeComponent(); }
     }
 }
