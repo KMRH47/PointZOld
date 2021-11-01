@@ -13,7 +13,7 @@
 
     <ContentPage.Resources>
         <ResourceDictionary>
-            <Style x:Key="EditorStyle" TargetType="{x:Type controls:CustomEditor}">
+            <Style TargetType="{x:Type controls:CustomEditor}">
                 <Setter Property="BackgroundColor" Value="Transparent" />
                 <Setter Property="Margin" Value="20,40,20,0" />
                 <Setter Property="VerticalOptions" Value="FillAndExpand" />
@@ -22,7 +22,6 @@
     </ContentPage.Resources>
 
     <ContentPage.Content>
-
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition />
@@ -31,8 +30,7 @@
 
             <!-- Touchpad -->
             <controls:StackLayoutTouchpad Grid.Row="0" Height="{Binding TouchpadHeight, Mode=OneWayToSource}">
-                <controls:CustomEditor Style="{StaticResource EditorStyle}"
-                                       Text="{Binding CustomEditorText}"
+                <controls:CustomEditor Text="{Binding CustomEditorText}"
                                        IsFocused="{Binding EditorFocused}">
                     <controls:CustomEditor.InputTransparent>
                         <MultiBinding Converter="{StaticResource BooleanOrConverter}">
@@ -43,7 +41,7 @@
                 </controls:CustomEditor>
             </controls:StackLayoutTouchpad>
 
-            <StackLayout Grid.Row="1" Orientation="Vertical">
+            <StackLayout Grid.Row="1" Orientation="Vertical" Spacing="1">
                 <!-- Keyboard Keys -->
                 <templates:KeyboardKeysTemplate IsVisible="{Binding KeyboardKeysVisible}" />
 

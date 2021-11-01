@@ -12,7 +12,6 @@
 
     <ContentPage.Resources>
         <ResourceDictionary>
-            <!-- Activity Indicator Style -->
             <Style x:Key="ActivityIndicatorBigStyle" TargetType="{x:Type ActivityIndicator}">
                 <Setter Property="Color"
                         Value="{AppThemeBinding 
@@ -21,8 +20,6 @@
                 <Setter Property="WidthRequest" Value="300" />
                 <Setter Property="HeightRequest" Value="300" />
             </Style>
-            
-            <!-- Label Style -->
             <Style TargetType="{x:Type Label}">
                 <Setter Property="TextColor"
                         Value="{AppThemeBinding 
@@ -31,8 +28,6 @@
                 <Setter Property="FontSize" Value="Title" />
                 <Setter Property="HorizontalOptions" Value="Center" />
             </Style>
-            
-            <!-- ListView Style -->
             <Style TargetType="{x:Type ListView}">
                 <Setter Property="Rotation" Value="180" />
                 <Setter Property="SeparatorColor"
@@ -51,8 +46,6 @@
             </Grid.RowDefinitions>
 
             <Grid Grid.Row="0">
-
-                <!-- Centered StackLayout -->
                 <StackLayout
                     IsVisible="{Binding Servers.Count,  Converter={StaticResource InverseCountToBoolConverter}}"
                     VerticalOptions="Center">
@@ -77,7 +70,6 @@
                             </ViewCell>
                         </DataTemplate>
                     </ListView.ItemTemplate>
-
                 </ListView>
             </Grid>
 
@@ -94,6 +86,5 @@
                 IMPORTANT: IsEnabled has to come after the Command property, since the Command property changes the state of the object's IsEnabled property.
                                                                                                                                                              -->
         </Grid>
-
     </ContentPage.Content>
 </ContentPage>

@@ -3,8 +3,8 @@
 namespace PointZ.Views.Templates
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class ArrowKeysTemplate
+    public partial class MiscKeysTemplate
     {
-        public ArrowKeysTemplate() { InitializeComponent(); }
+        public MiscKeysTemplate() { InitializeComponent(); }
     }
 }
