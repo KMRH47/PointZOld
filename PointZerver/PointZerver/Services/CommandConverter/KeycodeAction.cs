@@ -2,7 +2,7 @@
 {
     public enum KeycodeAction
     {
-         A = 29,
+        A = 29,
         AltLeft = 57,
         AltRight = 58,
         Apostrophe = 75,

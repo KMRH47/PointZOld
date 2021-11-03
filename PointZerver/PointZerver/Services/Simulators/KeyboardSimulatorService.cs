@@ -41,7 +41,6 @@ namespace PointZerver.Services.Simulators
                     {
                         this.keyboardSimulator.KeyPress(this.virtualKeyCodeConverterService.ParseString(payload));
                     }
-
                     break;
                 case "KeyPress":
                     this.keyboardSimulator.KeyPress(this.virtualKeyCodeConverterService.ParseString(payload));

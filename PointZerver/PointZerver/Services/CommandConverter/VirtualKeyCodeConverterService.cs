@@ -12,12 +12,12 @@ namespace PointZerver.Services.CommandConverter
 
             if (keyCodeInvalid) return VirtualKeyCode.NONAME;
 
-            VirtualKeyCode virtualKeyCode = keyCodeAction switch
+            return keyCodeAction switch
             {
                 KeycodeAction.A => VirtualKeyCode.VK_A,
                 KeycodeAction.AltLeft => VirtualKeyCode.LMENU,
                 KeycodeAction.AltRight => VirtualKeyCode.RMENU,
-                KeycodeAction.Apostrophe => VirtualKeyCode.PRIOR,
+                KeycodeAction.Apostrophe => VirtualKeyCode.NONAME,
                 KeycodeAction.AppSwitch => VirtualKeyCode.APPS,
                 KeycodeAction.Assist => VirtualKeyCode.NONAME,
                 KeycodeAction.At => VirtualKeyCode.ATTN,
@@ -80,12 +80,12 @@ namespace PointZerver.Services.CommandConverter
                 KeycodeAction.D => VirtualKeyCode.VK_D,
                 KeycodeAction.Del => VirtualKeyCode.BACK,
                 KeycodeAction.DpadCenter => VirtualKeyCode.NONAME,
-                KeycodeAction.DpadDown => VirtualKeyCode.NONAME,
+                KeycodeAction.DpadDown => VirtualKeyCode.DOWN,
                 KeycodeAction.DpadDownLeft => VirtualKeyCode.NONAME,
                 KeycodeAction.DpadDownRight => VirtualKeyCode.NONAME,
-                KeycodeAction.DpadLeft => VirtualKeyCode.NONAME,
-                KeycodeAction.DpadRight => VirtualKeyCode.NONAME,
-                KeycodeAction.DpadUp => VirtualKeyCode.NONAME,
+                KeycodeAction.DpadLeft => VirtualKeyCode.LEFT,
+                KeycodeAction.DpadRight => VirtualKeyCode.RIGHT,
+                KeycodeAction.DpadUp => VirtualKeyCode.UP,
                 KeycodeAction.DpadUpLeft => VirtualKeyCode.NONAME,
                 KeycodeAction.DpadUpRight => VirtualKeyCode.NONAME,
                 KeycodeAction.Dvr => VirtualKeyCode.NONAME,
@@ -141,7 +141,7 @@ namespace PointZerver.Services.CommandConverter
                 KeycodeAction.MediaClose => VirtualKeyCode.NONAME,
                 KeycodeAction.MediaEject => VirtualKeyCode.NONAME,
                 KeycodeAction.MediaFastForward => VirtualKeyCode.NONAME,
-                KeycodeAction.MediaNext => VirtualKeyCode.NONAME,
+                KeycodeAction.MediaNext => VirtualKeyCode.MEDIA_NEXT_TRACK,
                 KeycodeAction.MediaPause => VirtualKeyCode.NONAME,
                 KeycodeAction.MediaPlay => VirtualKeyCode.PLAY,
                 KeycodeAction.MediaPlayPause => VirtualKeyCode.MEDIA_PLAY_PAUSE,
@@ -194,17 +194,17 @@ namespace PointZerver.Services.CommandConverter
                 KeycodeAction.NumpadAdd => VirtualKeyCode.ADD,
                 KeycodeAction.NumpadComma => VirtualKeyCode.OEM_COMMA,
                 KeycodeAction.NumpadDivide => VirtualKeyCode.DIVIDE,
-                KeycodeAction.NumpadDot => VirtualKeyCode.NONAME,
-                KeycodeAction.NumpadEnter => VirtualKeyCode.NONAME,
-                KeycodeAction.NumpadEquals => VirtualKeyCode.NONAME,
+                KeycodeAction.NumpadDot => VirtualKeyCode.OEM_PERIOD,
+                KeycodeAction.NumpadEnter => VirtualKeyCode.RETURN,
+                KeycodeAction.NumpadEquals => VirtualKeyCode.OEM_PLUS,
                 KeycodeAction.NumpadLeftParen => VirtualKeyCode.NONAME,
-                KeycodeAction.NumpadMultiply => VirtualKeyCode.NONAME,
+                KeycodeAction.NumpadMultiply => VirtualKeyCode.MULTIPLY,
                 KeycodeAction.NumpadRightParen => VirtualKeyCode.NONAME,
-                KeycodeAction.NumpadSubtract => VirtualKeyCode.NONAME,
+                KeycodeAction.NumpadSubtract => VirtualKeyCode.OEM_MINUS,
                 KeycodeAction.O => VirtualKeyCode.VK_O,
                 KeycodeAction.P => VirtualKeyCode.VK_P,
-                KeycodeAction.PageDown => VirtualKeyCode.NONAME,
-                KeycodeAction.PageUp => VirtualKeyCode.NONAME,
+                KeycodeAction.PageDown => VirtualKeyCode.NEXT,
+                KeycodeAction.PageUp => VirtualKeyCode.PRIOR,
                 KeycodeAction.Pairing => VirtualKeyCode.NONAME,
                 KeycodeAction.Paste => VirtualKeyCode.NONAME,
                 KeycodeAction.Period => VirtualKeyCode.OEM_PERIOD,
@@ -233,7 +233,7 @@ namespace PointZerver.Services.CommandConverter
                 KeycodeAction.SoftRight => VirtualKeyCode.NONAME,
                 KeycodeAction.SoftSleep => VirtualKeyCode.NONAME,
                 KeycodeAction.Space => VirtualKeyCode.SPACE,
-                KeycodeAction.Star => VirtualKeyCode.NONAME,
+                KeycodeAction.Star => VirtualKeyCode.MULTIPLY,
                 KeycodeAction.StbInput => VirtualKeyCode.NONAME,
                 KeycodeAction.StbPower => VirtualKeyCode.NONAME,
                 KeycodeAction.Stem1 => VirtualKeyCode.NONAME,
@@ -300,8 +300,6 @@ namespace PointZerver.Services.CommandConverter
                 KeycodeAction.ZoomOut => VirtualKeyCode.NONAME,
                 _ => VirtualKeyCode.NONAME
             };
-            
-            return virtualKeyCode;
         }
     }
 }
