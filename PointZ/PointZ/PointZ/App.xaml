@@ -78,7 +78,7 @@
         <Style TargetType="{x:Type controls:SoftKeyboardButton}">
             <Setter Property="BorderWidth" Value="0" />
             <Setter Property="CornerRadius" Value="0" />
-            <Setter Property="FontSize" Value="Medium" />
+            <Setter Property="FontSize" Value="Title" />
             <Setter Property="FontFamily" Value="IconFont" />
             <Setter Property="BackgroundColor"
                     Value="{AppThemeBinding 

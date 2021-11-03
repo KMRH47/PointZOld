@@ -149,7 +149,7 @@ namespace PointZ.ViewModels
             get => this.customEditorText;
             set
             {
-                if (!DirectInputDisabled)
+                if (!DirectInputDisabled && this.customEditorMessageModeText.Length == 0)
                 {
                     if (value.Length == CustomEditorText.Length + 1)
                     {
