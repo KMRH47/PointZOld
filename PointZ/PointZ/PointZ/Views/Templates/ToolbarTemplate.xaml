@@ -19,13 +19,13 @@
             <!-- Soft Keyboard Button -->
             <controls:SoftKeyboardButton Grid.Column="0"
                                          Text="&#xE80E; &#xE80F;"
-                                         Command="{Binding KeyboardButtonCommand}"
-                                         IsVisible="{Binding EditorFocused, Converter={StaticResource InverseBooleanConverter}}" />
+                                         Command="{Binding SoftKeyboardButtonCommand}"
+                                         IsVisible="{Binding CustomEditorIsFocused, Converter={StaticResource InverseBooleanConverter}}" />
 
             <!-- Text Input Mode Button -->
             <Button Grid.Column="0"
                     Command="{Binding SwitchInputModeCommand}"
-                    IsVisible="{Binding EditorFocused}">
+                    IsVisible="{Binding CustomEditorIsFocused}">
                 <Button.Triggers>
                     <DataTrigger TargetType="Button" Binding="{Binding DirectInputDisabled}" Value="true">
                         <Setter Property="Text" Value="&#xF0E5;" />
@@ -36,24 +36,31 @@
                 </Button.Triggers>
             </Button>
 
-            <!-- Settings Button -->
-            <Button Grid.Column="1"
-                    Text="&#xE800;"
-                    IsVisible="{Binding EditorFocused, Converter={StaticResource InverseBooleanConverter}}" />
-
             <!-- Keyboard Keys Button -->
             <Button Grid.Column="1"
                     Text="&#xF108; &#xE80F;"
-                    Command="{Binding MediaKeyButtonCommand}"
-                    IsVisible="{Binding DirectInputDisabled, Converter={StaticResource InverseBooleanConverter}}" />
+                    Command="{Binding KeyboardButtonCommand}">
+                <Button.IsVisible>
+                    <MultiBinding Converter="{StaticResource BooleanOrConverter}">
+                        <Binding Path="CustomEditorIsFocused" Converter="{StaticResource InverseBooleanConverter}" />
+                        <Binding Path="DirectInputDisabled" Converter="{StaticResource InverseBooleanConverter}" />
+                    </MultiBinding>
+                </Button.IsVisible>
+            </Button>
 
             <!-- Send Text Button -->
             <Button Grid.Column="1"
                     Text="&#xF1D8;"
-                    IsEnabled="{Binding DirectInputDisabled}"
                     Command="{Binding SendTextCommand}"
-                    CommandParameter="{Binding CustomEditorText }"
-                    IsVisible="{Binding DirectInputDisabled}" />
+                    CommandParameter="{Binding CustomEditorText}"
+                    IsEnabled="{Binding DirectInputDisabled}">
+                <Button.IsVisible>
+                    <MultiBinding Converter="{StaticResource BooleanAndConverter}" >
+                        <Binding Path="DirectInputDisabled" Mode="OneWay"  />
+                        <Binding Path="CustomEditorIsFocused" Mode="OneWay" />
+                    </MultiBinding>
+                </Button.IsVisible>
+            </Button>
         </Grid>
     </ContentView.Content>
 </ContentView>

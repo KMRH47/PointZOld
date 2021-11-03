@@ -8,6 +8,7 @@ using PointZ.Controls;
 using PointZ.Models.CustomEditor;
 using PointZ.Models.KeyEvent;
 using PointZ.Services.PlatformEventService;
+using PointZ.Services.PlatformSettings;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
@@ -23,7 +24,6 @@ namespace PointZ.Android.Renderers
         public CustomEditorRenderer(Context context) : base(context)
         {
             this.platformEventService = DependencyService.Resolve<IPlatformEventService>();
-            this.platformEventService.CustomEditorFocusRequested += OnFocusRequested;
             this.platformEventService.CustomEditorSetInputType += OnSetInputType;
         }
 
@@ -110,7 +110,6 @@ namespace PointZ.Android.Renderers
             {
                 // Unsubscribe from event when reconnecting from a previous session.
                 System.Diagnostics.Debug.WriteLine(exception.Message);
-                this.platformEventService.CustomEditorFocusRequested -= OnFocusRequested;
                 this.platformEventService.CustomEditorSetInputType -= OnSetInputType;
             }
         }

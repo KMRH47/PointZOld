@@ -3,8 +3,8 @@
 namespace PointZ.Views.Templates
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class MediaKeysView
+    public partial class BackgroundLabelTemplate 
     {
-        public MediaKeysView() { InitializeComponent(); }
+        public BackgroundLabelTemplate() { InitializeComponent(); }
     }
 }

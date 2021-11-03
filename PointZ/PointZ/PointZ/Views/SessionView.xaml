@@ -6,6 +6,7 @@
              xmlns:viewModelsBase="clr-namespace:PointZ.ViewModels.Base;assembly=PointZ"
              xmlns:controls="clr-namespace:PointZ.Controls;assembly=PointZ"
              xmlns:templates="clr-namespace:PointZ.Views.Templates;assembly=PointZ"
+             xmlns:behaviors="clr-namespace:PointZ.Behaviors;assembly=PointZ"
              x:DataType="viewModels:SessionViewModel"
              x:Class="PointZ.Views.SessionView"
              NavigationPage.HasNavigationBar="False"
@@ -16,11 +17,20 @@
             <Style TargetType="{x:Type controls:CustomEditor}">
                 <Setter Property="BackgroundColor" Value="Transparent" />
                 <Setter Property="Margin" Value="20,40,20,0" />
-                <Setter Property="VerticalOptions" Value="FillAndExpand" />
+                <Setter Property="VerticalOptions" Value="End" />
+                <Setter Property="RotationX" Value="2" />
+                <Setter Property="FontSize" Value="Title" />
+                <Setter Property="AutoSize" Value="TextChanges" />
+            </Style>
+            <Style TargetType="{x:Type Button}" x:Key="SettingsButton">
+                <Setter Property="VerticalOptions" Value="Start" />
+                <Setter Property="HorizontalOptions" Value="End" />
+                <Setter Property="BackgroundColor" Value="Transparent" />
+                <Setter Property="Text" Value="&#xE800;" />
             </Style>
         </ResourceDictionary>
     </ContentPage.Resources>
-
+ 
     <ContentPage.Content>
         <Grid>
             <Grid.RowDefinitions>
@@ -28,22 +38,40 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
+            <!-- Settings Button -->
+            <Button Grid.Row="0" Style="{StaticResource SettingsButton}"/>
+
+            <!-- Background Label -->
+            <templates:BackgroundLabelTemplate Grid.Row="0" />
+
             <!-- Touchpad -->
-            <controls:StackLayoutTouchpad Grid.Row="0" Height="{Binding TouchpadHeight, Mode=OneWayToSource}">
+            <Grid Grid.Row="0" Height="{Binding TouchpadHeight, Mode=OneWayToSource}">
+
+                <!-- Editor  -->
                 <controls:CustomEditor Text="{Binding CustomEditorText}"
-                                       IsFocused="{Binding EditorFocused}">
+                                        IsFocused="{Binding CustomEditorIsFocused, Mode=OneWayToSource}"
+                                       behaviors:FocusBehavior.IsFocused="{Binding CustomEditorIsFocused}">
                     <controls:CustomEditor.InputTransparent>
                         <MultiBinding Converter="{StaticResource BooleanOrConverter}">
-                            <Binding Path="EditorFocused" Converter="{StaticResource InverseBooleanConverter}" />
-                            <Binding Path="DirectInputDisabled" Converter="{StaticResource InverseBooleanConverter}" />
+                            <Binding Path="CustomEditorIsFocused" Converter="{StaticResource InverseBooleanConverter}" />
+                            <Binding Path="DirectInputDisabled" Converter="{StaticResource InverseBooleanConverter}"
+                                     Mode="OneWay" />  
                         </MultiBinding>
                     </controls:CustomEditor.InputTransparent>
                 </controls:CustomEditor>
-            </controls:StackLayoutTouchpad>
+            </Grid>
 
             <StackLayout Grid.Row="1" Orientation="Vertical" Spacing="1">
                 <!-- Keyboard Keys -->
-                <templates:KeyboardKeysTemplate IsVisible="{Binding KeyboardKeysVisible}" />
+                <templates:KeyboardKeysTemplate>
+                    <templates:KeyboardKeysTemplate.IsVisible>
+                        <MultiBinding Converter="{StaticResource BooleanAndConverter}">
+                            <Binding Path="KeyboardKeysVisible" Mode="OneWay" />
+                            <Binding Path="DirectInputDisabled" Converter="{StaticResource InverseBooleanConverter}"
+                                     Mode="OneWay" />
+                        </MultiBinding>
+                    </templates:KeyboardKeysTemplate.IsVisible>
+                </templates:KeyboardKeysTemplate>
 
                 <!-- Bottom Toolbar -->
                 <templates:ToolbarTemplate />

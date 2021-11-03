@@ -10,7 +10,6 @@ namespace PointZ.Services.PlatformEventService
         event EventHandler ViewAppearing;
         event EventHandler ViewDisappearing;
         event EventHandler BackPressed;
-        event EventHandler CustomEditorFocusRequested;
         event EventHandler<TouchEventArgs> ScreenTouched;
         public event EventHandler<KeyEventArgs> CustomEditorAction;
         public event EventHandler<KeyEventArgs> KeyEvent;
@@ -21,7 +20,6 @@ namespace PointZ.Services.PlatformEventService
         void OnScreenTouched(TouchEventArgs e);
         void OnKeyEvent(KeyEventArgs e);
         void OnCustomEditorAction(KeyEventArgs e);
-        void OnCustomEditorFocusRequested();
         void OnCustomEditorSetInputType(CustomEditorEventArgs e);
     }
 }

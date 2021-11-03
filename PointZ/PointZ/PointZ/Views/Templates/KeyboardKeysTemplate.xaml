@@ -2,14 +2,83 @@
 
 <ContentView xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:templates="clr-namespace:PointZ.Views.Templates;assembly=PointZ"
+             xmlns:viewModels="clr-namespace:PointZ.ViewModels;assembly=PointZ"
+             x:DataType="viewModels:SessionViewModel"
              x:Class="PointZ.Views.Templates.KeyboardKeysTemplate">
- 
+
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <Style TargetType="{x:Type FlexLayout}">
+                <Setter Property="JustifyContent" Value="SpaceBetween" />
+            </Style>
+            <Style TargetType="{x:Type Button}">
+                <Setter Property="FontSize" Value="Small"/>
+            </Style>
+        </ResourceDictionary>
+    </ContentView.Resources>
+
     <ContentView.Content>
         <StackLayout>
             <FlexLayout>
-                <templates:MediaKeysView />
-                <templates:MiscKeysTemplate />
+                <!-- Media Keys -->
+                <StackLayout>
+                    <FlexLayout>
+                        <!-- Rewind -->
+                        <Button Text="&#xE809;" Command="{Binding MediaRewind}" />
+                        <!-- Play/Pause -->
+                        <Button Text="&#xE803;&#xE805;" Command="{Binding MediaPlayPause}" />
+                        <!-- Forward -->
+                        <Button Text="&#xE808;" Command="{Binding MediaForward}" />
+                    </FlexLayout>
+
+                    <FlexLayout>
+                        <!-- Previous -->
+                        <Button Text="&#xE80B;" Command="{Binding MediaPrevious}" />
+                        <!-- Stop -->
+                        <Button Text="&#xE804;" Command="{Binding MediaStop}" />
+                        <!-- Next -->
+                        <Button Text="&#xE80A;" Command="{Binding MediaNext}" />
+                    </FlexLayout>
+
+                    <FlexLayout>
+                        <!-- Volume Down -->
+                        <Button Text="&#xE80C;" Command="{Binding VolumeDown}" />
+                        <!-- Mute -->
+                        <Button Text="&#xE806; &#xE807;" Command="{Binding Mute}" />
+                        <!-- Volume Up-->
+                        <Button Text="&#xE80D;" Command="{Binding VolumeUp}" />
+                    </FlexLayout>
+                </StackLayout>
+
+                <!-- Misc Keys -->
+                <StackLayout>
+                    <FlexLayout>
+                        <!-- CTRL -->
+                        <Button Text="ctrl" />
+                        <!-- Windows -->
+                        <Button Text="&#xF17A;" />
+                        <!-- ALT -->
+                        <Button Text="alt" />
+                    </FlexLayout>
+
+                    <FlexLayout>
+                        <!-- Page Down -->
+                        <Button Text="pg d" />
+                        <!-- Arrow up -->
+                        <Button Text="&#xF176;" />
+                        <!-- Page Down -->
+                        <Button Text="pg up" />
+                    </FlexLayout>
+
+                    <FlexLayout>
+                        <!-- Arrow Left -->
+                        <Button Text="&#xF177;" />
+                        <!-- Arrow Down -->
+                        <Button Text="&#xF175;" />
+                        <!-- Arrow Right -->
+                        <Button Text="&#xF178;" />
+                    </FlexLayout>
+                </StackLayout>
             </FlexLayout>
         </StackLayout>
     </ContentView.Content>

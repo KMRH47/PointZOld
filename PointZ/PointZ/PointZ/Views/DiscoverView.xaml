@@ -35,6 +35,9 @@
                         Dark={StaticResource White80},
                         Light={StaticResource Black80}}" />
             </Style>
+            <Style TargetType="{x:Type templates:ServerTemplate}">
+                <Setter Property="Rotation" Value="180" />
+            </Style>
         </ResourceDictionary>
     </ContentPage.Resources>
 
@@ -56,17 +59,17 @@
 
                     <!-- Text Beneath Spinner -->
                     <Label Text="Searching" />
+
                 </StackLayout>
 
                 <!-- Server List -->
                 <ListView IsVisible="{Binding Servers.Count, Converter={StaticResource IntToBooleanConverter}}"
                           ItemsSource="{Binding Servers}"
                           SelectedItem="{Binding SelectedServer}">
-
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
-                                <templates:ServerTemplate Rotation="180" />
+                                <templates:ServerTemplate/>
                             </ViewCell>
                         </DataTemplate>
                     </ListView.ItemTemplate>

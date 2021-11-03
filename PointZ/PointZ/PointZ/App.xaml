@@ -3,8 +3,7 @@
 <Application xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:PointZ.Controls;assembly=PointZ"
-             xmlns:singleConverters="clr-namespace:PointZ.Converters.Single;assembly=PointZ"
-             xmlns:multiConverters="clr-namespace:PointZ.Converters.Multi;assembly=PointZ"
+             xmlns:converters="clr-namespace:PointZ.Converters;assembly=PointZ"
              x:Class="PointZ.App">
     <Application.Resources>
 
@@ -64,7 +63,7 @@
         <Style TargetType="{x:Type Button}">
             <Setter Property="BorderWidth" Value="0" />
             <Setter Property="CornerRadius" Value="0" />
-            <Setter Property="FontSize" Value="Medium" />
+            <Setter Property="FontSize" Value="Title" />
             <Setter Property="FontFamily" Value="IconFont" />
             <Setter Property="BackgroundColor"
                     Value="{AppThemeBinding 
@@ -92,11 +91,11 @@
         </Style>
 
         <!-- Converters -->
-        <singleConverters:IntToBooleanConverter x:Key="IntToBooleanConverter" />
-        <singleConverters:InverseCountToBooleanConverter x:Key="InverseCountToBoolConverter" />
-        <singleConverters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
-        <singleConverters:ObjectNotNullBooleanConverter x:Key="ObjectNotNullBooleanConverter" />
-        <multiConverters:BooleanOrConverter x:Key="BooleanOrConverter" />
-
+        <converters:IntToBooleanConverter x:Key="IntToBooleanConverter" />
+        <converters:InverseCountToBooleanConverter x:Key="InverseCountToBoolConverter" />
+        <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
+        <converters:ObjectNotNullBooleanConverter x:Key="ObjectNotNullBooleanConverter" />
+        <converters:BooleanOrConverter x:Key="BooleanOrConverter" />
+        <converters:BooleanAndConverter x:Key="BooleanAndConverter" />
     </Application.Resources>
 </Application>

@@ -29,11 +29,4 @@
       <None Remove="Resources\Fonts\fontello.ttf" />
       <EmbeddedResource Include="Resources\Fonts\fontello.ttf" />
     </ItemGroup>
-
-    <ItemGroup>
-      <Compile Update="Views\Templates\MediaKeysTemplate.xaml.cs">
-        <DependentUpon>MediaKeysView.xaml</DependentUpon>
-        <SubType>Code</SubType>
-      </Compile>
-    </ItemGroup>
 </Project>
