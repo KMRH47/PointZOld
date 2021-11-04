@@ -76,11 +76,11 @@ While the text box is empty, commands such as backspace and enter (new line) are
 
 ### PointZ
 
-https://drive.google.com/drive/folders/1Wb_Bz7FsOtTk9ZraFRQ9Ve7e_yYNw8HR
+[Android](Releases/PointZ/Android/sunflowerSensei.PointZ.apk.7z)
 
 ### PointZerver
 
-https://drive.google.com/drive/folders/1E1ca5ZQqQigOoMo5ikrgok3YpFGECbMH
+[Windows](Releases/PointZerver/Windows/win-x64.7z)
 
 # Troubleshooting
 
