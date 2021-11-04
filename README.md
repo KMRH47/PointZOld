@@ -111,6 +111,7 @@ Below is a table of all ports and protocols used by PointZ and PointZerver.
 | 0.2.1   | - Tap and hold now works correctly<br />- Textbox can no longer be clicked through<br />- Touch and key events no longer break when leaving/reentering activity |
 | 0.3.0   | Reworked touch-to-mouse code                                 |
 | 0.3.1   | - Reworked keyboard code<br />- Added send button (paper plane)<br />- Added settings button ((cog wheel) no functionality yet) |
+| 0.3.2   | - Added new icons<br />- Media keys and some other keyboard keys<br />- Optimized performance slightly<br />- Small UI overhaul |
 
 ### PointZerver
 
@@ -121,4 +122,5 @@ Below is a table of all ports and protocols used by PointZ and PointZerver.
 | 0.1.2   | Fixed data interpreter incorrectly deserializing payloads containing commas |
 | 0.1.3   | No longer binds to virtual network interfaces.               |
 | 0.1.4   | Minor code-refactor                                          |
+| 0.1.5   | Minor code-refactor                                          |
 

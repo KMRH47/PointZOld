@@ -9,7 +9,7 @@
         <Description>A desktop application used to interface with the Android/iOS application PointZ.</Description>
         <RepositoryUrl>https://gitlab.com/KMRH47/pointz</RepositoryUrl>
         <AssemblyVersion></AssemblyVersion>
-        <FileVersion>0.1.4</FileVersion>
+        <FileVersion>0.1.5</FileVersion>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
