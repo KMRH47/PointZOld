@@ -75,21 +75,6 @@
                     Light={StaticResource Black80}}" />
         </Style>
 
-        <Style TargetType="{x:Type controls:SoftKeyboardButton}">
-            <Setter Property="BorderWidth" Value="0" />
-            <Setter Property="CornerRadius" Value="0" />
-            <Setter Property="FontSize" Value="Title" />
-            <Setter Property="FontFamily" Value="IconFont" />
-            <Setter Property="BackgroundColor"
-                    Value="{AppThemeBinding 
-                    Dark={StaticResource Black80},
-                    Light={StaticResource White80}}" />
-            <Setter Property="TextColor"
-                    Value="{AppThemeBinding 
-                    Dark={StaticResource White80},
-                    Light={StaticResource Black80}}" />
-        </Style>
-
         <!-- Converters -->
         <converters:IntToBooleanConverter x:Key="IntToBooleanConverter" />
         <converters:InverseCountToBooleanConverter x:Key="InverseCountToBoolConverter" />

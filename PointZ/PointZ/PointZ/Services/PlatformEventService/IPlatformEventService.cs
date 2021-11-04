@@ -10,14 +10,14 @@ namespace PointZ.Services.PlatformEventService
         event EventHandler ViewAppearing;
         event EventHandler ViewDisappearing;
         event EventHandler BackPressed;
-        event EventHandler<TouchEventArgs> ScreenTouched;
+        event EventHandler<TouchEventArgs> TouchpadGridTouched;
         public event EventHandler<KeyEventArgs> CustomEditorAction;
         public event EventHandler<KeyEventArgs> KeyEvent;
         public event EventHandler<CustomEditorEventArgs> CustomEditorSetInputType;
         void OnBackPressed();
         void OnViewDisappearing();
         void OnViewAppearing();
-        void OnScreenTouched(TouchEventArgs e);
+        void OnTouchpadGridTouched(TouchEventArgs e);
         void OnKeyEvent(KeyEventArgs e);
         void OnCustomEditorAction(KeyEventArgs e);
         void OnCustomEditorSetInputType(CustomEditorEventArgs e);

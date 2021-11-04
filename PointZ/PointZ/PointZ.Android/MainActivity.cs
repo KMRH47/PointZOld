@@ -2,11 +2,9 @@
 using Android.Content.PM;
 using Android.OS;
 using Android.Views;
-using AndroidX.Core.View;
 using PointZ.Android.Renderers;
 using PointZ.Android.Services;
 using PointZ.Models.KeyEvent;
-using PointZ.Models.TouchEvent;
 using PointZ.Services.PlatformEventService;
 using PointZ.Services.PlatformSettings;
 using Xamarin.Forms;
@@ -21,24 +19,19 @@ namespace PointZ.Android
     public class MainActivity : FormsAppCompatActivity
     {
         private IPlatformEventService platformEventService;
-        private bool customEntryFocused;
+        private bool lieAboutFocus;
 
-        public override View CurrentFocus => this.customEntryFocused ? null : base.CurrentFocus;
+        public override View CurrentFocus => this.lieAboutFocus ? null : base.CurrentFocus;
 
         public override bool DispatchTouchEvent(MotionEvent motionEventArgs)
         {
-            float x = motionEventArgs.GetX();
-            float y = motionEventArgs.GetY();
-            TouchAction touchAction = (TouchAction)((ushort)motionEventArgs.Action);
-            this.platformEventService.OnScreenTouched(new TouchEventArgs(x, y, touchAction));
-        
             View viewInFocus = CurrentFocus;
             if (viewInFocus is null) return base.DispatchTouchEvent(motionEventArgs);
             if (viewInFocus.Parent is not CustomEditorRenderer) return base.DispatchTouchEvent(motionEventArgs);
-
-            this.customEntryFocused = true;
+            
+            this.lieAboutFocus = true;
             bool result = base.DispatchTouchEvent(motionEventArgs);
-            this.customEntryFocused = false;
+            this.lieAboutFocus = false;
             return result;
         }
 

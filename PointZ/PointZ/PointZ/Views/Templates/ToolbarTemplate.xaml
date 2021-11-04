@@ -17,10 +17,10 @@
             </Grid.ColumnDefinitions>
 
             <!-- Soft Keyboard Button -->
-            <controls:SoftKeyboardButton Grid.Column="0"
-                                         Text="&#xE80E; &#xE80F;"
-                                         Command="{Binding SoftKeyboardButtonCommand}"
-                                         IsVisible="{Binding CustomEditorIsFocused, Converter={StaticResource InverseBooleanConverter}}" />
+            <Button Grid.Column="0"
+                    Text="&#xE80E; &#xE80F;"
+                    Command="{Binding SoftKeyboardButtonCommand}"
+                    IsVisible="{Binding CustomEditorIsFocused, Converter={StaticResource InverseBooleanConverter}}" />
 
             <!-- Text Input Mode Button -->
             <Button Grid.Column="0"
@@ -55,8 +55,8 @@
                     CommandParameter="{Binding CustomEditorText}"
                     IsEnabled="{Binding DirectInputDisabled}">
                 <Button.IsVisible>
-                    <MultiBinding Converter="{StaticResource BooleanAndConverter}" >
-                        <Binding Path="DirectInputDisabled" Mode="OneWay"  />
+                    <MultiBinding Converter="{StaticResource BooleanAndConverter}">
+                        <Binding Path="DirectInputDisabled" Mode="OneWay" />
                         <Binding Path="CustomEditorIsFocused" Mode="OneWay" />
                     </MultiBinding>
                 </Button.IsVisible>

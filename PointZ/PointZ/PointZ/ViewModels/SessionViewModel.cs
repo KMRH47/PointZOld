@@ -31,6 +31,7 @@ namespace PointZ.ViewModels
         private bool customEditorIsFocused;
         private bool directInputDisabled;
         private bool keyboardKeysVisible;
+        private bool settingsButtonFocused;
 
         public SessionViewModel(
             IInputEventHandlerService inputEventHandlerService, IPlatformSettingsService platformSettingsService,
@@ -264,14 +265,14 @@ namespace PointZ.ViewModels
             base.NavigationService.NavigateBackAsync();
         }
 
-        private async void OnScreenTouched(object sender, TouchEventArgs e)
+        private async void OnTouchpadGridTouched(object sender, TouchEventArgs e)
         {
             if (CustomEditorIsFocused)
                 if (DirectInputDisabled)
                     return;
             if (e.Y > TouchpadHeight)
                 return;
-
+            
             await this.inputEventHandlerService.HandleTouchEventAsync(e);
         }
 
@@ -285,14 +286,14 @@ namespace PointZ.ViewModels
         private void AddPlatformListeners()
         {
             this.platformEventService.CustomEditorAction += OnCustomEditorAction;
-            this.platformEventService.ScreenTouched += OnScreenTouched;
+            this.platformEventService.TouchpadGridTouched += OnTouchpadGridTouched;
             this.platformEventService.BackPressed += OnBackPressed;
         }
 
         private void RemovePlatformListeners()
         {
             this.platformEventService.CustomEditorAction -= OnCustomEditorAction;
-            this.platformEventService.ScreenTouched -= OnScreenTouched;
+            this.platformEventService.TouchpadGridTouched -= OnTouchpadGridTouched;
             this.platformEventService.BackPressed -= OnBackPressed;
         }
     }

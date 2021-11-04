@@ -71,8 +71,8 @@
     <Compile Include="Extensions\ActivityExtensions.cs" />
     <Compile Include="Extensions\ViewGroupExtensions.cs" />
     <Compile Include="MainActivity.cs" />
-    <Compile Include="Renderers\SoftKeyboardButtonRenderer.cs" />
     <Compile Include="Renderers\CustomEditorRenderer.cs" />
+    <Compile Include="Renderers\TouchpadGridRenderer.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\AndroidSettingsService.cs" />
