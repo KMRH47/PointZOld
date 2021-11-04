@@ -1,12 +1,12 @@
-﻿namespace PointZ.Models.TouchEvent
+﻿namespace PointZ.Models.AndroidTouchEvent
 {
-    public class TouchEventArgs
+    public class AndroidTouchEventArgs
     {
-        public TouchEventArgs(float x, float y, TouchAction touchAction)
+        public AndroidTouchEventArgs(float x, float y, AndroidTouchAction androidTouchAction)
         {
             X = x;
             Y = y;
-            TouchAction = touchAction;
+            AndroidTouchAction = androidTouchAction;
         }
 
         /// <summary>
@@ -22,6 +22,6 @@
         /// <summary>
         /// The touch action associated with this event.
         /// </summary>
-        public TouchAction TouchAction { get; }
+        public AndroidTouchAction AndroidTouchAction { get; }
     }
 }

@@ -1,18 +1,18 @@
 ﻿using System.Threading.Tasks;
-using PointZ.Models.KeyEvent;
-using PointZ.Models.TouchEvent;
+using PointZ.Models.AndroidKeyEvent;
+using PointZ.Models.AndroidTouchEvent;
 using PointZ.Services.InputCommandSender;
 
 namespace PointZ.Services.InputEventHandler
 {
     public class InputEventHandlerService : IInputEventHandlerService
     {
-        private readonly IInputEventHandler<KeyEventArgs> keyboardEventHandler;
-        private readonly IInputEventHandler<TouchEventArgs> touchEventHandler;
+        private readonly IInputEventHandler<AndroidKeyEventArgs> keyboardEventHandler;
+        private readonly IInputEventHandler<AndroidTouchEventArgs> touchEventHandler;
 
         public InputEventHandlerService(
-            IInputEventHandler<KeyEventArgs> keyboardEventHandler,
-            IInputEventHandler<TouchEventArgs> touchEventHandler, IKeyboardCommandSender keyboardCommandSender)
+            IInputEventHandler<AndroidKeyEventArgs> keyboardEventHandler,
+            IInputEventHandler<AndroidTouchEventArgs> touchEventHandler, IKeyboardCommandSender keyboardCommandSender)
         {
             this.keyboardEventHandler = keyboardEventHandler;
             this.touchEventHandler = touchEventHandler;
@@ -21,10 +21,10 @@ namespace PointZ.Services.InputEventHandler
 
         public IKeyboardCommandSender KeyboardCommandSender { get; }
 
-        public async Task HandleTouchEventAsync(TouchEventArgs touchEventArgs) =>
-            await this.touchEventHandler.HandleAsync(touchEventArgs);
+        public async Task HandleTouchEventAsync(AndroidTouchEventArgs androidTouchEventArgs) =>
+            await this.touchEventHandler.HandleAsync(androidTouchEventArgs);
 
-        public async Task HandleKeyEventAsync(KeyEventArgs keyEventArgs) =>
-            await this.keyboardEventHandler.HandleAsync(keyEventArgs);
+        public async Task HandleKeyEventAsync(AndroidKeyEventArgs androidKeyEventArgs) =>
+            await this.keyboardEventHandler.HandleAsync(androidKeyEventArgs);
     }
 }

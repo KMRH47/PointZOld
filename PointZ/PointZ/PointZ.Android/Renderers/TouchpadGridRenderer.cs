@@ -1,7 +1,7 @@
 ﻿using Android.Content;
 using PointZ.Android.Renderers;
 using PointZ.Controls;
-using PointZ.Models.TouchEvent;
+using PointZ.Models.AndroidTouchEvent;
 using PointZ.Services.PlatformEventService;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
@@ -31,8 +31,8 @@ namespace PointZ.Android.Renderers
             {
                 float x = args.Event.GetX();
                 float y = args.Event.GetY();
-                TouchAction touchAction = (TouchAction)((ushort)args.Event.Action);
-                this.platformEventService.OnTouchpadGridTouched(new Models.TouchEvent.TouchEventArgs(x, y, touchAction));
+                AndroidTouchAction androidTouchAction = (AndroidTouchAction)((ushort)args.Event.Action);
+                this.platformEventService.OnTouchpadGridTouched(new AndroidTouchEventArgs(x, y, androidTouchAction));
             };
         }
     }

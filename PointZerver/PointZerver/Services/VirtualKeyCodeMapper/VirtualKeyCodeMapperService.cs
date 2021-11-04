@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Diagnostics;
 using InputSimulatorStandard.Native;
 
-namespace PointZerver.Services.CommandConverter
+namespace PointZerver.Services.VirtualKeyCodeMapper
 {
-    public class VirtualKeyCodeConverterService : IVirtualKeyCodeConverterService
+    public class VirtualKeyCodeMapperService : IVirtualKeyCodeMapperService
     {
         public VirtualKeyCode ParseString(string keycodeString)
         {

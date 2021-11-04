@@ -1,19 +1,19 @@
 ﻿using System.Diagnostics;
 using System.Threading.Tasks;
+using PointZ.Models.AndroidTouchEvent;
 using PointZ.Models.Input;
-using PointZ.Models.TouchEvent;
 using PointZ.Services.InputCommandSender;
 using PointZ.Services.Settings;
 
 namespace PointZ.Services.InputEventHandler
 {
-    public class TouchEventHandler : IInputEventHandler<TouchEventArgs>
+    public class TouchEventHandler : IInputEventHandler<AndroidTouchEventArgs>
     {
         private readonly IMouseCommandSender mouseCommandSender;
         private readonly ISettingsService settingsService;
 
-        private TouchAction previousTapAction = TouchAction.Cancel;
-        private TouchAction previousTouchAction = TouchAction.Cancel;
+        private AndroidTouchAction previousTapAction = AndroidTouchAction.Cancel;
+        private AndroidTouchAction previousTouchAction = AndroidTouchAction.Cancel;
         private double previousX;
         private double previousY;
         private bool moving;
@@ -34,11 +34,11 @@ namespace PointZ.Services.InputEventHandler
         private int DeadZoneInitial => this.settingsService.DeadZoneInitial;
         private int DeadZoneScroll => this.settingsService.DeadZoneScroll;
 
-        public async Task HandleAsync(TouchEventArgs e)
+        public async Task HandleAsync(AndroidTouchEventArgs e)
         {
-            switch (e.TouchAction)
+            switch (e.AndroidTouchAction)
             {
-                case TouchAction.Down:
+                case AndroidTouchAction.Down:
                     if (this.canDoubleClick)
                     {
                         await PrimaryMouseButtonDownAsync();
@@ -47,30 +47,30 @@ namespace PointZ.Services.InputEventHandler
 
                     this.previousX = e.X;
                     this.previousY = e.Y;
-                    this.previousTapAction = e.TouchAction;
+                    this.previousTapAction = e.AndroidTouchAction;
 
                     break;
-                case TouchAction.Pointer2Down:
-                    this.previousTapAction = e.TouchAction;
+                case AndroidTouchAction.Pointer2Down:
+                    this.previousTapAction = e.AndroidTouchAction;
 
                     break;
-                case TouchAction.Pointer3Down:
-                    this.previousTapAction = e.TouchAction;
+                case AndroidTouchAction.Pointer3Down:
+                    this.previousTapAction = e.AndroidTouchAction;
                     break;
-                case TouchAction.Up:
+                case AndroidTouchAction.Up:
                     await ExecuteMouseActionAsync();
                     this.moving = false;
                     break;
-                case TouchAction.Move:
+                case AndroidTouchAction.Move:
                     int x = (int)-(this.previousX - e.X);
                     int y = (int)-(this.previousY - e.Y);
 
                     switch (this.previousTouchAction)
                     {
-                        case TouchAction.Move:
+                        case AndroidTouchAction.Move:
                             switch (this.previousTapAction)
                             {
-                                case TouchAction.Pointer2Down:
+                                case AndroidTouchAction.Pointer2Down:
                                     int scrollDirection = y < 0 ? -ScrollSpeed : ScrollSpeed;
                                     if (DeadZoneScroll > ToAbs(x) && DeadZoneScroll > ToAbs(y)) break;
 
@@ -78,7 +78,7 @@ namespace PointZ.Services.InputEventHandler
                                     this.previousX = e.X;
                                     this.previousY = e.Y;
                                     break;
-                                case TouchAction.Down:
+                                case AndroidTouchAction.Down:
                                     await this.mouseCommandSender.MoveMouseByAsync(x, y);
 
                                     this.previousX = e.X;
@@ -95,13 +95,13 @@ namespace PointZ.Services.InputEventHandler
                             y = 0;
                             Debug.WriteLine($"Moving...");
                             this.moving = true;
-                            goto case TouchAction.Move;
+                            goto case AndroidTouchAction.Move;
                     }
 
                     break;
             }
 
-            this.previousTouchAction = e.TouchAction;
+            this.previousTouchAction = e.AndroidTouchAction;
         }
 
         private static int ToAbs(int value) => value <= 0 ? -value : value;
@@ -110,7 +110,7 @@ namespace PointZ.Services.InputEventHandler
         {
             switch (this.previousTapAction)
             {
-                case TouchAction.Down:
+                case AndroidTouchAction.Down:
                     if (this.holdingPrimaryMouseButton)
                     {
                         if (this.canDoubleClick)
@@ -143,16 +143,16 @@ namespace PointZ.Services.InputEventHandler
                     }
 
                     break;
-                case TouchAction.PointerDown:
+                case AndroidTouchAction.PointerDown:
                     break;
-                case TouchAction.Pointer2Down:
+                case AndroidTouchAction.Pointer2Down:
                     if (!this.moving)
                     {
                         await SecondaryMouseButtonClickAsync();
                     }
 
                     break;
-                case TouchAction.Pointer3Down:
+                case AndroidTouchAction.Pointer3Down:
                     await this.mouseCommandSender.SendMouseCommandAsync(MouseCommand.MiddleButtonClick);
                     break;
             }

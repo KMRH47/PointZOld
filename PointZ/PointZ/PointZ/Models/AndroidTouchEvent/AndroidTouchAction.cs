@@ -1,6 +1,6 @@
-﻿namespace PointZ.Models.TouchEvent
+﻿namespace PointZ.Models.AndroidTouchEvent
 {
-    public enum TouchAction
+    public enum AndroidTouchAction
     {
         Down,
         Up,

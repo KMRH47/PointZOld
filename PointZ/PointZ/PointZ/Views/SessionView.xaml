@@ -26,11 +26,12 @@
                 <Setter Property="VerticalOptions" Value="Start" />
                 <Setter Property="HorizontalOptions" Value="End" />
                 <Setter Property="BackgroundColor" Value="Transparent" />
+                <Setter Property="WidthRequest" Value="50" />
                 <Setter Property="Text" Value="&#xE800;" />
             </Style>
         </ResourceDictionary>
     </ContentPage.Resources>
- 
+
     <ContentPage.Content>
         <Grid>
             <Grid.RowDefinitions>
@@ -38,9 +39,9 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <!-- Touchpad -->
-            <controls:TouchpadGrid Grid.Row="0" Height="{Binding TouchpadHeight, Mode=OneWayToSource}">
-                
+            <!-- Touchpad Grid -->
+            <controls:TouchpadGrid Grid.Row="0">
+
                 <!-- Settings Button -->
                 <Button Grid.Row="0" Style="{StaticResource SettingsButton}" />
 
@@ -49,13 +50,14 @@
 
                 <!-- Editor  -->
                 <controls:CustomEditor Text="{Binding CustomEditorText}"
-                                        IsFocused="{Binding CustomEditorIsFocused, Mode=OneWayToSource}"
-                                       behaviors:FocusBehavior.IsFocused="{Binding CustomEditorIsFocused}">
+                                       IsFocused="{Binding CustomEditorIsFocused, Mode=OneWayToSource}"
+                                       behaviors:FocusBehavior.IsFocused="{Binding CustomEditorIsFocused}"
+                                       IsVisible="{Binding CustomEditorIsFocused}">
                     <controls:CustomEditor.InputTransparent>
                         <MultiBinding Converter="{StaticResource BooleanOrConverter}">
                             <Binding Path="CustomEditorIsFocused" Converter="{StaticResource InverseBooleanConverter}" />
                             <Binding Path="DirectInputDisabled" Converter="{StaticResource InverseBooleanConverter}"
-                                     Mode="OneWay" />  
+                                     Mode="OneWay" />
                         </MultiBinding>
                     </controls:CustomEditor.InputTransparent>
                 </controls:CustomEditor>

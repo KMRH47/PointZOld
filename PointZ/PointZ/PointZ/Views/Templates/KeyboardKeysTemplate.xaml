@@ -18,65 +18,66 @@
     </ContentView.Resources>
 
     <ContentView.Content>
+        <!-- TODO: Dynamically swap between Windows/Linux/Mac icons. -->
         <StackLayout>
             <FlexLayout>
                 <!-- Media Keys -->
                 <StackLayout>
                     <FlexLayout>
                         <!-- Rewind -->
-                        <Button Text="&#xE809;" Command="{Binding MediaRewind}" />
+                        <Button Text="&#xE809;" Command="{Binding MediaRewindCommand}" />
                         <!-- Play/Pause -->
-                        <Button Text="&#xE803;&#xE805;" Command="{Binding MediaPlayPause}" />
+                        <Button Text="&#xE803;&#xE805;" Command="{Binding MediaPlayPauseCommand}" />
                         <!-- Forward -->
-                        <Button Text="&#xE808;" Command="{Binding MediaForward}" />
+                        <Button Text="&#xE808;" Command="{Binding MediaForwardCommand}" />
                     </FlexLayout>
 
                     <FlexLayout>
                         <!-- Previous -->
-                        <Button Text="&#xE80B;" Command="{Binding MediaPrevious}" />
+                        <Button Text="&#xE80B;" Command="{Binding MediaPreviousCommand}" />
                         <!-- Stop -->
-                        <Button Text="&#xE804;" Command="{Binding MediaStop}" />
+                        <Button Text="&#xE804;" Command="{Binding MediaStopCommand}" />
                         <!-- Next -->
-                        <Button Text="&#xE80A;" Command="{Binding MediaNext}" />
+                        <Button Text="&#xE80A;" Command="{Binding MediaNextCommand}" />
                     </FlexLayout>
 
                     <FlexLayout>
                         <!-- Volume Down -->
-                        <Button Text="&#xE80C;" Command="{Binding VolumeDown}" />
+                        <Button Text="&#xE80C;" Command="{Binding VolumeDownCommand}" />
                         <!-- Mute -->
-                        <Button Text="&#xE806; &#xE807;" Command="{Binding Mute}" />
+                        <Button Text="&#xE806; &#xE807;" Command="{Binding MuteCommand}" />
                         <!-- Volume Up-->
-                        <Button Text="&#xE80D;" Command="{Binding VolumeUp}" />
+                        <Button Text="&#xE80D;" Command="{Binding VolumeUpCommand}" />
                     </FlexLayout>
                 </StackLayout>
 
                 <!-- Misc Keys -->
                 <StackLayout>
                     <FlexLayout>
-                        <!-- CTRL -->
-                        <Button Text="ctrl" />
-                        <!-- Windows -->
-                        <Button Text="&#xF17A;" />
-                        <!-- ALT -->
-                        <Button Text="alt" />
+                        <!-- Ctrl -->
+                        <Button Text="ctrl" Command="{Binding CtrlCommand}"/>
+                        <!-- Windows/Super/Command -->
+                        <Button Text="&#xF17A;" Command="{Binding WinCmdSupCommand}"/>
+                        <!-- Alt/opt -->
+                        <Button Text="alt" Command="{Binding AltOptCommand}"/>
                     </FlexLayout>
 
                     <FlexLayout>
                         <!-- Page Down -->
-                        <Button Text="pg d" />
+                        <Button Text="pg d" Command="{Binding PageDownCommand}"/>
                         <!-- Arrow up -->
-                        <Button Text="&#xF176;" />
+                        <Button Text="&#xF176;" Command="{Binding ArrowUpCommand}"/>
                         <!-- Page Down -->
-                        <Button Text="pg up" />
+                        <Button Text="pg up" Command="{Binding PageUpCommand}"/>
                     </FlexLayout>
 
                     <FlexLayout>
                         <!-- Arrow Left -->
-                        <Button Text="&#xF177;" />
+                        <Button Text="&#xF177;" Command="{Binding ArrowLeftCommand}"/>
                         <!-- Arrow Down -->
-                        <Button Text="&#xF175;" />
+                        <Button Text="&#xF175;" Command="{Binding ArrowDownCommand}"/>
                         <!-- Arrow Right -->
-                        <Button Text="&#xF178;" />
+                        <Button Text="&#xF178;" Command="{Binding ArrowRightCommand}"/>
                     </FlexLayout>
                 </StackLayout>
             </FlexLayout>

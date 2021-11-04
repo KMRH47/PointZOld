@@ -1,7 +1,7 @@
 ﻿using System;
+using PointZ.Models.AndroidKeyEvent;
+using PointZ.Models.AndroidTouchEvent;
 using PointZ.Models.CustomEditor;
-using PointZ.Models.KeyEvent;
-using PointZ.Models.TouchEvent;
 
 namespace PointZ.Services.PlatformEventService
 {
@@ -10,16 +10,16 @@ namespace PointZ.Services.PlatformEventService
         event EventHandler ViewAppearing;
         event EventHandler ViewDisappearing;
         event EventHandler BackPressed;
-        event EventHandler<TouchEventArgs> TouchpadGridTouched;
-        public event EventHandler<KeyEventArgs> CustomEditorAction;
-        public event EventHandler<KeyEventArgs> KeyEvent;
+        event EventHandler<AndroidTouchEventArgs> TouchpadGridTouched;
+        public event EventHandler<AndroidKeyEventArgs> CustomEditorAction;
+        public event EventHandler<AndroidKeyEventArgs> KeyEvent;
         public event EventHandler<CustomEditorEventArgs> CustomEditorSetInputType;
         void OnBackPressed();
         void OnViewDisappearing();
         void OnViewAppearing();
-        void OnTouchpadGridTouched(TouchEventArgs e);
-        void OnKeyEvent(KeyEventArgs e);
-        void OnCustomEditorAction(KeyEventArgs e);
+        void OnTouchpadGridTouched(AndroidTouchEventArgs e);
+        void OnKeyEvent(AndroidKeyEventArgs e);
+        void OnCustomEditorAction(AndroidKeyEventArgs e);
         void OnCustomEditorSetInputType(CustomEditorEventArgs e);
     }
 }

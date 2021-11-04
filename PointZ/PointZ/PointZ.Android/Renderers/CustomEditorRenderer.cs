@@ -5,8 +5,8 @@ using Android.Views;
 using Android.Views.InputMethods;
 using PointZ.Android.Renderers;
 using PointZ.Controls;
+using PointZ.Models.AndroidKeyEvent;
 using PointZ.Models.CustomEditor;
-using PointZ.Models.KeyEvent;
 using PointZ.Services.PlatformEventService;
 using PointZ.Services.PlatformSettings;
 using Xamarin.Forms;
@@ -46,8 +46,8 @@ namespace PointZ.Android.Renderers
                     case KeyEventActions.Down:
                         if (args.KeyCode == Keycode.Del)
                         {
-                            Models.KeyEvent.KeyEventArgs keyEventArgs = new(KeyAction.Down, KeyCodeAction.Del);
-                            this.platformEventService.OnCustomEditorAction(keyEventArgs);
+                            AndroidKeyEventArgs androidKeyEventArgs = new(AndroidKeyAction.Down, AndroidKeyCodeAction.Del);
+                            this.platformEventService.OnCustomEditorAction(androidKeyEventArgs);
                             System.Diagnostics.Debug.WriteLine(
                                 $"CustomEditorRenderer->Control.KeyPress(args: {args.Event})");
                         }
@@ -70,8 +70,8 @@ namespace PointZ.Android.Renderers
                 if (args.ActionId == ImeAction.Done)
                 {
                     // Direct mode
-                    Models.KeyEvent.KeyEventArgs keyEventArgs = new(KeyAction.Down, KeyCodeAction.Enter);
-                    this.platformEventService.OnCustomEditorAction(keyEventArgs);
+                    AndroidKeyEventArgs androidKeyEventArgs = new(AndroidKeyAction.Down, AndroidKeyCodeAction.Enter);
+                    this.platformEventService.OnCustomEditorAction(androidKeyEventArgs);
                 }
                 else
                 {

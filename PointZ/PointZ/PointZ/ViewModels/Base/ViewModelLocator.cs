@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Globalization;
 using System.Reflection;
-using PointZ.Models.KeyEvent;
-using PointZ.Models.TouchEvent;
+using PointZ.Models.AndroidKeyEvent;
+using PointZ.Models.AndroidTouchEvent;
 using PointZ.Services.InputCommandSender;
 using PointZ.Services.InputEventHandler;
 using PointZ.Services.Logger;
@@ -35,8 +35,8 @@ namespace PointZ.ViewModels.Base
             Container.Register<IUdpListenerService, UdpListenerService>().AsSingleton();
             Container.Register<ILogger, ConsoleLogger>().AsSingleton();;
             Container.Register<INavigationService, NavigationService>().AsSingleton();;
-            Container.Register<IInputEventHandler<TouchEventArgs>, TouchEventHandler>().AsSingleton();;
-            Container.Register<IInputEventHandler<KeyEventArgs>, KeyboardEventHandler>().AsSingleton();;
+            Container.Register<IInputEventHandler<AndroidTouchEventArgs>, TouchEventHandler>().AsSingleton();;
+            Container.Register<IInputEventHandler<AndroidKeyEventArgs>, KeyboardEventHandler>().AsSingleton();;
             Container.Register<IInputEventHandlerService, InputEventHandlerService>().AsSingleton();;
             Container.Register<IKeyboardCommandSender, KeyboardCommandSender>().AsSingleton();;
             Container.Register<IMouseCommandSender, MouseCommandSender>().AsSingleton();;

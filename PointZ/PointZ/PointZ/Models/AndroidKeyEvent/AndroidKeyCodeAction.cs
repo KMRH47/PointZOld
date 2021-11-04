@@ -1,6 +1,6 @@
-﻿namespace PointZ.Models.KeyEvent
+﻿namespace PointZ.Models.AndroidKeyEvent
 {
-    public enum KeyCodeAction
+    public enum AndroidKeyCodeAction
     {
         A = 29,
         AltLeft = 57,

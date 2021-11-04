@@ -3,10 +3,10 @@ using System.Diagnostics;
 using System.Net;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using PointZ.Models.AndroidKeyEvent;
+using PointZ.Models.AndroidTouchEvent;
 using PointZ.Models.CustomEditor;
 using PointZ.Models.Input;
-using PointZ.Models.KeyEvent;
-using PointZ.Models.TouchEvent;
 using PointZ.Services.InputEventHandler;
 using PointZ.Services.PlatformEventService;
 using PointZ.Services.PlatformSettings;
@@ -27,11 +27,9 @@ namespace PointZ.ViewModels
 
         private string customEditorText = "";
         private string customEditorMessageModeText = "";
-        private double touchpadHeight;
         private bool customEditorIsFocused;
         private bool directInputDisabled;
         private bool keyboardKeysVisible;
-        private bool settingsButtonFocused;
 
         public SessionViewModel(
             IInputEventHandlerService inputEventHandlerService, IPlatformSettingsService platformSettingsService,
@@ -47,15 +45,26 @@ namespace PointZ.ViewModels
             KeyboardButtonCommand = new Command(OnKeyboardButtonPressed);
 
             // Media keys (excessive)
-            MediaRewind = new Command(OnMediaRewind);
-            MediaPlayPause = new Command(OnMediaPlayPause);
-            MediaForward = new Command(OnMediaForward);
-            MediaPrevious = new Command(OnMediaPrevious);
-            MediaStop = new Command(OnMediaStop);
-            MediaNext = new Command(OnMediaNext);
-            VolumeDown = new Command(OnVolumeDown);
-            Mute = new Command(OnMute);
-            VolumeUp = new Command(OnVolumeUp);
+            MediaRewindCommand = new Command(OnMediaRewind);
+            MediaPlayPauseCommand = new Command(OnMediaPlayPause);
+            MediaForwardCommand = new Command(OnMediaForward);
+            MediaPreviousCommand = new Command(OnMediaPrevious);
+            MediaStopCommand = new Command(OnMediaStop);
+            MediaNextCommand = new Command(OnMediaNext);
+            VolumeDownCommand = new Command(OnVolumeDown);
+            MuteCommand = new Command(OnMute);
+            VolumeUpCommand = new Command(OnVolumeUp);
+
+            // Keyboard Misc Keys (excessive)
+            ArrowLeftCommand = new Command(OnArrowLeft);
+            ArrowUpCommand = new Command(OnArrowUp);
+            ArrowRightCommand = new Command(OnArrowRight);
+            ArrowDownCommand = new Command(OnArrowDown);
+            PageUpCommand = new Command(OnPageUp);
+            PageDownCommand = new Command(OnPageDown);
+            CtrlCommand = new Command(OnCtrl);
+            WinCmdSupCommand = new Command(OnWinCmdSup);
+            AltOptCommand = new Command(OnAltOpt);
         }
 
         public override Task InitializeAsync(object parameter)
@@ -75,15 +84,26 @@ namespace PointZ.ViewModels
         public ICommand SendTextCommand { get; set; }
 
         // Media Commands (excessive)
-        public ICommand MediaRewind { get; set; }
-        public ICommand MediaPlayPause { get; set; }
-        public ICommand MediaForward { get; set; }
-        public ICommand MediaPrevious { get; set; }
-        public ICommand MediaStop { get; set; }
-        public ICommand MediaNext { get; set; }
-        public ICommand VolumeDown { get; set; }
-        public ICommand Mute { get; set; }
-        public ICommand VolumeUp { get; set; }
+        public ICommand MediaRewindCommand { get; set; }
+        public ICommand MediaPlayPauseCommand { get; set; }
+        public ICommand MediaForwardCommand { get; set; }
+        public ICommand MediaPreviousCommand { get; set; }
+        public ICommand MediaStopCommand { get; set; }
+        public ICommand MediaNextCommand { get; set; }
+        public ICommand VolumeDownCommand { get; set; }
+        public ICommand MuteCommand { get; set; }
+        public ICommand VolumeUpCommand { get; set; }
+
+        // Keyboard Misc Keys (excessive)
+        public ICommand ArrowLeftCommand { get; set; }
+        public ICommand ArrowUpCommand { get; set; }
+        public ICommand ArrowRightCommand { get; set; }
+        public ICommand ArrowDownCommand { get; set; }
+        public ICommand PageUpCommand { get; set; }
+        public ICommand PageDownCommand { get; set; }
+        public ICommand CtrlCommand { get; set; }
+        public ICommand WinCmdSupCommand { get; set; }
+        public ICommand AltOptCommand { get; set; }
 
         #endregion
 
@@ -97,12 +117,6 @@ namespace PointZ.ViewModels
                 this.keyboardKeysVisible = value;
                 OnPropertyChanged();
             }
-        }
-
-        public double TouchpadHeight
-        {
-            get => this.touchpadHeight;
-            set => this.touchpadHeight = value * this.platformSettingsService.DisplayDensity;
         }
 
         public bool CustomEditorIsFocused
@@ -125,7 +139,7 @@ namespace PointZ.ViewModels
             {
                 if (value)
                 {
-                    CustomEditorText = this.customEditorMessageModeText; 
+                    CustomEditorText = this.customEditorMessageModeText;
                     this.customEditorMessageModeText = string.Empty;
                     this.platformSettingsService.DisplayPopupHint(PopUpHintSwitchInputMode + "Message", 0);
                     this.platformEventService.OnCustomEditorSetInputType(
@@ -159,7 +173,7 @@ namespace PointZ.ViewModels
                     else if (CustomEditorText.Length == value.Length + 1)
                     {
                         this.inputEventHandlerService.KeyboardCommandSender.SendKeyboardCommandAsync(
-                            KeyboardCommand.KeyDown, KeyCodeAction.Del);
+                            KeyboardCommand.KeyDown, AndroidKeyCodeAction.Del);
                     }
                 }
 
@@ -193,7 +207,7 @@ namespace PointZ.ViewModels
                 }
 
                 await this.inputEventHandlerService.KeyboardCommandSender.SendKeyboardCommandAsync(
-                    KeyboardCommand.KeyPress, KeyCodeAction.Enter);
+                    KeyboardCommand.KeyPress, AndroidKeyCodeAction.Enter);
             }
             catch (Exception e)
             {
@@ -205,40 +219,72 @@ namespace PointZ.ViewModels
         // Media Keys (excessive)
         private void OnMediaRewind() =>
             this.inputEventHandlerService.KeyboardCommandSender.SendKeyboardCommandAsync(KeyboardCommand.KeyDown,
-                KeyCodeAction.MediaRewind);
+                AndroidKeyCodeAction.MediaRewind);
 
         private void OnMediaPlayPause() =>
             this.inputEventHandlerService.KeyboardCommandSender.SendKeyboardCommandAsync(KeyboardCommand.KeyDown,
-                KeyCodeAction.MediaPlayPause);
+                AndroidKeyCodeAction.MediaPlayPause);
 
         private void OnMediaForward() =>
             this.inputEventHandlerService.KeyboardCommandSender.SendKeyboardCommandAsync(KeyboardCommand.KeyDown,
-                KeyCodeAction.MediaFastForward);
+                AndroidKeyCodeAction.MediaFastForward);
 
         private void OnMediaPrevious() =>
             this.inputEventHandlerService.KeyboardCommandSender.SendKeyboardCommandAsync(KeyboardCommand.KeyDown,
-                KeyCodeAction.MediaPrevious);
+                AndroidKeyCodeAction.MediaPrevious);
 
         private void OnMediaStop() =>
             this.inputEventHandlerService.KeyboardCommandSender.SendKeyboardCommandAsync(KeyboardCommand.KeyDown,
-                KeyCodeAction.MediaStop);
+                AndroidKeyCodeAction.MediaStop);
 
         private void OnMediaNext() =>
             this.inputEventHandlerService.KeyboardCommandSender.SendKeyboardCommandAsync(KeyboardCommand.KeyDown,
-                KeyCodeAction.MediaNext);
+                AndroidKeyCodeAction.MediaNext);
 
         private void OnVolumeDown() =>
             this.inputEventHandlerService.KeyboardCommandSender.SendKeyboardCommandAsync(KeyboardCommand.KeyDown,
-                KeyCodeAction.VolumeDown);
+                AndroidKeyCodeAction.VolumeDown);
 
         private void OnMute() =>
             this.inputEventHandlerService.KeyboardCommandSender.SendKeyboardCommandAsync(KeyboardCommand.KeyDown,
-                KeyCodeAction.Mute);
+                AndroidKeyCodeAction.Mute);
 
         private void OnVolumeUp() =>
             this.inputEventHandlerService.KeyboardCommandSender.SendKeyboardCommandAsync(KeyboardCommand.KeyDown,
-                KeyCodeAction.VolumeUp);
+                AndroidKeyCodeAction.VolumeUp);
 
+
+        private void OnArrowLeft() =>
+            this.inputEventHandlerService.KeyboardCommandSender.SendKeyboardCommandAsync(KeyboardCommand.KeyDown,
+                AndroidKeyCodeAction.DpadLeft);
+        private void OnArrowUp() =>
+            this.inputEventHandlerService.KeyboardCommandSender.SendKeyboardCommandAsync(KeyboardCommand.KeyDown,
+                AndroidKeyCodeAction.DpadUp);
+        
+        private void OnArrowRight() =>
+            this.inputEventHandlerService.KeyboardCommandSender.SendKeyboardCommandAsync(KeyboardCommand.KeyDown,
+                AndroidKeyCodeAction.DpadRight);
+        private void OnArrowDown() =>
+            this.inputEventHandlerService.KeyboardCommandSender.SendKeyboardCommandAsync(KeyboardCommand.KeyDown,
+                AndroidKeyCodeAction.DpadDown);
+        private void OnPageUp() =>
+            this.inputEventHandlerService.KeyboardCommandSender.SendKeyboardCommandAsync(KeyboardCommand.KeyDown,
+                AndroidKeyCodeAction.PageUp);
+        private void OnPageDown() =>
+            this.inputEventHandlerService.KeyboardCommandSender.SendKeyboardCommandAsync(KeyboardCommand.KeyDown,
+                AndroidKeyCodeAction.PageDown);
+        private void OnCtrl() =>
+            this.inputEventHandlerService.KeyboardCommandSender.SendKeyboardCommandAsync(KeyboardCommand.KeyDown,
+                AndroidKeyCodeAction.CtrlLeft);
+        /// <summary>
+        /// Can't find any answer in the documentation that provides a Windows/Super/Command key equivalent.
+        /// </summary>
+        private void OnWinCmdSup() =>
+            this.inputEventHandlerService.KeyboardCommandSender.SendKeyboardCommandAsync(KeyboardCommand.KeyDown,
+                AndroidKeyCodeAction.Window);
+        private void OnAltOpt() =>
+            this.inputEventHandlerService.KeyboardCommandSender.SendKeyboardCommandAsync(KeyboardCommand.KeyDown,
+                AndroidKeyCodeAction.AltLeft);
         #endregion
 
         #region Event Members
@@ -265,18 +311,16 @@ namespace PointZ.ViewModels
             base.NavigationService.NavigateBackAsync();
         }
 
-        private async void OnTouchpadGridTouched(object sender, TouchEventArgs e)
+        private async void OnTouchpadGridTouched(object sender, AndroidTouchEventArgs e)
         {
             if (CustomEditorIsFocused)
                 if (DirectInputDisabled)
                     return;
-            if (e.Y > TouchpadHeight)
-                return;
-            
+
             await this.inputEventHandlerService.HandleTouchEventAsync(e);
         }
 
-        private void OnCustomEditorAction(object sender, KeyEventArgs e)
+        private void OnCustomEditorAction(object sender, AndroidKeyEventArgs e)
         {
             this.inputEventHandlerService.HandleKeyEventAsync(e);
         }

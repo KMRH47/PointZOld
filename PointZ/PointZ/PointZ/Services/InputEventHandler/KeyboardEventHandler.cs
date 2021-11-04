@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
+using PointZ.Models.AndroidKeyEvent;
 using PointZ.Models.Input;
-using PointZ.Models.KeyEvent;
 using PointZ.Services.InputCommandSender;
 
 namespace PointZ.Services.InputEventHandler
 {
-    public class KeyboardEventHandler : IInputEventHandler<KeyEventArgs>
+    public class KeyboardEventHandler : IInputEventHandler<AndroidKeyEventArgs>
     {
         private readonly IKeyboardCommandSender keyboardCommandSender;
 
@@ -15,15 +15,15 @@ namespace PointZ.Services.InputEventHandler
             this.keyboardCommandSender = keyboardCommandSender;
         }
 
-        public async Task HandleAsync(KeyEventArgs e)
+        public async Task HandleAsync(AndroidKeyEventArgs e)
         {
-            switch (e.KeyAction)
+            switch (e.AndroidKeyAction)
             {
-                case KeyAction.Up:
+                case AndroidKeyAction.Up:
                     break;
-                case KeyAction.Multiple:
-                case KeyAction.Down:
-                    await this.keyboardCommandSender.SendKeyboardCommandAsync(KeyboardCommand.KeyPress, e.KeyCodeAction);
+                case AndroidKeyAction.Multiple:
+                case AndroidKeyAction.Down:
+                    await this.keyboardCommandSender.SendKeyboardCommandAsync(KeyboardCommand.KeyPress, e.AndroidKeyCodeAction);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

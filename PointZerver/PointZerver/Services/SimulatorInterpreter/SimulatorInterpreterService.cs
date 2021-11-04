@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using PointZerver.Extensions;
 using PointZerver.Services.Logger;
 using PointZerver.Services.Simulators;
 

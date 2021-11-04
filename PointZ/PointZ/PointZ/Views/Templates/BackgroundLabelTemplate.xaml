@@ -8,7 +8,7 @@
 
     <ContentView.Resources>
         <ResourceDictionary>
-            <Style TargetType="{x:Type Label}">
+            <Style TargetType="{x:Type Label}" x:Key="BackgroundLabelStyle">
                 <Setter Property="FontSize" Value="Title" />
                 <Setter Property="Opacity" Value="0" />
                 <Setter Property="VerticalOptions" Value="Center" />
@@ -18,7 +18,7 @@
     </ContentView.Resources>
 
     <ContentView.Content>
-        <Label Grid.Row="0" IsVisible="{Binding CustomEditorIsFocused}">
+        <Label Grid.Row="0" Style="{StaticResource BackgroundLabelStyle}" IsVisible="{Binding CustomEditorIsFocused}">
             <Label.Triggers>
                 <DataTrigger TargetType="Label" Binding="{Binding DirectInputDisabled, Mode=OneWay}" Value="true">
                     <Setter Property="Text" Value="MESSAGE" />

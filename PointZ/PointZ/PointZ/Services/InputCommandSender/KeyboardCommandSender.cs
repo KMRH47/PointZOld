@@ -1,7 +1,7 @@
 ﻿using System.Net.Sockets;
 using System.Threading.Tasks;
+using PointZ.Models.AndroidKeyEvent;
 using PointZ.Models.Input;
-using PointZ.Models.KeyEvent;
 using PointZ.Services.Settings;
 
 namespace PointZ.Services.InputCommandSender
@@ -11,8 +11,8 @@ namespace PointZ.Services.InputCommandSender
         public KeyboardCommandSender(ISettingsService settingsService, UdpClient udpClient)
             : base(settingsService, udpClient) { }
 
-        public async Task SendKeyboardCommandAsync(KeyboardCommand command, KeyCodeAction keyCodeAction) =>
-            await base.SendAsync(InputType.Keyboard, command.ToString(), keyCodeAction.ToString());
+        public async Task SendKeyboardCommandAsync(KeyboardCommand command, AndroidKeyCodeAction androidKeyCodeAction) =>
+            await base.SendAsync(InputType.Keyboard, command.ToString(), androidKeyCodeAction.ToString());
 
         public async Task SendKeyboardCommandAsync(KeyboardCommand command, string keyCode) =>
             await base.SendAsync(InputType.Keyboard, command.ToString(), keyCode);

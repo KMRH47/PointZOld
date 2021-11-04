@@ -1,7 +1,7 @@
 ﻿using System;
+using PointZ.Models.AndroidKeyEvent;
+using PointZ.Models.AndroidTouchEvent;
 using PointZ.Models.CustomEditor;
-using PointZ.Models.KeyEvent;
-using PointZ.Models.TouchEvent;
 using PointZ.Services.PlatformEventService;
 
 namespace PointZ.Android.Services
@@ -11,17 +11,17 @@ namespace PointZ.Android.Services
         public event EventHandler ViewAppearing;
         public event EventHandler ViewDisappearing;
         public event EventHandler BackPressed;
-        public event EventHandler<TouchEventArgs> TouchpadGridTouched;
-        public event EventHandler<KeyEventArgs> KeyEvent;
-        public event EventHandler<KeyEventArgs> CustomEditorAction;
+        public event EventHandler<AndroidTouchEventArgs> TouchpadGridTouched;
+        public event EventHandler<AndroidKeyEventArgs> KeyEvent;
+        public event EventHandler<AndroidKeyEventArgs> CustomEditorAction;
         public event EventHandler<CustomEditorEventArgs> CustomEditorSetInputType;
 
         public void OnBackPressed() => this.BackPressed?.Invoke(this, EventArgs.Empty);
         public void OnViewDisappearing() => this.ViewDisappearing?.Invoke(this, EventArgs.Empty);
         public void OnViewAppearing() => this.ViewAppearing?.Invoke(this, EventArgs.Empty);
-        public void OnCustomEditorAction(KeyEventArgs e) => this.CustomEditorAction?.Invoke(this, e);
-        public void OnKeyEvent(KeyEventArgs e) => this.KeyEvent?.Invoke(this, e);
-        public void OnTouchpadGridTouched(TouchEventArgs e) => this.TouchpadGridTouched?.Invoke(this, e);
+        public void OnCustomEditorAction(AndroidKeyEventArgs e) => this.CustomEditorAction?.Invoke(this, e);
+        public void OnKeyEvent(AndroidKeyEventArgs e) => this.KeyEvent?.Invoke(this, e);
+        public void OnTouchpadGridTouched(AndroidTouchEventArgs e) => this.TouchpadGridTouched?.Invoke(this, e);
         public void OnCustomEditorSetInputType(CustomEditorEventArgs e) =>
             this.CustomEditorSetInputType?.Invoke(this, e);
     }

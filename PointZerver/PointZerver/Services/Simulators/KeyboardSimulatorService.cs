@@ -5,21 +5,21 @@ using System.Threading.Tasks;
 using InputSimulatorStandard;
 using InputSimulatorStandard.Native;
 using PointZerver.Extensions;
-using PointZerver.Services.CommandConverter;
 using PointZerver.Services.Logger;
+using PointZerver.Services.VirtualKeyCodeMapper;
 
 namespace PointZerver.Services.Simulators
 {
     public class KeyboardSimulatorService : IInputSimulatorService
     {
         private readonly IKeyboardSimulator keyboardSimulator;
-        private readonly IVirtualKeyCodeConverterService virtualKeyCodeConverterService;
+        private readonly IVirtualKeyCodeMapperService virtualKeyCodeMapperService;
 
         public KeyboardSimulatorService(
-            IKeyboardSimulator keyboardSimulator, IVirtualKeyCodeConverterService virtualKeyCodeConverterService)
+            IKeyboardSimulator keyboardSimulator, IVirtualKeyCodeMapperService virtualKeyCodeMapperService)
         {
             this.keyboardSimulator = keyboardSimulator;
-            this.virtualKeyCodeConverterService = virtualKeyCodeConverterService;
+            this.virtualKeyCodeMapperService = virtualKeyCodeMapperService;
         }
 
         public string CommandId => "K";
@@ -39,11 +39,11 @@ namespace PointZerver.Services.Simulators
                     }
                     else
                     {
-                        this.keyboardSimulator.KeyPress(this.virtualKeyCodeConverterService.ParseString(payload));
+                        this.keyboardSimulator.KeyPress(this.virtualKeyCodeMapperService.ParseString(payload));
                     }
                     break;
                 case "KeyPress":
-                    this.keyboardSimulator.KeyPress(this.virtualKeyCodeConverterService.ParseString(payload));
+                    this.keyboardSimulator.KeyPress(this.virtualKeyCodeMapperService.ParseString(payload));
                     break;
                 case "TextEntry":
                     this.keyboardSimulator.TextEntry(payload);

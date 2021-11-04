@@ -5,12 +5,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using InputSimulatorStandard;
 using Microsoft.Extensions.DependencyInjection;
-using PointZerver.Services.CommandConverter;
 using PointZerver.Services.Logger;
 using PointZerver.Services.SimulatorInterpreter;
 using PointZerver.Services.Simulators;
 using PointZerver.Services.UdpBroadcast;
 using PointZerver.Services.UdpListener;
+using PointZerver.Services.VirtualKeyCodeMapper;
 using PointZerver.Tools;
 
 namespace PointZerver
@@ -43,12 +43,12 @@ namespace PointZerver
             UdpClient udpClient = new();
             udpClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
             udpClient.Client.Bind(serverIpEndPoint);
-            IVirtualKeyCodeConverterService virtualKeyCodeConverterService = new VirtualKeyCodeConverterService();
+            IVirtualKeyCodeMapperService virtualKeyCodeMapperService = new VirtualKeyCodeMapperService();
             IMouseSimulator mouseSimulator = new MouseSimulator();
             IKeyboardSimulator keyboardSimulator = new KeyboardSimulator();
             IInputSimulatorService mouseSimService = new MouseSimulatorService(mouseSimulator);
             IInputSimulatorService keyboardSimService =
-                new KeyboardSimulatorService(keyboardSimulator, virtualKeyCodeConverterService);
+                new KeyboardSimulatorService(keyboardSimulator, virtualKeyCodeMapperService);
             IInputSimulatorService[] inputSimulators = { mouseSimService, keyboardSimService };
 
             // -Registration
@@ -64,7 +64,7 @@ namespace PointZerver
             services.AddScoped<IInputSimulatorService, MouseSimulatorService>();
             services.AddScoped<IMouseSimulator, MouseSimulator>();
             services.AddScoped<IKeyboardSimulator, KeyboardSimulator>();
-            services.AddScoped<IVirtualKeyCodeConverterService, VirtualKeyCodeConverterService>();
+            services.AddScoped<IVirtualKeyCodeMapperService, VirtualKeyCodeMapperService>();
 
             IServiceProvider serviceProvider = services.BuildServiceProvider();
 

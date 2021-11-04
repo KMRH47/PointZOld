@@ -1,4 +1,4 @@
-﻿namespace PointZerver.Services.CommandConverter
+﻿namespace PointZerver.Services.VirtualKeyCodeMapper
 {
     public enum KeycodeAction
     {

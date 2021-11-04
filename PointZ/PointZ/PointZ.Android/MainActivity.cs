@@ -4,7 +4,7 @@ using Android.OS;
 using Android.Views;
 using PointZ.Android.Renderers;
 using PointZ.Android.Services;
-using PointZ.Models.KeyEvent;
+using PointZ.Models.AndroidKeyEvent;
 using PointZ.Services.PlatformEventService;
 using PointZ.Services.PlatformSettings;
 using Xamarin.Forms;
@@ -39,10 +39,10 @@ namespace PointZ.Android
         {
             if (e.Action != KeyEventActions.Down) return base.DispatchKeyEvent(e);
             
-            KeyAction keyEventAction = (KeyAction)e.Action;
-            KeyCodeAction keyCodeAction = (KeyCodeAction)e.KeyCode;
-            KeyEventArgs keyEventArgs = new(keyEventAction, keyCodeAction);
-            this.platformEventService.OnKeyEvent(keyEventArgs);
+            AndroidKeyAction androidKeyEventAction = (AndroidKeyAction)e.Action;
+            AndroidKeyCodeAction androidKeyCodeAction = (AndroidKeyCodeAction)e.KeyCode;
+            AndroidKeyEventArgs androidKeyEventArgs = new(androidKeyEventAction, androidKeyCodeAction);
+            this.platformEventService.OnKeyEvent(androidKeyEventArgs);
             return base.DispatchKeyEvent(e);
         }
 
