@@ -42,22 +42,20 @@ While PointZ is running it'll listen for any computers on the local network.
 
 
 While PointZ is running it'll listen for any computers on the local network.
-<video src="Graphic/Guide/PointZ/1.mp4" height="300"/>
+[1](Graphic/Guide/PointZ/1.mp4)
 
 When the computer is found, a remote control session can begin.
-<video src="Graphic/Guide/PointZ/3.mp4" height="300"/>
+[2](Graphic/Guide/PointZ/2.mp4)
 
 Phone/Keyboard button illustrates the software keyboard, tap it to open it up. 
 Direct Mode (default): Instantly sends the character tapped (text-prediction, grammar correct and other features are disabled in this mode).
-<video src="Graphic/Guide/PointZ/4.mp4" height="300"/>
+[3](Graphic/Guide/PointZ/3.mp4)
 
 The PC/Keyboard button illustrates a hardware keyboard, tap it to open media- and other useful hardware keys. 
-<video src="Graphic/Guide/PointZ/2.mp4" height="300"/>
+[4](Graphic/Guide/PointZ/4.mp4)
 
 Message Mode: Input behaves chat-app like. Tap the paper plane icon to send the message (return/enter does NOT send).
-<video src="Graphic/Guide/PointZ/5.mp4" height="300"/>
-
-
+[5](Graphic/Guide/PointZ/5.mp4)
 
 # How to use
 
