@@ -3,8 +3,8 @@
 namespace PointZ.Views.Templates
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class BackgroundLabelTemplate 
+    public partial class SessionBackgroundLabelTemplate 
     {
-        public BackgroundLabelTemplate() { InitializeComponent(); }
+        public SessionBackgroundLabelTemplate() { InitializeComponent(); }
     }
 }

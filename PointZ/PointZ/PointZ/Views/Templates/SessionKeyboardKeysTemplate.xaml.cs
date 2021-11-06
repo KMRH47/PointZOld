@@ -3,8 +3,8 @@
 namespace PointZ.Views.Templates
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class KeyboardKeysTemplate 
+    public partial class SessionKeyboardKeysTemplate 
     {
-        public KeyboardKeysTemplate() { InitializeComponent(); }
+        public SessionKeyboardKeysTemplate() { InitializeComponent(); }
     }
 }

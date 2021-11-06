@@ -35,7 +35,7 @@
                         Dark={StaticResource White80},
                         Light={StaticResource Black80}}" />
             </Style>
-            <Style TargetType="{x:Type templates:ServerTemplate}">
+            <Style TargetType="{x:Type templates:DiscoverServerTemplate}">
                 <Setter Property="Rotation" Value="180" />
             </Style>
         </ResourceDictionary>
@@ -69,7 +69,7 @@
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
-                                <templates:ServerTemplate/>
+                                <templates:DiscoverServerTemplate/>
                             </ViewCell>
                         </DataTemplate>
                     </ListView.ItemTemplate>

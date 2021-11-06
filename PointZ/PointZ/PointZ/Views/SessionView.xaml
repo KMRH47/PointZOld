@@ -46,7 +46,7 @@
                 <Button Grid.Row="0" Style="{StaticResource SettingsButton}" />
 
                 <!-- Background Label -->
-                <templates:BackgroundLabelTemplate Grid.Row="0" />
+                <templates:SessionBackgroundLabelTemplate Grid.Row="0" />
 
                 <!-- Editor  -->
                 <controls:CustomEditor Text="{Binding CustomEditorText}"
@@ -65,18 +65,18 @@
 
             <StackLayout Grid.Row="1" Orientation="Vertical" Spacing="1">
                 <!-- Keyboard Keys -->
-                <templates:KeyboardKeysTemplate>
-                    <templates:KeyboardKeysTemplate.IsVisible>
+                <templates:SessionKeyboardKeysTemplate>
+                    <templates:SessionKeyboardKeysTemplate.IsVisible>
                         <MultiBinding Converter="{StaticResource BooleanAndConverter}">
                             <Binding Path="KeyboardKeysVisible" Mode="OneWay" />
                             <Binding Path="DirectInputDisabled" Converter="{StaticResource InverseBooleanConverter}"
                                      Mode="OneWay" />
                         </MultiBinding>
-                    </templates:KeyboardKeysTemplate.IsVisible>
-                </templates:KeyboardKeysTemplate>
+                    </templates:SessionKeyboardKeysTemplate.IsVisible>
+                </templates:SessionKeyboardKeysTemplate>
 
                 <!-- Bottom Toolbar -->
-                <templates:ToolbarTemplate />
+                <templates:SessionToolbarTemplate />
             </StackLayout>
         </Grid>
     </ContentPage.Content>

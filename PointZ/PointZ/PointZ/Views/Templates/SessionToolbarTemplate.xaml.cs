@@ -3,9 +3,9 @@
 namespace PointZ.Views.Templates
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class ServerTemplate
+    public partial class SessionToolbarTemplate
     {
-        public ServerTemplate()
+        public SessionToolbarTemplate()
         {
             InitializeComponent();
         }
