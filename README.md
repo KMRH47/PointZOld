@@ -33,13 +33,23 @@ PointZ is free and open-source.
 
 # Get started
 
-1. When PointZ is running, it'll immediately enter "Discovery mode", listening for any PointZerver applications on the network. 
-2. When PointZerver and PointZ runs simultaneously, PointZ will list all available devices.
-3. When you tap on the device you want to remote control, a **connect** button appears at the bottom of the screen.
+<table><tr>
+<td><center><b>1</b></center><video src="Graphic/Guide/PointZ/1.mp4" height="400"></video></td>
+<td><center><b>2</b></center><video src="Graphic/Guide/PointZ/2.mp4" height="400"></video></td>
+<td><center><b>3</b></center><video src="Graphic/Guide/PointZ/3.mp4" height="400"></video></td>
+<td><center><b>4</b></center><video src="Graphic/Guide/PointZ/4.mp4" height="400"></video></td>
+<td><center><b>5</b></center><video src="Graphic/Guide/PointZ/5.mp4" height="400"></video></td>
+</tr></table>
 
-Click **connect** and remote control the selected device!
 
-![](Graphic/Guide/PointZ/Full.png)
+1. While PointZ is running it'll listen for any computers on the local network.
+2. When the computer is found, a remote control session can begin.
+3. Phone/Keyboard button illustrates the software keyboard, tap it to open it up. 
+   Direct Mode (default): Instantly sends the character tapped (text-prediction, grammar correct and other features are disabled in this mode).
+4. The PC/Keyboard button illustrates a hardware keyboard, tap it to open media- and other useful hardware keys. 
+5. Message Mode: Input behaves chat-app like. Tap the paper plane icon to send the message (return/enter does NOT send).
+
+
 
 # How to use
 
