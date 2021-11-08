@@ -20,10 +20,10 @@
     <ContentView.Content>
         <Label Grid.Row="0" Style="{StaticResource BackgroundLabelStyle}" IsVisible="{Binding CustomEditorIsFocused}">
             <Label.Triggers>
-                <DataTrigger TargetType="Label" Binding="{Binding DirectInputDisabled, Mode=OneWay}" Value="true">
+                <DataTrigger TargetType="Label" Binding="{Binding DirectInputDisabled}" Value="true">
                     <Setter Property="Text" Value="MESSAGE" />
                 </DataTrigger>
-                <DataTrigger TargetType="Label" Binding="{Binding DirectInputDisabled,Mode=OneWay}" Value="false">
+                <DataTrigger TargetType="Label" Binding="{Binding DirectInputDisabled}" Value="false">
                     <Setter Property="Text" Value="DIRECT" />
                 </DataTrigger>
                 <DataTrigger TargetType="Label" Binding="{Binding CustomEditorText.Length}" Value="0">

@@ -139,14 +139,15 @@ namespace PointZ.ViewModels
             {
                 if (value)
                 {
+                    // Switch to Message
                     CustomEditorText = this.customEditorMessageModeText;
-                    this.customEditorMessageModeText = string.Empty;
                     this.platformSettingsService.DisplayPopupHint(PopUpHintSwitchInputMode + "Message", true);
                     this.platformEventService.OnCustomEditorSetInputType(
                         new CustomEditorEventArgs(TextInputTypes.ClassText | TextInputTypes.TextFlagMultiLine));
                 }
                 else
                 {
+                    // Switch to Direct
                     this.customEditorMessageModeText = CustomEditorText;
                     CustomEditorText = string.Empty;
                     this.platformSettingsService.DisplayPopupHint(PopUpHintSwitchInputMode + "Direct", true);
@@ -176,7 +177,7 @@ namespace PointZ.ViewModels
                             KeyboardCommand.KeyDown, AndroidKeyCodeAction.Del);
                     }
                 }
-
+                
                 this.customEditorText = value;
                 OnPropertyChanged();
             }
