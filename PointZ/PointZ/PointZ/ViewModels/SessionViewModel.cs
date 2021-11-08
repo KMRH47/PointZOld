@@ -253,7 +253,6 @@ namespace PointZ.ViewModels
             this.inputEventHandlerService.KeyboardCommandSender.SendKeyboardCommandAsync(KeyboardCommand.KeyDown,
                 AndroidKeyCodeAction.VolumeUp);
 
-
         private void OnArrowLeft() =>
             this.inputEventHandlerService.KeyboardCommandSender.SendKeyboardCommandAsync(KeyboardCommand.KeyDown,
                 AndroidKeyCodeAction.DpadLeft);
