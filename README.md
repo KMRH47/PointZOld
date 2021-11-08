@@ -35,26 +35,33 @@ PointZ is free and open-source.
 
 
 
-While PointZ is running it'll listen for any computers on the local network.
 
-![](./Graphic/Guide/PointZ/1.mp4)
 
-When the computer is found, a remote control session can begin.
 
-![](./Graphic/Guide/PointZ/2.mp4)
 
-Phone/Keyboard button illustrates the software keyboard, tap it to open it up. 
-Direct Mode (default): Instantly sends the character tapped (text-prediction, grammar correct and other features are disabled in this mode).
 
-![](./Graphic/Guide/PointZ/3.mp4)
 
-The PC/Keyboard button illustrates a hardware keyboard, tap it to open media- and other useful hardware keys. 
+​			
 
-![](./Graphic/Guide/PointZ/4.mp4)
+| While PointZ is running it'll listen for any computers on the local network.<br />![](./Graphic/Guide/PointZ/1.gif) | When the computer is found, a remote control session can begin.<br />![](./Graphic/Guide/PointZ/2.gif) | Phone/Keyboard button illustrates the software keyboard, tap it to open it up. <br/>Direct Mode (default): Instantly sends the character tapped (text-prediction, grammar correct and other features are disabled in this mode).<br />![](./Graphic/Guide/PointZ/3.gif) |
+| ------------------------------------------------------------ | :----------------------------------------------------------- | ------------------------------------------------------------ |
 
-Message Mode: Input behaves chat-app like. Tap the paper plane icon to send the message (return/enter does NOT send).
 
-![](./Graphic/Guide/PointZ/5.mp4)
+
+| The PC/Keyboard button illustrates a hardware keyboard, tap it to open media- and other useful hardware keys.<br />![](./Graphic/Guide/PointZ/4.gif) | Message Mode: Input behaves chat-app like. Tap the paper plane icon to send the message (return/enter does NOT send).<br />![](./Graphic/Guide/PointZ/5.gif) |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+
+
+
+
+
+
+
+
+
+
+
+
 
 # How to use
 
