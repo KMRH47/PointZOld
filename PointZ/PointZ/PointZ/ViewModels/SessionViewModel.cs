@@ -141,7 +141,7 @@ namespace PointZ.ViewModels
                 {
                     CustomEditorText = this.customEditorMessageModeText;
                     this.customEditorMessageModeText = string.Empty;
-                    this.platformSettingsService.DisplayPopupHint(PopUpHintSwitchInputMode + "Message", 0);
+                    this.platformSettingsService.DisplayPopupHint(PopUpHintSwitchInputMode + "Message", true);
                     this.platformEventService.OnCustomEditorSetInputType(
                         new CustomEditorEventArgs(TextInputTypes.ClassText | TextInputTypes.TextFlagMultiLine));
                 }
@@ -149,7 +149,7 @@ namespace PointZ.ViewModels
                 {
                     this.customEditorMessageModeText = CustomEditorText;
                     CustomEditorText = string.Empty;
-                    this.platformSettingsService.DisplayPopupHint(PopUpHintSwitchInputMode + "Direct", 0);
+                    this.platformSettingsService.DisplayPopupHint(PopUpHintSwitchInputMode + "Direct", true);
                     this.platformEventService.OnCustomEditorSetInputType(
                         new CustomEditorEventArgs(TextInputTypes.TextVariationVisiblePassword));
                 }
@@ -211,7 +211,7 @@ namespace PointZ.ViewModels
             }
             catch (Exception e)
             {
-                this.platformSettingsService.DisplayPopupHint(e.Message, 1);
+                this.platformSettingsService.DisplayPopupHint(e.Message, false);
                 Debug.WriteLine(e);
             }
         }

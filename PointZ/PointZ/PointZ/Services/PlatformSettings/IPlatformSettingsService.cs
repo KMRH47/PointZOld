@@ -8,7 +8,7 @@
         /// Displays a pop-up hint. 
         /// </summary>
         /// <param name="message">The message to display.</param>
-        /// <param name="duration">0 = short, anything else = long.</param>
-        void DisplayPopupHint(string message, byte duration);
+        /// <param name="isQuickPopup">True = short duration, false = longer duration.</param>
+        void DisplayPopupHint(string message, bool isQuickPopup);
     }
 }

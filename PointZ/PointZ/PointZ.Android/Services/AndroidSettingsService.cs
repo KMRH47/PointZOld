@@ -18,9 +18,9 @@ namespace PointZ.Android.Services
             activityWindow?.SetSoftInputMode(SoftInput.AdjustResize);
         }
 
-        public void DisplayPopupHint(string message, byte duration = 0)
+        public void DisplayPopupHint(string message, bool isQuickPopup)
         {
-            Toast toast = duration == 0
+            Toast toast = isQuickPopup
                 ? Toast.MakeText(this.activity, message, ToastLength.Short)
                 : Toast.MakeText(this.activity, message, ToastLength.Long);
             toast?.Show();
