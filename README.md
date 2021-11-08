@@ -33,24 +33,25 @@ PointZ is free and open-source.
 
 # Get started
 
-
-| <div align="center"><img width="150" src="Graphic/Guide/PointZ/1.gif"></img></div> | <div align="center"><img width="150" src="Graphic/Guide/PointZ/2.gif"></img></div> | <div align="center"><img width="150" src="Graphic/Guide/PointZ/3.gif"></img></div> | <div align="center"><img width="150" src="Graphic/Guide/PointZ/4.gif"></img></div> | <div align="center"><img width="150" src="Graphic/Guide/PointZ/5.gif"></img></div> |
-| :--: | :--: | :--: | :--: | :--: |
-| While PointZ is running it'll listen for any computers on the local network.| When the computer is found, a remote control session can begin. | Phone/Keyboard button illustrates the software keyboard, tap it to open it up. | The PC/Keyboard button illustrates a hardware keyboard, tap it to open media- and other useful hardware keys. | Tap the paper plane icon to send the message (return/enter does NOT send). |
-
+<table>
+    <tr>
+        <th width="20%"><img src="Graphic/Guide/PointZ/1.gif"></th>
+        <th width="20%"><img src="Graphic/Guide/PointZ/2.gif"></th>
+        <th width="20%"><img src="Graphic/Guide/PointZ/3.gif"></th>
+        <th width="20%"><img src="Graphic/Guide/PointZ/4.gif"></th>
+        <th width="20%"><img src="Graphic/Guide/PointZ/5.gif"></th>
+    </tr>
+    <tr>
+        <td align="center">While PointZ is running it'll listen for any computers on the local network.</td>
+        <td align="center"> When the computer is found, a remote control session can begin.</td>
+        <td align="center">Phone/Keyboard button illustrates the software keyboard, tap it to open it up.</td>
+        <td align="center">The PC/Keyboard button illustrates a hardware keyboard, tap it to open media- and other useful hardware keys.</td>
+        <td align="center">Tap the paper plane icon to send the message (return/enter does NOT send).</td>
+    </tr>
+</table> 
 
 - Direct Mode (default): Instantly sends the character tapped (text-prediction, grammar correct and other features are disabled)
 - Message Mode: Input behaves chat-like.
-
-
-
-
-
-
-
-
-
-
 
 # How to use
 
