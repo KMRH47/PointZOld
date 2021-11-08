@@ -34,24 +34,13 @@ PointZ is free and open-source.
 # Get started
 
 
-
-| While PointZ is running it'll listen for any computers on the local network. |
-| :----------------------------------------------------------: |
-|              ![](./Graphic/Guide/PointZ/1.gif)               |
-
+| <div align="center"><img width="150" src="Graphic/Guide/PointZ/1.gif"></img></div> | <div align="center"><img width="150" src="Graphic/Guide/PointZ/2.gif"></img></div> | <div align="center"><img width="150" src="Graphic/Guide/PointZ/3.gif"></img></div> | <div align="center"><img width="150" src="Graphic/Guide/PointZ/4.gif"></img></div> | <div align="center"><img width="150" src="Graphic/Guide/PointZ/5.gif"></img></div> |
+| :--: | :--: | :--: | :--: | :--: |
+| While PointZ is running it'll listen for any computers on the local network.| When the computer is found, a remote control session can begin. | Phone/Keyboard button illustrates the software keyboard, tap it to open it up. | The PC/Keyboard button illustrates a hardware keyboard, tap it to open media- and other useful hardware keys. | Tap the paper plane icon to send the message (return/enter does NOT send). |
 
 
-| When the computer is found, a remote control session can begin. | Phone/Keyboard button illustrates the software keyboard, tap it to open it up. |
-| :----------------------------------------------------------: | :----------------------------------------------------------: |
-|              ![](./Graphic/Guide/PointZ/2.gif)               |              ![](./Graphic/Guide/PointZ/3.gif)               |
-
-***Direct Mode (default): Instantly sends the character tapped (text-prediction, grammar correct and other features are disabled)***
-
-| The PC/Keyboard button illustrates a hardware keyboard, tap it to open media- and other useful hardware keys. | Message Mode: Input behaves chat-like. Tap the paper plane icon to send the message (return/enter does NOT send). |
-| :----------------------------------------------------------: | :----------------------------------------------------------: |
-|              ![](./Graphic/Guide/PointZ/4.gif)               |              ![](./Graphic/Guide/PointZ/5.gif)               |
-
-
+- Direct Mode (default): Instantly sends the character tapped (text-prediction, grammar correct and other features are disabled)
+- Message Mode: Input behaves chat-like.
 
 
 
