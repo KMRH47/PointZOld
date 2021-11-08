@@ -35,22 +35,29 @@ PointZ is free and open-source.
 
 <table>
     <tr>
-        <th width="20%"><img src="Graphic/Guide/PointZ/1.gif"></th>
-        <th width="20%"><img src="Graphic/Guide/PointZ/2.gif"></th>
-        <th width="20%"><img src="Graphic/Guide/PointZ/3.gif"></th>
-        <th width="20%"><img src="Graphic/Guide/PointZ/4.gif"></th>
-        <th width="20%"><img src="Graphic/Guide/PointZ/5.gif"></th>
+        <th width="33.33%"><img src="Graphic/Guide/PointZ/1.gif"></th>
+        <th width="33.33%"><img src="Graphic/Guide/PointZ/2.gif"></th>
+        <th width="33.33%"><img src="Graphic/Guide/PointZ/3.gif"></th>
     </tr>
     <tr>
         <td align="center">While PointZ is running it'll listen for any computers on the local network.</td>
-        <td align="center"> When the computer is found, a remote control session can begin.</td>
+        <td align="center"> When a PC is found, a remote control session can begin.</td>
         <td align="center">Phone/Keyboard button illustrates the software keyboard, tap it to open it up.</td>
-        <td align="center">The PC/Keyboard button illustrates a hardware keyboard, tap it to open media- and other useful hardware keys.</td>
-        <td align="center">Tap the paper plane icon to send the message (return/enter does NOT send).</td>
     </tr>
-</table> 
+	<tr>
+    	<th width="33.33%"><img src="Graphic/Guide/PointZ/4.gif"></th>
+    	<th width="33.33%"><img src="Graphic/Guide/PointZ/5.gif"></th>
+        <th width="33.33%"><img src="Graphic/Guide/PointZ/6.gif"></th>
+	</tr>
+    <tr>
+   		<td >The PC/Keyboard button illustrates a hardware keyboard, tap it to open media- and other useful 									hardware keys.</td>
+    	<td >Tap the chatbubble logo to toggle between direct- or message-mode.</td>
+        <td >Tap the paper plane icon to send the message.</td>
+    </tr>
+</table>
 
-- Direct Mode (default): Instantly sends the character tapped (text-prediction, grammar correct and other features are disabled)
+
+- Direct Mode (default): Instantly sends the character tapped (text-prediction, grammar correct and other features are disabled.)
 - Message Mode: Input behaves chat-like.
 
 # How to use
