@@ -220,46 +220,36 @@ namespace PointZ.ViewModels
         private void OnMediaRewind() =>
             this.inputEventHandlerService.KeyboardCommandSender.SendKeyboardCommandAsync(KeyboardCommand.KeyDown,
                 AndroidKeyCodeAction.MediaRewind);
-
         private void OnMediaPlayPause() =>
             this.inputEventHandlerService.KeyboardCommandSender.SendKeyboardCommandAsync(KeyboardCommand.KeyDown,
                 AndroidKeyCodeAction.MediaPlayPause);
-
         private void OnMediaForward() =>
             this.inputEventHandlerService.KeyboardCommandSender.SendKeyboardCommandAsync(KeyboardCommand.KeyDown,
                 AndroidKeyCodeAction.MediaFastForward);
-
         private void OnMediaPrevious() =>
             this.inputEventHandlerService.KeyboardCommandSender.SendKeyboardCommandAsync(KeyboardCommand.KeyDown,
                 AndroidKeyCodeAction.MediaPrevious);
-
         private void OnMediaStop() =>
             this.inputEventHandlerService.KeyboardCommandSender.SendKeyboardCommandAsync(KeyboardCommand.KeyDown,
                 AndroidKeyCodeAction.MediaStop);
-
         private void OnMediaNext() =>
             this.inputEventHandlerService.KeyboardCommandSender.SendKeyboardCommandAsync(KeyboardCommand.KeyDown,
                 AndroidKeyCodeAction.MediaNext);
-
         private void OnVolumeDown() =>
             this.inputEventHandlerService.KeyboardCommandSender.SendKeyboardCommandAsync(KeyboardCommand.KeyDown,
                 AndroidKeyCodeAction.VolumeDown);
-
         private void OnMute() =>
             this.inputEventHandlerService.KeyboardCommandSender.SendKeyboardCommandAsync(KeyboardCommand.KeyDown,
                 AndroidKeyCodeAction.Mute);
-
         private void OnVolumeUp() =>
             this.inputEventHandlerService.KeyboardCommandSender.SendKeyboardCommandAsync(KeyboardCommand.KeyDown,
                 AndroidKeyCodeAction.VolumeUp);
-
         private void OnArrowLeft() =>
             this.inputEventHandlerService.KeyboardCommandSender.SendKeyboardCommandAsync(KeyboardCommand.KeyDown,
                 AndroidKeyCodeAction.DpadLeft);
         private void OnArrowUp() =>
             this.inputEventHandlerService.KeyboardCommandSender.SendKeyboardCommandAsync(KeyboardCommand.KeyDown,
                 AndroidKeyCodeAction.DpadUp);
-        
         private void OnArrowRight() =>
             this.inputEventHandlerService.KeyboardCommandSender.SendKeyboardCommandAsync(KeyboardCommand.KeyDown,
                 AndroidKeyCodeAction.DpadRight);
