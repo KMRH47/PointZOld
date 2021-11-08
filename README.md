@@ -47,7 +47,7 @@ PointZ is free and open-source.
 
 ***Direct Mode (default): Instantly sends the character tapped (text-prediction, grammar correct and other features are disabled)***
 
-| The PC/Keyboard button illustrates a hardware keyboard, tap it to open media- and other useful hardware keys. | Message Mode: Input behaves chat-app like. Tap the paper plane icon to send the message (return/enter does NOT send). |
+| The PC/Keyboard button illustrates a hardware keyboard, tap it to open media- and other useful hardware keys. | Message Mode: Input behaves chat like. Tap the paper plane icon to send the message (return/enter does NOT send). |
 | :----------------------------------------------------------: | :----------------------------------------------------------: |
 |              ![](./Graphic/Guide/PointZ/4.gif)               |              ![](./Graphic/Guide/PointZ/5.gif)               |
 
