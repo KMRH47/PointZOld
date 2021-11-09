@@ -7,15 +7,15 @@ variables:
 stages:
   - build
 
-# PointZ Android
+# Android
 android_release_apk:
   stage: build
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
   script:
-    - '& "$env:NUGET_PATH" restore "$env:CSPROJ_ANDROID_PATH"'  # restore Nuget dependencies
+    - '& "$env:NUGET_PATH" restore "$env:CSPROJ_ANDROID_PATH"' # Restore NuGet Dependencies
     - '& "$env:MSBUILD_PATH" "$env:CSPROJ_ANDROID_PATH" /t:Clean /p:Configuration=Release' # Clean
-    - '& "$env:MSBUILD_PATH" "$env:CSPROJ_ANDROID_PATH" /t:Build -restore /p:Configuration=Release' # Build
-    - '& "$env:MSBUILD_PATH" "$env:CSPROJ_ANDROID_PATH" /t:PackageForAndroid /p:Configuration=Release /p:OutputPath="$env:RELEASE_ANDROID_PATH"' # APK
+    - '& "$env:MSBUILD_PATH" "$env:CSPROJ_ANDROID_PATH" /t:Build /p:Configuration=Release' # Build
+    - '& "$env:MSBUILD_PATH" "$env:CSPROJ_ANDROID_PATH" /p:Configuration=Release /t:PackageForAndroid /p:OutputPath="$env:RELEASE_ANDROID_PATH"' # APK
 
 # Saving for later: /t:SignAndroidPackage 

@@ -114,6 +114,16 @@ mono_crash.*
 [Dd]ebug/
 [Dd]ebugPublic/
 [Rr]elease/
+
+# Except mine
+Releases/*
+!Releases/PointZ
+Releases/PointZ/*
+# iOS to be added
+!Releases/PointZ/Android
+Releases/PointZ/Android/*
+!Releases/PointZ/Android/sunflowerSensei.PointZ.apk
+
 x64/
 x86/
 [Ww][Ii][Nn]32/
