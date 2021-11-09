@@ -1,8 +1,8 @@
 variables:
+  RELEASE_ANDROID_PATH: 'C:\Users\45222\Git\pointz\Releases\PointZ\Android'
   MSBUILD_PATH: 'D:\Programs\Microsoft Visual Studio\2022\Preview\Msbuild\Current\Bin\MSBuild.exe'
   NUGET_PATH: 'Z:\Programmering\NuGet\nuget.exe'
   CSPROJ_ANDROID_PATH: './PointZ/PointZ/PointZ.Android/PointZ.Android.csproj'
-  RELEASE_ANDROID_PATH: './Releases/PointZ/Android'
   
 stages:
   - build
