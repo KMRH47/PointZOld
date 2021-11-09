@@ -16,4 +16,6 @@ android_release_apk:
     - '& "$env:NUGET_PATH" restore "$env:CSPROJ_ANDROID_PATH"'  # restore Nuget dependencies
     - '& "$env:MSBUILD_PATH" "$env:CSPROJ_ANDROID_PATH" /t:Clean /p:Configuration=Release' # Clean
     - '& "$env:MSBUILD_PATH" "$env:CSPROJ_ANDROID_PATH" /t:Build -restore /p:Configuration=Release' # Build
-    - '& "$env:MSBUILD_PATH" "$env:CSPROJ_ANDROID_PATH" /t:PackageForAndroid /t:SignAndroidPackage /p:Configuration=Release /p:OutputPath="$env:RELEASE_ANDROID_PATH"' # APK
+    - '& "$env:MSBUILD_PATH" "$env:CSPROJ_ANDROID_PATH" /t:PackageForAndroid /p:Configuration=Release /p:OutputPath="$env:RELEASE_ANDROID_PATH"' # APK
+
+# Saving for later: /t:SignAndroidPackage 
