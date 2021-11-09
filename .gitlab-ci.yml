@@ -1,0 +1,19 @@
+variables:
+  MSBUILD_PATH: 'D:\Programs\Microsoft Visual Studio\2022\Preview\Msbuild\Current\Bin\MSBuild.exe'
+  NUGET_PATH: 'Z:\Programmering\NuGet\nuget.exe'
+  CSPROJ_ANDROID_PATH: './PointZ/PointZ/PointZ.Android/PointZ.Android.csproj'
+  RELEASE_ANDROID_PATH: './Releases/PointZ/Android'
+  
+stages:
+  - build
+
+# PointZ Android
+android_release_apk:
+  stage: build
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+  script:
+    - '& "$env:NUGET_PATH" restore'  # restore Nuget dependencies
+    - '& "$env:MSBUILD_PATH" "$env:CSPROJ_ANDROID_PATH" /t:Clean /p:Configuration=Release' # Build
+    - '& "$env:MSBUILD_PATH" "$env:CSPROJ_ANDROID_PATH" /t:Build /p:Configuration=Release' # Clean
+    - '& "$env:MSBUILD_PATH" "$env:CSPROJ_ANDROID_PATH" /t:PackageForAndroid /t:SignAndroidPackage /p:Configuration=Release /p:OutputPath="$env:RELEASE_ANDROID_PATH"' # APK
