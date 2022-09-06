@@ -1,5 +1,7 @@
 ![](Graphic/Logo/pz_banner.png)
 
+**I'm developing a new PointZ app with MAUI, this is an older version made with Xamarin.**
+
 # FAQ
 
 ### What is PointZ?
