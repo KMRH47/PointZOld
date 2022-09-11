@@ -20,7 +20,7 @@ Since PointZerver is built using .NET 5.0, it can be compiled to **Windows**, **
 
 ### Is PointZ on Google Play and App store?
 
-No. Maybe in the future, but I'd rather upload releases here on GitLab.
+No. Maybe in the future, but I'd rather upload releases here on GitHub.
 
 ### Is  PointZ free?
 
@@ -119,29 +119,3 @@ Below is a table of all ports and protocols used by PointZ and PointZerver.
 | ----------- | ----- | -------- | ---------------- |
 | PointZ      | 45455 | UDP      | Listener         |
 | PointZerver | 45454 | UDP      | Command Receiver |
-
-# Changelog
-
-### PointZ
-
-| Version | Changes                                                      |
-| ------- | ------------------------------------------------------------ |
-| 0.1     | Alpha Release                                                |
-| 0.1.1   | - Mouse up command is no longer send if **Secondary Button Click** has been performed after engaging **Primary Button Hold**<br />- Scrolling no longer jumps randomly |
-| 0.2.0   | - Keyboard added<br />- Replaced bottom bar with text-input  |
-| 0.2.1   | - Tap and hold now works correctly<br />- Textbox can no longer be clicked through<br />- Touch and key events no longer break when leaving/reentering activity |
-| 0.3.0   | Reworked touch-to-mouse code                                 |
-| 0.3.1   | - Reworked keyboard code<br />- Added send button (paper plane)<br />- Added settings button ((cog wheel) no functionality yet) |
-| 0.3.2   | - Added new icons<br />- Media keys and some other keyboard keys<br />- Optimized performance slightly<br />- Small UI overhaul |
-
-### PointZerver
-
-| Version | Changes                                                      |
-| ------- | ------------------------------------------------------------ |
-| 0.1     | Alpha Release                                                |
-| 0.1.1   | Adjusted keyboard interpretation (when receiving data from PointZ). |
-| 0.1.2   | Fixed data interpreter incorrectly deserializing payloads containing commas |
-| 0.1.3   | No longer binds to virtual network interfaces.               |
-| 0.1.4   | Minor code-refactor                                          |
-| 0.1.5   | Minor code-refactor                                          |
-
