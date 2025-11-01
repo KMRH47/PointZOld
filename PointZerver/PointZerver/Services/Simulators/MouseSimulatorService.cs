@@ -1,14 +1,15 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.Threading.Tasks;
-using InputSimulatorStandard;
+using SharpHook;
+using SharpHook.Native;
 
 namespace PointZerver.Services.Simulators
 {
     public class MouseSimulatorService : IInputSimulatorService
     {
-        private readonly IMouseSimulator mouseSimulator;
+        private readonly IEventSimulator eventSimulator;
 
-        public MouseSimulatorService(IMouseSimulator mouseSimulator) => this.mouseSimulator = mouseSimulator;
+        public MouseSimulatorService(IEventSimulator eventSimulator) => this.eventSimulator = eventSimulator;
 
         public string CommandId => "M";
 
@@ -19,54 +20,69 @@ namespace PointZerver.Services.Simulators
             switch (dataSplit[1])
             {
                 case "HorizontalScroll":
-                    this.mouseSimulator.HorizontalScroll(int.Parse(dataSplit[2]));
+                    this.eventSimulator.SimulateMouseWheel(UioHookWheelDirection.Horizontal,
+                        ParseScrollAmount(dataSplit[2]));
                     break;
                 case "VerticalScroll":
-                    Debug.WriteLine($"Vertical SCroll! amount:{dataSplit[2]}");
-                    this.mouseSimulator.VerticalScroll(int.Parse(dataSplit[2]));
+                    Debug.WriteLine($"Vertical Scroll! amount:{dataSplit[2]}");
+                    this.eventSimulator.SimulateMouseWheel(UioHookWheelDirection.Vertical,
+                        ParseScrollAmount(dataSplit[2]));
                     break;
                 case "LeftButtonClick":
-                    this.mouseSimulator.LeftButtonClick();
+                    SimulateClick(MouseButton.Button1);
                     break;
                 case "LeftButtonDown":
-                    this.mouseSimulator.LeftButtonDown();
+                    this.eventSimulator.SimulateMousePress(MouseButton.Button1);
                     break;
                 case "LeftButtonUp":
-                    this.mouseSimulator.LeftButtonUp();
+                    this.eventSimulator.SimulateMouseRelease(MouseButton.Button1);
                     break;
                 case "MiddleButtonClick":
-                    this.mouseSimulator.MiddleButtonClick();
+                    SimulateClick(MouseButton.Button3);
                     break;
                 case "MiddleButtonDown":
-                    this.mouseSimulator.MiddleButtonDown();
+                    this.eventSimulator.SimulateMousePress(MouseButton.Button3);
                     break;
                 case "MiddleButtonUp":
-                    this.mouseSimulator.MiddleButtonUp();
+                    this.eventSimulator.SimulateMouseRelease(MouseButton.Button3);
                     break;
                 case "RightButtonClick":
-                    this.mouseSimulator.RightButtonClick();
+                    SimulateClick(MouseButton.Button2);
                     break;
                 case "RightButtonDown":
-                    this.mouseSimulator.RightButtonDown();
+                    this.eventSimulator.SimulateMousePress(MouseButton.Button2);
                     break;
                 case "RightButtonUp":
-                    this.mouseSimulator.RightButtonUp();
+                    this.eventSimulator.SimulateMouseRelease(MouseButton.Button2);
                     break;
                 case "MoveMouseBy":
                     Debug.WriteLine($"Moving mouse by {dataSplit[2]}, {dataSplit[3]}");
-                    this.mouseSimulator.MoveMouseBy(int.Parse(dataSplit[2]), int.Parse(dataSplit[3]));
+                    this.eventSimulator.SimulateMouseMovementRelative(ParseMovement(dataSplit[2]),
+                        ParseMovement(dataSplit[3]));
                     break;
                 case "MoveMouseTo":
-                    // await this.logger.Log($"x: {dataSplit[2]} y: {dataSplit[3]}", this);
-                    this.mouseSimulator.MoveMouseTo(double.Parse(dataSplit[2]), double.Parse(dataSplit[3]));
+                    this.eventSimulator.SimulateMouseMovement(new Point(ParseCoordinate(dataSplit[2]),
+                        ParseCoordinate(dataSplit[3])));
                     break;
                 case "MoveMouseToPositionOnVirtualDesktop":
-                    this.mouseSimulator.MoveMouseToPositionOnVirtualDesktop(double.Parse(dataSplit[2]),
-                        double.Parse(dataSplit[3]));
+                    this.eventSimulator.SimulateMouseMovement(new Point(ParseCoordinate(dataSplit[2]),
+                        ParseCoordinate(dataSplit[3])));
                     break;
             }
-            
+
             return Task.CompletedTask;
         }
+
+        private void SimulateClick(MouseButton button)
+        {
+            this.eventSimulator.SimulateMousePress(button);
+            this.eventSimulator.SimulateMouseRelease(button);
+        }
+
+        private static short ParseScrollAmount(string value) => (short)int.Parse(value);
+
+        private static short ParseMovement(string value) => (short)int.Parse(value);
+
+        private static int ParseCoordinate(string value) => int.Parse(value);
     }
 }

@@ -13,7 +13,7 @@ namespace PointZerver.Services.SimulatorInterpreter
             new Dictionary<string, IInputSimulatorService>();
         private readonly ILogger logger;
 
-        public SimulatorInterpreterService(ILogger logger, params IInputSimulatorService[] inputSimulatorServices)
+        public SimulatorInterpreterService(ILogger logger, IEnumerable<IInputSimulatorService> inputSimulatorServices)
         {
             try
             {

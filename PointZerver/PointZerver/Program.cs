@@ -3,7 +3,6 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
-using InputSimulatorStandard;
 using Microsoft.Extensions.DependencyInjection;
 using PointZerver.Services.Logger;
 using PointZerver.Services.SimulatorInterpreter;
@@ -12,6 +11,7 @@ using PointZerver.Services.UdpBroadcast;
 using PointZerver.Services.UdpListener;
 using PointZerver.Services.VirtualKeyCodeMapper;
 using PointZerver.Tools;
+using SharpHook;
 
 namespace PointZerver
 {
@@ -43,28 +43,17 @@ namespace PointZerver
             UdpClient udpClient = new();
             udpClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
             udpClient.Client.Bind(serverIpEndPoint);
-            IVirtualKeyCodeMapperService virtualKeyCodeMapperService = new VirtualKeyCodeMapperService();
-            IMouseSimulator mouseSimulator = new MouseSimulator();
-            IKeyboardSimulator keyboardSimulator = new KeyboardSimulator();
-            IInputSimulatorService mouseSimService = new MouseSimulatorService(mouseSimulator);
-            IInputSimulatorService keyboardSimService =
-                new KeyboardSimulatorService(keyboardSimulator, virtualKeyCodeMapperService);
-            IInputSimulatorService[] inputSimulators = { mouseSimService, keyboardSimService };
-
             // -Registration
             IServiceCollection services = new ServiceCollection();
-            services.AddSingleton(inputSimulators);
             services.AddSingleton(udpClient);
             services.AddSingleton(logger);
-            services.AddScoped<MouseSimulatorService>();
-            services.AddScoped<KeyboardSimulatorService>();
+            services.AddSingleton<IEventSimulator, EventSimulator>();
+            services.AddSingleton<IVirtualKeyCodeMapperService, VirtualKeyCodeMapperService>();
+            services.AddScoped<IInputSimulatorService, MouseSimulatorService>();
+            services.AddScoped<IInputSimulatorService, KeyboardSimulatorService>();
             services.AddScoped<IUdpBroadcastService, UdpBroadcastService>();
             services.AddScoped<ISimulatorInterpreterService, SimulatorInterpreterService>();
             services.AddScoped<IUdpListenerService, UdpListenerService>();
-            services.AddScoped<IInputSimulatorService, MouseSimulatorService>();
-            services.AddScoped<IMouseSimulator, MouseSimulator>();
-            services.AddScoped<IKeyboardSimulator, KeyboardSimulator>();
-            services.AddScoped<IVirtualKeyCodeMapperService, VirtualKeyCodeMapperService>();
 
             IServiceProvider serviceProvider = services.BuildServiceProvider();
 
