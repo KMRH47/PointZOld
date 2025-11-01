@@ -17,8 +17,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="InputSimulatorStandard" Version="1.0.0" />
       <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0-rc.2.21480.5" />
+      <PackageReference Include="SharpHook" Version="5.2.1" />
     </ItemGroup>
 
 </Project>

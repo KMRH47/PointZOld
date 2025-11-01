@@ -1,9 +1,9 @@
-﻿using InputSimulatorStandard.Native;
+using SharpHook.Native;
 
 namespace PointZerver.Services.VirtualKeyCodeMapper
 {
     public interface IVirtualKeyCodeMapperService
     {
-        VirtualKeyCode ParseString(string keycodeString);
+        KeyCode ParseString(string keycodeString);
     }
 }
