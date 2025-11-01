@@ -73,7 +73,13 @@ namespace PointZerver
             services.AddScoped<MouseSimulatorService>();
             services.AddScoped<KeyboardSimulatorService>();
             services.AddScoped<IUdpBroadcastService, UdpBroadcastService>();
-            services.AddScoped<ISimulatorInterpreterService, SimulatorInterpreterService>();
+            services.AddScoped<ISimulatorInterpreterService>(provider =>
+            {
+                ILogger logger = provider.GetRequiredService<ILogger>();
+                MouseSimulatorService mouseService = provider.GetRequiredService<MouseSimulatorService>();
+                KeyboardSimulatorService keyboardService = provider.GetRequiredService<KeyboardSimulatorService>();
+                return new SimulatorInterpreterService(logger, mouseService, keyboardService);
+            });
             services.AddScoped<IUdpListenerService, UdpListenerService>();
             services.AddScoped<IInputSimulatorService, MouseSimulatorService>();
             services.AddScoped<IInputSimulatorService, KeyboardSimulatorService>();

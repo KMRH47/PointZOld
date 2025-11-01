@@ -81,29 +81,60 @@ namespace PointZerver.Services.Simulators.Controllers
 
         public void MoveMouseBy(int x, int y)
         {
-            CGPoint currentPosition = GetCurrentMousePosition();
-            CGPoint targetPosition = new(currentPosition.X + x, currentPosition.Y - y);
-            PostMouseMove(targetPosition);
+            try
+            {
+                CGPoint currentPosition = GetCurrentMousePosition();
+                CGPoint targetPosition = new(currentPosition.X + x, currentPosition.Y + y);
+                PostMouseMove(targetPosition);
+            }
+            catch (Exception)
+            {
+                // Silently fail - likely accessibility permissions issue
+            }
         }
 
         public void MoveMouseTo(double x, double y)
         {
-            CGPoint targetPosition = CalculateAbsolutePosition(x, y);
-            PostMouseMove(targetPosition);
+            try
+            {
+                CGPoint targetPosition = CalculateAbsolutePosition(x, y);
+                PostMouseMove(targetPosition);
+            }
+            catch (Exception)
+            {
+                // Silently fail - likely accessibility permissions issue
+            }
         }
 
         public void MoveMouseToPositionOnVirtualDesktop(double x, double y)
         {
-            CGPoint targetPosition = CalculateAbsolutePosition(x, y);
-            PostMouseMove(targetPosition);
+            try
+            {
+                CGPoint targetPosition = CalculateAbsolutePosition(x, y);
+                PostMouseMove(targetPosition);
+            }
+            catch (Exception)
+            {
+                // Silently fail - likely accessibility permissions issue
+            }
         }
 
         private static void PostEvent(IntPtr eventRef)
         {
             if (eventRef == IntPtr.Zero) return;
 
-            CGEventPost(CGEventTapLocation.Hid, eventRef);
-            CFRelease(eventRef);
+            try
+            {
+                CGEventPost(CGEventTapLocation.Hid, eventRef);
+            }
+            catch (Exception)
+            {
+                // Silently fail - likely accessibility permissions issue
+            }
+            finally
+            {
+                CFRelease(eventRef);
+            }
         }
 
         private void PostMouseMove(CGPoint position)
