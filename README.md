@@ -16,7 +16,7 @@ PointZerver is a desktop application built using .NET 5.0. PointZerver, as the n
 
 Since PointZerver is built using .NET 5.0, it can be compiled to **Windows**, **macOS** and **Linux**.
 
-<u>*However, it's not currently being worked on for **iOS** or **macOS***</u>
+<u>*However, it's not currently being worked on for **iOS***</u>
 
 ### Is PointZ on Google Play and App store?
 

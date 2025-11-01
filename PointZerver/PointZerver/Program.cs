@@ -1,6 +1,7 @@
-﻿using System;
+using System;
 using System.Net;
 using System.Net.Sockets;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using InputSimulatorStandard;
@@ -8,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using PointZerver.Services.Logger;
 using PointZerver.Services.SimulatorInterpreter;
 using PointZerver.Services.Simulators;
+using PointZerver.Services.Simulators.Controllers;
 using PointZerver.Services.UdpBroadcast;
 using PointZerver.Services.UdpListener;
 using PointZerver.Services.VirtualKeyCodeMapper;
@@ -44,27 +46,37 @@ namespace PointZerver
             udpClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
             udpClient.Client.Bind(serverIpEndPoint);
             IVirtualKeyCodeMapperService virtualKeyCodeMapperService = new VirtualKeyCodeMapperService();
-            IMouseSimulator mouseSimulator = new MouseSimulator();
-            IKeyboardSimulator keyboardSimulator = new KeyboardSimulator();
-            IInputSimulatorService mouseSimService = new MouseSimulatorService(mouseSimulator);
-            IInputSimulatorService keyboardSimService =
-                new KeyboardSimulatorService(keyboardSimulator, virtualKeyCodeMapperService);
-            IInputSimulatorService[] inputSimulators = { mouseSimService, keyboardSimService };
+            bool isMac = RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
 
             // -Registration
             IServiceCollection services = new ServiceCollection();
-            services.AddSingleton(inputSimulators);
             services.AddSingleton(udpClient);
             services.AddSingleton(logger);
+            services.AddSingleton<IVirtualKeyCodeMapperService>(virtualKeyCodeMapperService);
+            if (isMac)
+            {
+                services.AddSingleton<IMouseController, MacMouseController>();
+                services.AddSingleton<IKeyboardController, MacKeyboardController>();
+            }
+            else
+            {
+                IMouseSimulator mouseSimulator = new MouseSimulator();
+                IKeyboardSimulator keyboardSimulator = new KeyboardSimulator();
+                services.AddSingleton(mouseSimulator);
+                services.AddSingleton(keyboardSimulator);
+                services.AddSingleton<IMouseController>(
+                    _ => new WindowsMouseController(mouseSimulator));
+                services.AddSingleton<IKeyboardController>(
+                    provider => new WindowsKeyboardController(keyboardSimulator,
+                        provider.GetRequiredService<IVirtualKeyCodeMapperService>()));
+            }
             services.AddScoped<MouseSimulatorService>();
             services.AddScoped<KeyboardSimulatorService>();
             services.AddScoped<IUdpBroadcastService, UdpBroadcastService>();
             services.AddScoped<ISimulatorInterpreterService, SimulatorInterpreterService>();
             services.AddScoped<IUdpListenerService, UdpListenerService>();
             services.AddScoped<IInputSimulatorService, MouseSimulatorService>();
-            services.AddScoped<IMouseSimulator, MouseSimulator>();
-            services.AddScoped<IKeyboardSimulator, KeyboardSimulator>();
-            services.AddScoped<IVirtualKeyCodeMapperService, VirtualKeyCodeMapperService>();
+            services.AddScoped<IInputSimulatorService, KeyboardSimulatorService>();
 
             IServiceProvider serviceProvider = services.BuildServiceProvider();
 

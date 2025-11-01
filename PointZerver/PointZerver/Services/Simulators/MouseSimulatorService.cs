@@ -1,14 +1,14 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.Threading.Tasks;
-using InputSimulatorStandard;
+using PointZerver.Services.Simulators.Controllers;
 
 namespace PointZerver.Services.Simulators
 {
     public class MouseSimulatorService : IInputSimulatorService
     {
-        private readonly IMouseSimulator mouseSimulator;
+        private readonly IMouseController mouseController;
 
-        public MouseSimulatorService(IMouseSimulator mouseSimulator) => this.mouseSimulator = mouseSimulator;
+        public MouseSimulatorService(IMouseController mouseController) => this.mouseController = mouseController;
 
         public string CommandId => "M";
 
@@ -19,53 +19,52 @@ namespace PointZerver.Services.Simulators
             switch (dataSplit[1])
             {
                 case "HorizontalScroll":
-                    this.mouseSimulator.HorizontalScroll(int.Parse(dataSplit[2]));
+                    this.mouseController.HorizontalScroll(int.Parse(dataSplit[2]));
                     break;
                 case "VerticalScroll":
-                    Debug.WriteLine($"Vertical SCroll! amount:{dataSplit[2]}");
-                    this.mouseSimulator.VerticalScroll(int.Parse(dataSplit[2]));
+                    Debug.WriteLine($"Vertical Scroll amount:{dataSplit[2]}");
+                    this.mouseController.VerticalScroll(int.Parse(dataSplit[2]));
                     break;
                 case "LeftButtonClick":
-                    this.mouseSimulator.LeftButtonClick();
+                    this.mouseController.LeftButtonClick();
                     break;
                 case "LeftButtonDown":
-                    this.mouseSimulator.LeftButtonDown();
+                    this.mouseController.LeftButtonDown();
                     break;
                 case "LeftButtonUp":
-                    this.mouseSimulator.LeftButtonUp();
+                    this.mouseController.LeftButtonUp();
                     break;
                 case "MiddleButtonClick":
-                    this.mouseSimulator.MiddleButtonClick();
+                    this.mouseController.MiddleButtonClick();
                     break;
                 case "MiddleButtonDown":
-                    this.mouseSimulator.MiddleButtonDown();
+                    this.mouseController.MiddleButtonDown();
                     break;
                 case "MiddleButtonUp":
-                    this.mouseSimulator.MiddleButtonUp();
+                    this.mouseController.MiddleButtonUp();
                     break;
                 case "RightButtonClick":
-                    this.mouseSimulator.RightButtonClick();
+                    this.mouseController.RightButtonClick();
                     break;
                 case "RightButtonDown":
-                    this.mouseSimulator.RightButtonDown();
+                    this.mouseController.RightButtonDown();
                     break;
                 case "RightButtonUp":
-                    this.mouseSimulator.RightButtonUp();
+                    this.mouseController.RightButtonUp();
                     break;
                 case "MoveMouseBy":
                     Debug.WriteLine($"Moving mouse by {dataSplit[2]}, {dataSplit[3]}");
-                    this.mouseSimulator.MoveMouseBy(int.Parse(dataSplit[2]), int.Parse(dataSplit[3]));
+                    this.mouseController.MoveMouseBy(int.Parse(dataSplit[2]), int.Parse(dataSplit[3]));
                     break;
                 case "MoveMouseTo":
-                    // await this.logger.Log($"x: {dataSplit[2]} y: {dataSplit[3]}", this);
-                    this.mouseSimulator.MoveMouseTo(double.Parse(dataSplit[2]), double.Parse(dataSplit[3]));
+                    this.mouseController.MoveMouseTo(double.Parse(dataSplit[2]), double.Parse(dataSplit[3]));
                     break;
                 case "MoveMouseToPositionOnVirtualDesktop":
-                    this.mouseSimulator.MoveMouseToPositionOnVirtualDesktop(double.Parse(dataSplit[2]),
+                    this.mouseController.MoveMouseToPositionOnVirtualDesktop(double.Parse(dataSplit[2]),
                         double.Parse(dataSplit[3]));
                     break;
             }
-            
+
             return Task.CompletedTask;
         }
     }

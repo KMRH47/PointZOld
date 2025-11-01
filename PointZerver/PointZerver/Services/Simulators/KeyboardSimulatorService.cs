@@ -1,26 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System;
 using System.Threading.Tasks;
-using InputSimulatorStandard;
-using InputSimulatorStandard.Native;
 using PointZerver.Extensions;
-using PointZerver.Services.Logger;
+using PointZerver.Services.Simulators.Controllers;
 using PointZerver.Services.VirtualKeyCodeMapper;
 
 namespace PointZerver.Services.Simulators
 {
     public class KeyboardSimulatorService : IInputSimulatorService
     {
-        private readonly IKeyboardSimulator keyboardSimulator;
-        private readonly IVirtualKeyCodeMapperService virtualKeyCodeMapperService;
+        private readonly IKeyboardController keyboardController;
 
-        public KeyboardSimulatorService(
-            IKeyboardSimulator keyboardSimulator, IVirtualKeyCodeMapperService virtualKeyCodeMapperService)
-        {
-            this.keyboardSimulator = keyboardSimulator;
-            this.virtualKeyCodeMapperService = virtualKeyCodeMapperService;
-        }
+        public KeyboardSimulatorService(IKeyboardController keyboardController) =>
+            this.keyboardController = keyboardController;
 
         public string CommandId => "K";
 
@@ -33,47 +24,35 @@ namespace PointZerver.Services.Simulators
             switch (command)
             {
                 case "KeyDown":
-                    if (payload.Length == 1)
-                    {
-                        this.keyboardSimulator.TextEntry(payload);
-                    }
-                    else
-                    {
-                        this.keyboardSimulator.KeyPress(this.virtualKeyCodeMapperService.ParseString(payload));
-                    }
+                    HandleKeyAction(payload);
                     break;
                 case "KeyPress":
-                    this.keyboardSimulator.KeyPress(this.virtualKeyCodeMapperService.ParseString(payload));
+                    HandleKeyAction(payload);
                     break;
                 case "TextEntry":
-                    this.keyboardSimulator.TextEntry(payload);
+                    this.keyboardController.TextEntry(payload);
                     break;
                 case "ModifiedKeyStroke":
-                    //VirtualKeyCode[] parameters = await GetParams(data);
-                    //this.keyboardSimulator.KeyPress(parameters);
-                    // this.keyboardSimulator.ModifiedKeyStroke();
                     break;
             }
 
             return Task.CompletedTask;
         }
 
-        private Task<VirtualKeyCode[]> GetParams(IReadOnlyList<string> data)
+        private void HandleKeyAction(string payload)
         {
-            List<VirtualKeyCode> dataList = new();
+            if (string.IsNullOrEmpty(payload)) return;
 
-            for (int i = 2; i < data.Count; i++)
+            if (payload.Length == 1)
             {
-                string arg = data[i];
-                bool parseUnsuccessful = !Enum.TryParse(arg, out VirtualKeyCode key);
-                if (parseUnsuccessful) throw ArgumentException(arg);
-                dataList.Add(key);
+                this.keyboardController.TextEntry(payload);
+                return;
             }
 
-            return Task.FromResult(dataList.ToArray());
-        }
+            bool parsed = Enum.TryParse(payload, out KeycodeAction keycodeAction);
+            if (!parsed) return;
 
-        private static ArgumentException ArgumentException(object contextData) =>
-            new($"No VirtualKeyCode matching {contextData}.");
+            this.keyboardController.KeyPress(keycodeAction);
+        }
     }
 }

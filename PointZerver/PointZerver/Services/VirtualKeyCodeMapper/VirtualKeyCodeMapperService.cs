@@ -11,6 +11,11 @@ namespace PointZerver.Services.VirtualKeyCodeMapper
 
             if (keyCodeInvalid) return VirtualKeyCode.NONAME;
 
+            return MapKeycodeAction(keyCodeAction);
+        }
+
+        public VirtualKeyCode MapKeycodeAction(KeycodeAction keyCodeAction)
+        {
             return keyCodeAction switch
             {
                 KeycodeAction.A => VirtualKeyCode.VK_A,
